@@ -60,4 +60,5 @@ int main(void)
 {
 	chk_revert();
 	chk_switch_stacks();
+	return 0;
 }
