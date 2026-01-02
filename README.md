@@ -14,14 +14,25 @@ having said that. you shouldn't be using POSIX signals anyways. if you *really*
 need them, save/restore the signal mask yourself, or just use the ucontext
 functions.
 
-i intend to port this to work on the following platforms:
+i intend to port this to work on the following processors:
 
 - arm
 - aarch64
+- riscv
+- riscv64
+- ppc
+- ppc64(le)
 - i386
 - x86-64
 
-mostly this is intended to run on Windows or Unix systems.
+currently, the following have been implemented:
+
+- aarch64
+
+mostly this is intended to run on Windows or Unix systems. it should be
+reasonably portable though, you may just have to add the appropriate
+preprocessor directives if the ones here don't cover things.
+
 i'm open to porting to other platforms, so if you have trouble compiling or the
 tests fail, open an issue, or [email me](mailto:pestpestthechicken@yahoo.com).
 
