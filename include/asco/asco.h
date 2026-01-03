@@ -26,7 +26,7 @@
 // This library also doesn't play nice with POSIX signals. When `asco_load`-ing
 // something the signal mask is unchanged. If you care about that, use
 // ucontext, or save/restore the signal mask yourself. I'd just avoid POSIX
-// signals like the plague, personally.
+// signals like the plague, personally, but I'd do that anyways.
 
 #pragma once
 #include <stddef.h>
@@ -44,10 +44,13 @@
 #define ASCO_ASM_NAME(NAME) asm(#NAME)
 
 typedef struct {
-	uint64_t rbx;
-	uint64_t rsp;
+	uint64_t rip;
 	uint64_t rbp;
-	uint64_t pc;
+	uint64_t rsp;
+	uint64_t rbx;
+	uint32_t mxcsr;
+	uint16_t x87cw;
+	uint16_t padding;
 
 	uint64_t r12_r15[4];
 } asco_ctx;
