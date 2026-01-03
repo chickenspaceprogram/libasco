@@ -35,11 +35,25 @@ mostly this is intended to run with both the Microsoft and GNU toolchains. it
 should be reasonably portable though, you may just have to add the appropriate
 preprocessor directives if the ones here don't cover things.
 
-all my testing does occur on hosted systems but this library should build
-fine freestanding. you might have to disable building tests, though.
+all my testing does occur on hosted systems, and CMake is configured for that.
+technically speaking, only the tests require a hosted system (even then it's
+for abort() and fprintf()), so you'd probably be fine removing the asserts and
+setting up a makefile to compile your desired architecture manually.
+
+i don't know much about freestanding environments so i don't currently have
+plans to officially support them; that might come in future if i do get
+experience though.
+
+porting to new platforms should be pretty straightforward if you already know
+that platform's assembly; you need to implement 3 assembly routines and a C
+function that aligns and sets up the stack pointer properly. unfortunately,
+prior to this project I'd only touched z80 assembly so porting's gonna be slow.
+this project was mostly an excuse to mess around a bit with a bunch of assembly
+languages to be honest.
+
+i also need to setup benchmarks at some point to compare these routines with
+standard function calls; that'll come after I implement the most common
+architectures.
 
 i'm open to porting to other platforms, so if you have trouble compiling or the
 tests fail, open an issue, or [email me](mailto:pestpestthechicken@yahoo.com).
-
-if you're on a windows system, Intel syntax is assumed.
-if you're anywhere else, AT&T syntax is assumed.
