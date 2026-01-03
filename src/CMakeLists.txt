@@ -28,10 +28,10 @@ if(ASCO_ARCH_X86_64 AND ASCO_OS_UNIX)
 elseif(ASCO_ARCH_AARCH64)
 	if (ASCO_ASM_ASM)
 		enable_language(ASM)
-		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/aarch64.s")
+		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/aarch64/as.s")
 	elseif(ASCO_ASM_MARMASM)
 		enable_language(ASM_MARMASM)
-		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/aarch64.s")
+		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/aarch64/marmasm.asm")
 	else()
 		message(FATAL_ERROR "Couldn't find a suitable assembler")
 	endif()
@@ -41,9 +41,9 @@ endif()
 
 
 add_library(asco
+	"${ASCO_PLATFORM_FILES}"
 	"${ASCO_SOURCE_DIR}/asco.c"
 	"${ASCO_INCLUDE_FILES}"
-	"${ASCO_PLATFORM_FILES}"
 )
 
 target_include_directories(asco PUBLIC ${ASCO_INCLUDE_DIR})

@@ -54,7 +54,7 @@ typedef struct {
 
 #elif ASCO_ARCH_AARCH64
 
-#ifdef ASCO_OS_UNIX
+#ifndef ASCO_OS_WINDOWS
 // if this breaks, special-case it and define it to expand to nothing
 #undef ASCO_ASM_NAME
 #define ASCO_ASM_NAME(NAME) asm(#NAME)

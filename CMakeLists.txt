@@ -45,6 +45,7 @@ set(ASCO_INCLUDE_FILES
 	"${ASCO_INCLUDE_DIR}/asco/asco.h")
 
 include(CTest)
+enable_testing()
 
 add_subdirectory(src)
 add_subdirectory(tests)
