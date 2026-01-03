@@ -8,17 +8,17 @@
 // i haven't written much aarch64, so expect inane comments
 
 
-.global _asco_init_internal
+.global asco_init_internal
 // void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp);
 
-.global _asco_save
+.global asco_save
 // int asco_save(asco_ctx *cur_ctx);
 
-.global _asco_load
+.global asco_load
 // void asco_load(const asco_ctx *new_ctx);
 
 
-_asco_init_internal:
+asco_init_internal:
 	// no previous frame, no previous link, so set those to 0
 	stp	xzr, xzr, [x0], #16
 	stp	x3, x1, [x0], #16
@@ -29,7 +29,7 @@ _asco_init_internal:
 	ret
 
 
-_asco_save:
+asco_save:
 	// copying sp and intended pc
 	mov	x9, sp
 	adr	x10, Lasco_save_cameback
@@ -59,7 +59,7 @@ Lasco_save_cameback:
 	mov	w0, #1
 	ret
 
-_asco_load:
+asco_load:
 	// loading lr, sp, fp, pc
 	ldp	fp, lr, [x0], #16
 	ldp	x9, x10, [x0], #16

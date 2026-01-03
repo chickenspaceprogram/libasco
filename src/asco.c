@@ -8,7 +8,7 @@
 
 // actually implemented in asm
 extern void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
-	void *sp);
+	void *sp) ASCO_ASM_NAME(asco_init_internal);
 
 // arch dependent
 static inline void *set_stack_ptr(void *stack_start, size_t stack_sz);

@@ -71,6 +71,9 @@ typedef struct {
 	double d8_d15[8];
 } asco_ctx;
 
+// i hate clang's `_name` so goddamn much
+#define ASCO_ASM_NAME(NAME) asm(#NAME)
+
 #elif defined(__arm__) || defined(_M_ARM32)
 #	define ASCO_ARM32
 #	error "Sorry, not supported yet."
@@ -118,7 +121,7 @@ void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 // after the current scope ends.
 //
 // Returns 1 if we've come from another coroutine, 0 if not.
-extern int asco_save(asco_ctx *cur_ctx);
+extern int asco_save(asco_ctx *cur_ctx) ASCO_ASM_NAME(asco_save);
 
 // Sets the current ctx to `new_ctx`.
 //
@@ -126,7 +129,7 @@ extern int asco_save(asco_ctx *cur_ctx);
 // pointer.
 //
 // This function never returns.
-extern void asco_load(const asco_ctx *new_ctx);
+extern void asco_load(const asco_ctx *new_ctx) ASCO_ASM_NAME(asco_load);
 
 // Saves the current execution context, then jumps to the new context.
 //
