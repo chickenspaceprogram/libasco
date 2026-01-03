@@ -34,20 +34,20 @@
 #include <assert.h>
 
 
-// probably going to make a wrapper juuuuuust for win32, yay
-#ifdef _WIN32
-#	define ASCO_CALL __stdcall
-#else
-#	define ASCO_CALL
-#endif
-
-
 #if defined(_M_AMD64)
 #	define ASCO_WIN_X86_64
 #	error "Sorry, not supported yet."
 #elif defined(__amd64__)
 #	define ASCO_GNU_X86_64
-#	error "Sorry, not supported yet."
+typedef struct {
+	uint64_t rbx;
+	uint64_t rsp;
+	uint64_t rbp;
+	uint64_t pc;
+
+	uint64_t r12_r15[4];
+} asco_ctx;
+
 #elif defined(_M_IX32)
 #	define ASCO_WIN_X86
 #	error "Sorry, not supported yet."
@@ -71,7 +71,7 @@ typedef struct {
 	double d8_d15[8];
 } asco_ctx;
 
-// i hate clang's `_name` so goddamn much
+// i hate clang's `_NAME` so goddamn much
 #define ASCO_ASM_NAME(NAME) asm(#NAME)
 
 #elif defined(__arm__) || defined(_M_ARM32)
@@ -84,11 +84,11 @@ typedef struct {
 
 // The function whose pointer has this type looks as follows:
 //
-// void ASCO_CALL whatever_function_name(void *arg)
+// void whatever_function_name(void *arg)
 // {
 // 	// ...
 // }
-typedef void (ASCO_CALL *asco_fn)(void *arg);
+typedef void (*asco_fn)(void *arg);
 
 // Instantiates an `asco_ctx`.
 //

@@ -14,10 +14,7 @@ extern void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
 static inline void *set_stack_ptr(void *stack_start, size_t stack_sz);
 
 #if defined(ASCO_WIN_X86_64)
-#elif defined(ASCO_GNU_X86_64)
-#elif defined(ASCO_WIN_X86)
-#elif defined(ASCO_GNU_X86)
-#elif defined(ASCO_AARCH64)
+#elif defined(ASCO_GNU_X86_64) || defined(ASCO_AARCH64)
 
 static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
@@ -27,6 +24,8 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 	return (void *)st;
 }
 
+#elif defined(ASCO_WIN_X86)
+#elif defined(ASCO_GNU_X86)
 #elif defined(ASCO_ARM32)
 #else
 #	error "Unsupported CPU architecture."
