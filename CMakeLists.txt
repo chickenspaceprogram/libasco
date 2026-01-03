@@ -13,7 +13,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(ASCO_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 set(ASCO_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(ASCO_TEST_DIR "${CMAKE_SOURCE_DIR}/tests")
-set(ASCO_INCLUDE_FILES "${ASCO_INCLUDE_DIR}/asco/asco.h")
+set(ASCO_INCLUDE_FILES
+	"${ASCO_INCLUDE_DIR}/asco/arch-detection.h"
+	"${ASCO_INCLUDE_DIR}/asco/asco.h")
 
 include(CTest)
 

@@ -33,12 +33,13 @@
 #include <stdint.h>
 #include <assert.h>
 
+#include <asco/arch-detection.h>
 
-#if defined(_M_AMD64)
-#	define ASCO_WIN_X86_64
-#	error "Sorry, not supported yet."
-#elif defined(__amd64__)
-#	define ASCO_GNU_X86_64
+
+#if (ASCO_ARCH_X86_64 && ASCO_OS_UNIX)
+// sysV conventions
+
+#define ASCO_ASM_NAME(NAME) asm(#NAME)
 typedef struct {
 	uint64_t rbx;
 	uint64_t rsp;
@@ -48,15 +49,10 @@ typedef struct {
 	uint64_t r12_r15[4];
 } asco_ctx;
 
-#elif defined(_M_IX32)
-#	define ASCO_WIN_X86
-#	error "Sorry, not supported yet."
-#elif defined(__i386__)
-#	define ASCO_GNU_X86
-#	error "Sorry, not supported yet."
-#elif defined(__aarch64__) || defined(_M_ARM64)
-#	define ASCO_AARCH64
+#elif ASCO_ARCH_AARCH64
 
+// i hate clang's `_NAME` so goddamn much
+#define ASCO_ASM_NAME(NAME) asm(#NAME)
 typedef struct {
 	uint64_t fp;
 	uint64_t lr;
@@ -71,12 +67,7 @@ typedef struct {
 	double d8_d15[8];
 } asco_ctx;
 
-// i hate clang's `_NAME` so goddamn much
-#define ASCO_ASM_NAME(NAME) asm(#NAME)
 
-#elif defined(__arm__) || defined(_M_ARM32)
-#	define ASCO_ARM32
-#	error "Sorry, not supported yet."
 #else
 #	error "Unsupported CPU architecture."
 #endif

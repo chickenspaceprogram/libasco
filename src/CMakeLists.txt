@@ -6,64 +6,16 @@
 
 cmake_minimum_required(VERSION 3.21)
 
-include(CheckCSourceCompiles)
-set(ASCO_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
+include(CheckSymbolExists)
 
-check_c_source_compiles("
-#include \"${ASCO_INCLUDE_DIR}/asco/asco.h\"
-#ifndef ASCO_WIN_X86_64
-#error \"Incorrect architecture\"
-#endif
-int main(void) {}
-" ASCO_ARCH_WIN_X86_64)
-check_c_source_compiles("
-#include \"${ASCO_INCLUDE_DIR}/asco/asco.h\"
-#ifndef ASCO_GNU_X86_64
-#error \"Incorrect architecture\"
-#endif
-int main(void) {}
-" ASCO_ARCH_GNU_X86_64)
-check_c_source_compiles("
-#include \"${ASCO_INCLUDE_DIR}/asco/asco.h\"
-#ifndef ASCO_WIN_X86
-#error \"Incorrect architecture\"
-#endif
-int main(void) {}
-" ASCO_ARCH_WIN_X86)
-check_c_source_compiles("
-#include \"${ASCO_INCLUDE_DIR}/asco/asco.h\"
-#ifndef ASCO_GNU_X86
-#error \"Incorrect architecture\"
-#endif
-int main(void) {}
-" ASCO_ARCH_GNU_X86)
-check_c_source_compiles("
-#include \"${ASCO_INCLUDE_DIR}/asco/asco.h\"
-#ifndef ASCO_AARCH64
-#error \"Incorrect architecture\"
-#endif
-int main(void) {}
-" ASCO_ARCH_AARCH64)
-check_c_source_compiles("
-#include \"${ASCO_INCLUDE_DIR}/asco/asco.h\"
-#ifndef ASCO_ARM32
-#error \"Incorrect architecture\"
-#endif
-int main(void) {}
-" ASCO_ARCH_ARM32)
+check_symbol_exists("ASCO_ARCH_AARCH64" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_AARCH64)
+check_symbol_exists("ASCO_ARCH_X86_64" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_X86_64)
+check_symbol_exists("ASCO_OS_UNIX" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_OS_UNIX)
 
-if(ASCO_ARCH_WIN_X86_64)
-set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/win-x86_64.s")
-elseif(ASCO_ARCH_GNU_X86_64)
-set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/gnu-x86_64.s")
-elseif(ASCO_ARCH_WIN_X86)
-set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/win-x86.s")
-elseif(ASCO_ARCH_GNU_X86)
-set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/gnu-x86.s")
+if(ASCO_ARCH_X86_64 AND ASCO_OS_UNIX)
+	set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/gnu-x86_64.s")
 elseif(ASCO_ARCH_AARCH64)
-set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/aarch64.s")
-elseif(ASCO_ARCH_ARM32)
-set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/arm32.s")
+	set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/aarch64.s")
 else()
 message(SEND_ERROR "Unsupported architecture.")
 endif()
