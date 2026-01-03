@@ -35,11 +35,14 @@
 
 #include <asco/arch-detection.h>
 
+#define ASCO_ASM_NAME(NAME)
 
-#if (ASCO_ARCH_X86_64 && ASCO_OS_UNIX)
-// sysV conventions
+#if (ASCO_ARCH_X86_64 && ASCO_OS_UNIX) // sysV
 
+// if this breaks, special-case it and define it to expand to nothing
+#undef ASCO_ASM_NAME
 #define ASCO_ASM_NAME(NAME) asm(#NAME)
+
 typedef struct {
 	uint64_t rbx;
 	uint64_t rsp;
@@ -51,8 +54,11 @@ typedef struct {
 
 #elif ASCO_ARCH_AARCH64
 
-// i hate clang's `_NAME` so goddamn much
+#ifdef ASCO_OS_UNIX
+// if this breaks, special-case it and define it to expand to nothing
+#undef ASCO_ASM_NAME
 #define ASCO_ASM_NAME(NAME) asm(#NAME)
+#endif
 typedef struct {
 	uint64_t fp;
 	uint64_t lr;
