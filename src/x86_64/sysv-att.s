@@ -7,16 +7,30 @@
 .section text
 
 .global asco_init_internal
-// void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp);
 
 .global asco_save
-// int asco_save(asco_ctx *cur_ctx);
 
 .global asco_load
-// void asco_load(const asco_ctx *new_ctx);
 
-
+// void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp);
 asco_init_internal:
+	// storing instruction ptr, stack ptr, setting frame ptr to null
+	movq	%rsi, (%rdi)
+	movq	$0, 8(%rdi)
+	movq	%rcx, 16(%rdi)
+
+	// "%rbx" stores the first arg of the fn, as always
+	movq	%rdx, 24(%rdi)
+
+	// setting default mxcsr state
+	movl	$0b1111110000000, 32(%rdi)
+	// setting default x87cw state
+	movw	$0x037F, 36(%rdi)
+
+	// no need to save r12-r15
+	ret
+
+// int asco_save(asco_ctx *cur_ctx);
 asco_save:
 	// get pointer to cameback
 	lea	Lasco_save_cameback(%rip), %rcx
@@ -28,7 +42,7 @@ asco_save:
 
 	// saving fp state
 	stmxcsr	32(%rdi)
-	fnstcw	36(%rdi)
+	fstcw	36(%rdi)
 
 	// moving r12-r15
 	movq	%r12, 40(%rdi)
@@ -43,6 +57,25 @@ Lasco_save_cameback:
 	movl	$1, %eax
 	ret
 
+// void asco_load(const asco_ctx *new_ctx);
 asco_load:
+	movq	8(%rdi), %rbp
+	movq	16(%rdi), %rsp
+	movq	24(%rdi), %rbx
 
+	// loading fp state
+	ldmxcsr	32(%rdi)
+	fclex
+	fldcw	36(%rdi)
+
+	movq	40(%rdi), %r12
+	movq	48(%rdi), %r13
+	movq	56(%rdi), %r14
+	movq	64(%rdi), %r15
+
+	// move whatever's in r12 to fst argument of fn
+	movq	%r12, %rdi
+
+	// jmp to stored-rip
+	jmp	*(%rdi)
 
