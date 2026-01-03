@@ -5,7 +5,34 @@
 # SPDX-License-Identifier: MPL-2.0
 
 cmake_minimum_required(VERSION 3.21)
-project(hmacro C ASM)
+project(hmacro C)
+
+include(CheckLanguage)
+
+check_language(ASM)
+if (CMAKE_ASM_COMPILER)
+set(ASCO_ASM_ASM ON)
+endif()
+
+check_language(ASM_NASM)
+if (CMAKE_ASM_NASM_COMPILER)
+set(ASCO_ASM_NASM ON)
+endif()
+
+check_language(ASM_MARMASM)
+if (CMAKE_ASM_MARMASM_COMPILER)
+set(ASCO_ASM_MARMASM ON)
+endif()
+
+check_language(ASM_MASM)
+if (CMAKE_ASM_MASM_COMPILER)
+set(ASCO_ASM_MASM ON)
+endif()
+
+check_language(ASM-ATT)
+if (CMAKE_ASM-ATT_COMPILER)
+set(ASCO_ASM_ATT ON)
+endif()
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
