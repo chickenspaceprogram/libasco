@@ -73,9 +73,12 @@ asco_load:
 	movq	56(%rdi), %r14
 	movq	64(%rdi), %r15
 
+	// saving struct pointer so we can jmp to it later
+	movq	%rdi, %rsi
+
 	// move whatever's in r12 to fst argument of fn
 	movq	%r12, %rdi
 
 	// jmp to stored-rip
-	jmp	*(%rdi)
+	jmp	*(%rsi)
 
