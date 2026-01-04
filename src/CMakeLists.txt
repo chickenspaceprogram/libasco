@@ -11,7 +11,7 @@ include(CheckSymbolExists)
 check_symbol_exists("ASCO_ARCH_AARCH64" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_AARCH64)
 check_symbol_exists("ASCO_ARCH_X86_64" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_X86_64)
 check_symbol_exists("ASCO_OS_UNIX" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_OS_UNIX)
-check_symbol_exists("ASCO_OS_WINDOWS" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_OS_UNIX)
+check_symbol_exists("ASCO_OS_WINDOWS" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_OS_WINDOWS)
 
 if(ASCO_ARCH_X86_64 AND ASCO_OS_UNIX)
 	if (ASCO_ASM_ATT)
