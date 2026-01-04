@@ -36,7 +36,7 @@
 #	define arg4 r9
 
 #	define tmp1 r11
-#	define tmp2 r9
+#	define tmp2 r10
 
 #	define ret32 eax
 
