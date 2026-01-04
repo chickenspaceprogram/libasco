@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# if you want to regenerate the .s, .asm files in this directory, run:
+#
+# rm sysv* win*
+# ./gen_arch_spec.sh
+
+
 SOURCE_FILENAME=source
 PREPROC=cpp
 OBJCONV=objconv
