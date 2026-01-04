@@ -19,7 +19,7 @@ asco_init_internal:
 	movq	$0, 8(%rdi)
 	movq	%rcx, 16(%rdi)
 
-	// "%rbx" stores the first arg of the fn, as always
+	// the fake "%rbx" stores the first arg of the fn, as always
 	movq	%rdx, 24(%rdi)
 
 	// setting default mxcsr state
@@ -76,8 +76,8 @@ asco_load:
 	// saving struct pointer so we can jmp to it later
 	movq	%rdi, %rsi
 
-	// move whatever's in r12 to fst argument of fn
-	movq	%r12, %rdi
+	// move whatever's in "%rbx" to fst argument of fn
+	movq	%rbx, %rdi
 
 	// jmp to stored-rip
 	jmp	*(%rsi)
