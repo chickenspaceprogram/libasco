@@ -75,7 +75,7 @@ typedef struct {
 	// win32 specific
 	uint64_t rdi;
 	uint64_t rsi;
-	uint64_t xmm6_15[2 * 10]
+	uint64_t xmm6_15[2 * 10];
 } asco_ctx;
 
 
