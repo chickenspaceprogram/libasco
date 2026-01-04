@@ -1,0 +1,27 @@
+#!/bin/sh
+
+SOURCE_FILENAME=source
+PREPROC=cpp
+OBJCONV=objconv
+SYSV_ASM=x86_64-elf-as
+WIN_ASM=x86_64-w64-mingw32-as
+
+
+$PREPROC -DSYSV_CALL -P "$SOURCE_FILENAME.S" > "sysv-as.s"
+$PREPROC -DWIN_CALL -P "$SOURCE_FILENAME.S" > "win64-as.s"
+
+$SYSV_ASM -o "$SOURCE_FILENAME.sysv.o" "sysv-as.s"
+$WIN_ASM -o "$SOURCE_FILENAME.win.o" "win64-as.s"
+
+
+$OBJCONV -fnasm "$SOURCE_FILENAME.sysv.o"
+mv "$SOURCE_FILENAME.sysv.asm" sysv-nasm.asm
+
+rm "$SOURCE_FILENAME.sysv.o"
+
+$OBJCONV -fnasm "$SOURCE_FILENAME.win.o"
+mv "$SOURCE_FILENAME.win.asm" win64-nasm.asm
+$OBJCONV -fmasm "$SOURCE_FILENAME.win.o"
+mv "$SOURCE_FILENAME.win.asm" win64-masm.asm
+
+rm "$SOURCE_FILENAME.win.o"

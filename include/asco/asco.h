@@ -43,16 +43,41 @@
 #define ASCO_ASM_NAME(NAME) asm(#NAME)
 
 typedef struct {
+	// preserved in any sane call conv
 	uint64_t rip;
 	uint64_t rbp;
 	uint64_t rsp;
-	uint64_t rbx;
 	uint32_t mxcsr;
 	uint16_t x87cw;
 	uint16_t padding;
 
+	// in both sysV and win64
+	uint64_t rbx;
 	uint64_t r12_r15[4];
 } asco_ctx;
+
+#elif (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS) // win64
+
+// RDI, RSI, and XMM6-XMM15 
+typedef struct {
+	// preserved in any sane call conv
+	uint64_t rip;
+	uint64_t rbp;
+	uint64_t rsp;
+	uint32_t mxcsr;
+	uint16_t x87cw;
+	uint16_t padding;
+
+	// in both sysV and win64
+	uint64_t rbx;
+	uint64_t r12_r15[4];
+
+	// win32 specific
+	uint64_t rdi;
+	uint64_t rsi;
+	uint64_t xmm6_15[2 * 10]
+} asco_ctx;
+
 
 #elif ASCO_ARCH_AARCH64
 
