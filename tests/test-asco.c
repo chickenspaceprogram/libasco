@@ -33,7 +33,7 @@ static void chk_revert(void)
 	if (!rv) {
 		fputs("chk_revert(): asco_save() called\n", stderr);
 		asco_load(&ctx);
-		fputs("chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n", stderr);
+		assert(0 && "chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n");
 		niter = 1;
 	}
 	dbgassert(niter == 6969);
