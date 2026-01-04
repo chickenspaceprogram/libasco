@@ -18,7 +18,7 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= st % 16;
+	st -= st % 15;
 	return (void *)st;
 }
 #elif ASCO_ARCH_X86_64
@@ -26,8 +26,10 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= st % 16;
-	st -= 8; // leaving space for ret addr
+	st -= st % 15;
+	st -= 24; // leaving space for ret addr
+		  // this is 24 bytes because MSVC can store things above the
+		  // stack ptr
 	return (void *)st;
 }
 #else
