@@ -1,5 +1,5 @@
 ; Disassembly of file: source.sysv.o
-; Sat Jan  3 20:04:41 2026
+; Sat Jan  3 20:11:48 2026
 ; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: SSE, x64, 80x87
@@ -59,7 +59,7 @@ asco_load:; Function begin
         mov     r15, qword [rdi+40H]                    ; 007A _ 4C: 8B. 7F, 40
         mov     r11, rdi                                ; 007E _ 49: 89. FB
         mov     rdi, rbx                                ; 0081 _ 48: 89. DF
-        jmp     near [rsi]                              ; 0084 _ FF. 26
+        jmp     near [r11]                              ; 0084 _ 41: FF. 23
 ; asco_load End of function
 
 

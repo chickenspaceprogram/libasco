@@ -1,5 +1,5 @@
 ; Disassembly of file: source.win.o
-; Sat Jan  3 20:04:41 2026
+; Sat Jan  3 20:11:48 2026
 ; Type: COFF64
 ; Syntax: MASM/ML64
 ; Instruction set: SSE2, x64, 80x87
@@ -82,10 +82,9 @@ asco_load PROC
         movdqu  xmm15, xmmword ptr [rcx+0E8H]           ; 0123 _ F3 44: 0F 6F. B9, 000000E8
         mov     r11, rcx                                ; 012C _ 49: 89. CB
         mov     rcx, rbx                                ; 012F _ 48: 89. D9
-        jmp     qword ptr [rsi]                         ; 0132 _ FF. 26
+        jmp     qword ptr [r11]                         ; 0132 _ 41: FF. 23
 asco_load ENDP
 
-        nop                                             ; 0134 _ 90
         nop                                             ; 0135 _ 90
         nop                                             ; 0136 _ 90
         nop                                             ; 0137 _ 90

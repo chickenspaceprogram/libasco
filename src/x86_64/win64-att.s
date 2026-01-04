@@ -125,6 +125,6 @@ asco_load:
 	movq	%rbx, %rcx
 
 	
-	jmp	*(%rsi)
+	jmp	*(%r11)
 
 

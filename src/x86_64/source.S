@@ -158,5 +158,5 @@ asco_load:
 	movq	%rbx, %arg1
 
 	/* jmp to stored-rip */
-	jmp	*(%rsi)
+	jmp	*(%tmp1)
 
