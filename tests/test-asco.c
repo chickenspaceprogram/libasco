@@ -24,13 +24,22 @@
 	}\
 } while (0)
 
+#define NFLAGS 5
+static int FLAGLIST[NFLAGS] = {};
+static int CUR_FLAG = 0;
+
 
 static void chk_revert(void)
 {
 	asco_ctx ctx;
-	int niter = 6969;
+	volatile int niter = 6969;
+	FLAGLIST[0] = CUR_FLAG++;
 	bool rv = asco_save(&ctx);
-	if (!rv) {
+	if (rv) {
+		FLAGLIST[2] = CUR_FLAG++;
+	}
+	else {
+		FLAGLIST[1] = CUR_FLAG++;
 		fputs("chk_revert(): asco_save() called\n", stderr);
 		asco_load(&ctx);
 		dbgassert(0 && "chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n");
@@ -44,11 +53,12 @@ static void jumpback(void *arg)
 	volatile int foo = 3;
 	dbgassert(foo == 3);
 	asco_ctx *main_ctx = arg;
+	FLAGLIST[3] = CUR_FLAG++;
 	asco_load(main_ctx);
-	fputs("jumpback(): asco_load() called\n", stderr);
+	dbgassert(0 && "jumpback(): asco_load() called, SHOULD NOT BE HERE");
 }
 
-static void chk_switch_stacks(void)
+static void chk_switch_stacks()
 {
 	int val = 123;
 	asco_ctx main_ctx;
@@ -58,6 +68,7 @@ static void chk_switch_stacks(void)
 	asco_init(&new_ctx, jumpback, &main_ctx, stack, 0x1000);
 	fputs("chk_switch_stacks(): asco_init() called\n", stderr);
 	asco_swap(&main_ctx, &new_ctx);
+	FLAGLIST[4] = CUR_FLAG++;
 	fputs("chk_switch_stacks(): asco_swap() called\n", stderr);
 	dbgassert(val == 123);
 	free(stack);
@@ -69,5 +80,8 @@ int main(void)
 	chk_revert();
 	fputs("Calling chk_switch_stacks()\n", stderr);
 	chk_switch_stacks();
+	for (int i = 0; i < NFLAGS; ++i) {
+		dbgassert(i == FLAGLIST[i]);
+	}
 	return 0;
 }
