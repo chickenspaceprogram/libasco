@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <assert.h>
 
 #define dbgassert(ARG) do {\
 	if (!(ARG)) {\
@@ -34,7 +33,7 @@ static void chk_revert(void)
 	if (!rv) {
 		fputs("chk_revert(): asco_save() called\n", stderr);
 		asco_load(&ctx);
-		assert(0 && "chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n");
+		dbgassert(0 && "chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n");
 		niter = 1;
 	}
 	dbgassert(niter == 6969);
@@ -55,6 +54,7 @@ static void chk_switch_stacks(void)
 	asco_ctx main_ctx;
 	asco_ctx new_ctx;
 	void *stack = malloc(0x1000);
+	dbgassert(stack != NULL);
 	asco_init(&new_ctx, jumpback, &main_ctx, stack, 0x1000);
 	fputs("chk_switch_stacks(): asco_init() called\n", stderr);
 	asco_swap(&main_ctx, &new_ctx);
