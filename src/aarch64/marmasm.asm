@@ -14,42 +14,36 @@
 	EXPORT	asco_init_internal
 	EXPORT	asco_save
 	EXPORT	asco_load
-	EXPORT	asco_save_cameback
-
-// for some fucking reason a colon in a label makes marmasm shit itself???
-// microsoft go home, you're drunk
-asco_save_cameback
-	mov	w0, #1
-	ret
 
 
 // void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp);
 asco_init_internal
-	// no previous frame, no previous link, so set those to 0
-	stp	xzr, xzr, [x0], #16
-	stp	x3, x1, [x0], #16
+	stp	x1, xzr, [x0], #16
+	stp	x3, x2, [x0], #16
 
-	// saving first argument to "x19 reg"
-	str	x2, [x0]
+	// after setup:
+	// ctx.lr = fn
+	// ctx.fp = 0
+	// ctx.sp = new_sp
+	// ctx.x19_or_x0 = arg
 	
 	ret
 
 // int asco_save(asco_ctx *cur_ctx);
 asco_save
-	// copying sp and intended pc
+	// copying sp
 	mov	x9, sp
-	adrp	x10, asco_save_cameback
 
-	// storing fp, lr, sp, pc
-	stp	fp, lr, [x0], #16
-	stp	x9, x10, [x0], #16
+	// storing fp, lr, sp, x19
+	stp	lr, fp, [x0], #16
+	stp	x9, x19, [x0], #16
 
 	// storing x19-x28
-	stp	x19, x20, [x0], #16
-	stp	x21, x22, [x0], #16
-	stp	x23, x24, [x0], #16
-	stp	x25, x26, [x0], #16
-	stp	x27, x28, [x0], #16
+	stp	x20, x21, [x0], #16
+	stp	x22, x23, [x0], #16
+	stp	x24, x25, [x0], #16
+	stp	x26, x27, [x0], #16
+	str	x28, [x0], #8
 
 	// storing d8-d15
 	stp	d8, d9, [x0], #16
@@ -64,18 +58,18 @@ asco_save
 // void asco_load(const asco_ctx *new_ctx);
 asco_load
 	// loading lr, sp, fp, pc
-	ldp	fp, lr, [x0], #16
-	ldp	x9, x10, [x0], #16
+	ldp	lr, fp, [x0], #16
+	ldp	x9, x19, [x0], #16
 	
-	// copying into sp, can't jmp to pc yet
+	// copying into sp
 	mov	sp, x9
 
 	// loading x19-x28
-	ldp	x19, x20, [x0], #16
-	ldp	x21, x22, [x0], #16
-	ldp	x23, x24, [x0], #16
-	ldp	x25, x26, [x0], #16
-	ldp	x27, x28, [x0], #16
+	ldp	x20, x21, [x0], #16
+	ldp	x22, x23, [x0], #16
+	ldp	x24, x25, [x0], #16
+	ldp	x26, x27, [x0], #16
+	ldr	x28, [x0], #8
 
 	// loading d8, d15
 	ldp	d8, d9, [x0], #16
@@ -90,7 +84,7 @@ asco_load
 	// issues then either
 	mov	x0, x19
 
-	// branching to pc
-	br	x10
+	// basically br lr
+	ret
 
 	END
