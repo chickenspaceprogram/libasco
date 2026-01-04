@@ -27,12 +27,12 @@
 static void chk_revert(void)
 {
 	asco_ctx ctx;
-	int val = 123;
 	int niter = 6969;
-	if (val++ == 123 && asco_save(&ctx)) {
+	bool rv = asco_save(&ctx);
+	if (!rv) {
 		fputs("chk_revert(): asco_save() called\n", stderr);
 		asco_load(&ctx);
-		fputs("chk_revert(): asco_load() called\n", stderr);
+		fputs("chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n", stderr);
 		niter = 1;
 	}
 	dbgassert(niter == 6969);
