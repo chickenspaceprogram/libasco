@@ -87,10 +87,9 @@ typedef struct {
 #define ASCO_ASM_NAME(NAME) asm(#NAME)
 #endif
 typedef struct {
-	uint64_t fp;
 	uint64_t lr;
+	uint64_t fp;
 	uint64_t sp;
-	uint64_t pc;
 
 	// i'm using the x19 slot to serve a dual purpose
 	// it's x19 when resuming a ctx, and x0 when starting a new ctx
