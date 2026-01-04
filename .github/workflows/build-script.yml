@@ -21,7 +21,7 @@ jobs:
         build_type: [Release, Debug]
         c_compiler: [gcc, clang, cl]
         cpp_compiler: [g++, clang++, cl]
-        generator: [Ninja, "Visual Studio 18 2026"]
+        generator: [Ninja, "Visual Studio 17 2022"]
 
         exclude:
           - c_compiler: gcc
