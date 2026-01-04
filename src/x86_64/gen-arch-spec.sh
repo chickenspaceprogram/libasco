@@ -13,11 +13,11 @@ SYSV_ASM=x86_64-elf-as
 WIN_ASM=x86_64-w64-mingw32-as
 
 
-$PREPROC -DSYSV_CALL -P "$SOURCE_FILENAME.S" > "sysv-as.s"
-$PREPROC -DWIN_CALL -P "$SOURCE_FILENAME.S" > "win64-as.s"
+$PREPROC -DSYSV_CALL -P "$SOURCE_FILENAME.S" > "sysv-att.s"
+$PREPROC -DWIN_CALL -P "$SOURCE_FILENAME.S" > "win64-att.s"
 
-$SYSV_ASM -o "$SOURCE_FILENAME.sysv.o" "sysv-as.s"
-$WIN_ASM -o "$SOURCE_FILENAME.win.o" "win64-as.s"
+$SYSV_ASM -o "$SOURCE_FILENAME.sysv.o" "sysv-att.s"
+$WIN_ASM -o "$SOURCE_FILENAME.win.o" "win64-att.s"
 
 
 $OBJCONV -fnasm "$SOURCE_FILENAME.sysv.o"
