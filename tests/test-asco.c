@@ -30,7 +30,9 @@ static void chk_revert(void)
 	int val = 123;
 	int niter = 6969;
 	if (val++ == 123 && asco_save(&ctx)) {
+		fputs("chk_revert(): asco_save() called\n", stderr);
 		asco_load(&ctx);
+		fputs("chk_revert(): asco_load() called\n", stderr);
 		niter = 1;
 	}
 	dbgassert(niter == 6969);
@@ -42,6 +44,7 @@ static void jumpback(void *arg)
 	dbgassert(foo == 3);
 	asco_ctx *main_ctx = arg;
 	asco_load(main_ctx);
+	fputs("jumpback(): asco_load() called\n", stderr);
 }
 
 static void chk_switch_stacks(void)
@@ -51,14 +54,18 @@ static void chk_switch_stacks(void)
 	asco_ctx new_ctx;
 	void *stack = malloc(0x1000);
 	asco_init(&new_ctx, jumpback, &main_ctx, stack, 0x1000);
+	fputs("chk_switch_stacks(): asco_init() called\n", stderr);
 	asco_swap(&main_ctx, &new_ctx);
+	fputs("chk_switch_stacks(): asco_swap() called\n", stderr);
 	dbgassert(val == 123);
 	free(stack);
 }
 
 int main(void)
 {
+	fputs("Calling chk_revert()\n", stderr);
 	chk_revert();
+	fputs("Calling chk_switch_stacks()\n", stderr);
 	chk_switch_stacks();
 	return 0;
 }
