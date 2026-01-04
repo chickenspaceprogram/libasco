@@ -49,6 +49,11 @@ jobs:
           - c_compiler: cl
             os: macos-latest
 
+            # clang doesn't want to compile ARM assembly on Win11 ARM for some reason
+            # gcc works fine so just use that
+          - c_compiler: clang
+            os: windows-11-arm
+
     steps:
     - uses: actions/checkout@v4
 
