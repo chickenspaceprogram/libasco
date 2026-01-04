@@ -94,6 +94,9 @@ Lasco_save_cameback:
 
 
 asco_load:
+	
+	movq	(%rcx), %r11
+
 	movq	0x8(%rcx), %rbp
 	movq	0x10(%rcx), %rsp
 
@@ -133,6 +136,6 @@ asco_load:
 	movl	$1, %eax
 
 	
-	jmp	*(%rcx)
+	jmp	*%r11
 
 

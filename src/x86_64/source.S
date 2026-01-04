@@ -127,6 +127,9 @@ Lasco_save_cameback:
 
 /* void asco_load(const asco_ctx *new_ctx); */
 asco_load:
+	/* save intended %rip for later */
+	movq	(%arg1), %tmp1
+
 	movq	0x8(%arg1), %rbp
 	movq	0x10(%arg1), %rsp
 
@@ -166,5 +169,5 @@ asco_load:
 	movl	$1, %ret32
 
 	/* jmp to stored-rip */
-	jmp	*(%arg1)
+	jmp	*%tmp1
 

@@ -1,5 +1,5 @@
 ; Disassembly of file: source.win.o
-; Sun Jan  4 11:44:04 2026
+; Sun Jan  4 11:51:50 2026
 ; Type: COFF64
 ; Syntax: MASM/ML64
 ; Instruction set: SSE2, x64, 80x87
@@ -57,38 +57,35 @@ asco_save ENDP
         ret                                             ; 00AB _ C3
 
 asco_load PROC
-        mov     rbp, qword ptr [rcx+8H]                 ; 00AC _ 48: 8B. 69, 08
-        mov     rsp, qword ptr [rcx+10H]                ; 00B0 _ 48: 8B. 61, 10
-        ldmxcsr dword ptr [rcx+18H]                     ; 00B4 _ 0F AE. 51, 18
-        fwait                                           ; 00B8 _ 9B
-        fnclex                                          ; 00B9 _ DB. E2
-        fldcw   word ptr [rcx+1CH]                      ; 00BB _ D9. 69, 1C
-        mov     rbx, qword ptr [rcx+20H]                ; 00BE _ 48: 8B. 59, 20
-        mov     r12, qword ptr [rcx+28H]                ; 00C2 _ 4C: 8B. 61, 28
-        mov     r13, qword ptr [rcx+30H]                ; 00C6 _ 4C: 8B. 69, 30
-        mov     r14, qword ptr [rcx+38H]                ; 00CA _ 4C: 8B. 71, 38
-        mov     r15, qword ptr [rcx+40H]                ; 00CE _ 4C: 8B. 79, 40
-        mov     rdi, qword ptr [rcx+48H]                ; 00D2 _ 48: 8B. 79, 48
-        mov     rsi, qword ptr [rcx+50H]                ; 00D6 _ 48: 8B. 71, 50
-        movdqu  xmm6, xmmword ptr [rcx+58H]             ; 00DA _ F3: 0F 6F. 71, 58
-        movdqu  xmm7, xmmword ptr [rcx+68H]             ; 00DF _ F3: 0F 6F. 79, 68
-        movdqu  xmm8, xmmword ptr [rcx+78H]             ; 00E4 _ F3 44: 0F 6F. 41, 78
-        movdqu  xmm9, xmmword ptr [rcx+88H]             ; 00EA _ F3 44: 0F 6F. 89, 00000088
-        movdqu  xmm10, xmmword ptr [rcx+98H]            ; 00F3 _ F3 44: 0F 6F. 91, 00000098
-        movdqu  xmm11, xmmword ptr [rcx+0A8H]           ; 00FC _ F3 44: 0F 6F. 99, 000000A8
-        movdqu  xmm12, xmmword ptr [rcx+0B8H]           ; 0105 _ F3 44: 0F 6F. A1, 000000B8
-        movdqu  xmm13, xmmword ptr [rcx+0C8H]           ; 010E _ F3 44: 0F 6F. A9, 000000C8
-        movdqu  xmm14, xmmword ptr [rcx+0D8H]           ; 0117 _ F3 44: 0F 6F. B1, 000000D8
-        movdqu  xmm15, xmmword ptr [rcx+0E8H]           ; 0120 _ F3 44: 0F 6F. B9, 000000E8
-        mov     rcx, rbx                                ; 0129 _ 48: 89. D9
-        mov     eax, 1                                  ; 012C _ B8, 00000001
-        jmp     qword ptr [rcx]                         ; 0131 _ FF. 21
+        mov     r11, qword ptr [rcx]                    ; 00AC _ 4C: 8B. 19
+        mov     rbp, qword ptr [rcx+8H]                 ; 00AF _ 48: 8B. 69, 08
+        mov     rsp, qword ptr [rcx+10H]                ; 00B3 _ 48: 8B. 61, 10
+        ldmxcsr dword ptr [rcx+18H]                     ; 00B7 _ 0F AE. 51, 18
+        fwait                                           ; 00BB _ 9B
+        fnclex                                          ; 00BC _ DB. E2
+        fldcw   word ptr [rcx+1CH]                      ; 00BE _ D9. 69, 1C
+        mov     rbx, qword ptr [rcx+20H]                ; 00C1 _ 48: 8B. 59, 20
+        mov     r12, qword ptr [rcx+28H]                ; 00C5 _ 4C: 8B. 61, 28
+        mov     r13, qword ptr [rcx+30H]                ; 00C9 _ 4C: 8B. 69, 30
+        mov     r14, qword ptr [rcx+38H]                ; 00CD _ 4C: 8B. 71, 38
+        mov     r15, qword ptr [rcx+40H]                ; 00D1 _ 4C: 8B. 79, 40
+        mov     rdi, qword ptr [rcx+48H]                ; 00D5 _ 48: 8B. 79, 48
+        mov     rsi, qword ptr [rcx+50H]                ; 00D9 _ 48: 8B. 71, 50
+        movdqu  xmm6, xmmword ptr [rcx+58H]             ; 00DD _ F3: 0F 6F. 71, 58
+        movdqu  xmm7, xmmword ptr [rcx+68H]             ; 00E2 _ F3: 0F 6F. 79, 68
+        movdqu  xmm8, xmmword ptr [rcx+78H]             ; 00E7 _ F3 44: 0F 6F. 41, 78
+        movdqu  xmm9, xmmword ptr [rcx+88H]             ; 00ED _ F3 44: 0F 6F. 89, 00000088
+        movdqu  xmm10, xmmword ptr [rcx+98H]            ; 00F6 _ F3 44: 0F 6F. 91, 00000098
+        movdqu  xmm11, xmmword ptr [rcx+0A8H]           ; 00FF _ F3 44: 0F 6F. 99, 000000A8
+        movdqu  xmm12, xmmword ptr [rcx+0B8H]           ; 0108 _ F3 44: 0F 6F. A1, 000000B8
+        movdqu  xmm13, xmmword ptr [rcx+0C8H]           ; 0111 _ F3 44: 0F 6F. A9, 000000C8
+        movdqu  xmm14, xmmword ptr [rcx+0D8H]           ; 011A _ F3 44: 0F 6F. B1, 000000D8
+        movdqu  xmm15, xmmword ptr [rcx+0E8H]           ; 0123 _ F3 44: 0F 6F. B9, 000000E8
+        mov     rcx, rbx                                ; 012C _ 48: 89. D9
+        mov     eax, 1                                  ; 012F _ B8, 00000001
+        jmp     r11                                     ; 0134 _ 41: FF. E3
 asco_load ENDP
 
-        nop                                             ; 0133 _ 90
-        nop                                             ; 0134 _ 90
-        nop                                             ; 0135 _ 90
-        nop                                             ; 0136 _ 90
         nop                                             ; 0137 _ 90
         nop                                             ; 0138 _ 90
         nop                                             ; 0139 _ 90
