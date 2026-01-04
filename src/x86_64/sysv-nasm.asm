@@ -1,5 +1,5 @@
 ; Disassembly of file: source.sysv.o
-; Sun Jan  4 01:27:51 2026
+; Sun Jan  4 11:41:47 2026
 ; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: SSE, x64, 80x87
@@ -9,6 +9,8 @@ default rel
 global asco_init_internal
 global asco_save
 global asco_load
+
+extern eax                                              ; dword
 
 
 SECTION .text   align=1 exec                            ; section number 1, code
@@ -25,41 +27,43 @@ asco_init_internal:; Function begin
 ; asco_init_internal End of function
 
 asco_save:; Function begin
-        lea     r11, [rel Lasco_save_cameback]          ; 0021 _ 4C: 8D. 1D, 0000002A(rel)
-        mov     qword [rdi], r11                        ; 0028 _ 4C: 89. 1F
-        mov     qword [rdi+8H], rbp                     ; 002B _ 48: 89. 6F, 08
-        mov     qword [rdi+10H], rsp                    ; 002F _ 48: 89. 67, 10
-        stmxcsr dword [rdi+18H]                         ; 0033 _ 0F AE. 5F, 18
-        fwait                                           ; 0037 _ 9B
-        fnstcw  word [rdi+1CH]                          ; 0038 _ D9. 7F, 1C
-        mov     qword [rdi+20H], rbx                    ; 003B _ 48: 89. 5F, 20
-        mov     qword [rdi+28H], r12                    ; 003F _ 4C: 89. 67, 28
-        mov     qword [rdi+30H], r13                    ; 0043 _ 4C: 89. 6F, 30
-        mov     qword [rdi+38H], r14                    ; 0047 _ 4C: 89. 77, 38
-        mov     qword [rdi+40H], r15                    ; 004B _ 4C: 89. 7F, 40
-        xor     eax, eax                                ; 004F _ 31. C0
-        ret                                             ; 0051 _ C3
+        pop     r11                                     ; 0021 _ 41: 5B
+        mov     qword [rdi], r11                        ; 0023 _ 4C: 89. 1F
+        mov     qword [rdi+10H], rsp                    ; 0026 _ 48: 89. 67, 10
+        push    r11                                     ; 002A _ 41: 53
+        mov     qword [rdi+8H], rbp                     ; 002C _ 48: 89. 6F, 08
+        stmxcsr dword [rdi+18H]                         ; 0030 _ 0F AE. 5F, 18
+        fwait                                           ; 0034 _ 9B
+        fnstcw  word [rdi+1CH]                          ; 0035 _ D9. 7F, 1C
+        mov     qword [rdi+20H], rbx                    ; 0038 _ 48: 89. 5F, 20
+        mov     qword [rdi+28H], r12                    ; 003C _ 4C: 89. 67, 28
+        mov     qword [rdi+30H], r13                    ; 0040 _ 4C: 89. 6F, 30
+        mov     qword [rdi+38H], r14                    ; 0044 _ 4C: 89. 77, 38
+        mov     qword [rdi+40H], r15                    ; 0048 _ 4C: 89. 7F, 40
+        xor     eax, eax                                ; 004C _ 31. C0
+        ret                                             ; 004E _ C3
 ; asco_save End of function
 
 Lasco_save_cameback:; Local function
-        mov     eax, 1                                  ; 0052 _ B8, 00000001
-        ret                                             ; 0057 _ C3
+        mov     eax, 1                                  ; 004F _ B8, 00000001
+        ret                                             ; 0054 _ C3
 
 asco_load:; Function begin
-        mov     rbp, qword [rdi+8H]                     ; 0058 _ 48: 8B. 6F, 08
-        mov     rsp, qword [rdi+10H]                    ; 005C _ 48: 8B. 67, 10
-        ldmxcsr dword [rdi+18H]                         ; 0060 _ 0F AE. 57, 18
-        fwait                                           ; 0064 _ 9B
-        fnclex                                          ; 0065 _ DB. E2
-        fldcw   word [rdi+1CH]                          ; 0067 _ D9. 6F, 1C
-        mov     rbx, qword [rdi+20H]                    ; 006A _ 48: 8B. 5F, 20
-        mov     r12, qword [rdi+28H]                    ; 006E _ 4C: 8B. 67, 28
-        mov     r13, qword [rdi+30H]                    ; 0072 _ 4C: 8B. 6F, 30
-        mov     r14, qword [rdi+38H]                    ; 0076 _ 4C: 8B. 77, 38
-        mov     r15, qword [rdi+40H]                    ; 007A _ 4C: 8B. 7F, 40
-        mov     r11, rdi                                ; 007E _ 49: 89. FB
-        mov     rdi, rbx                                ; 0081 _ 48: 89. DF
-        jmp     near [r11]                              ; 0084 _ 41: FF. 23
+        mov     rbp, qword [rdi+8H]                     ; 0055 _ 48: 8B. 6F, 08
+        mov     rsp, qword [rdi+10H]                    ; 0059 _ 48: 8B. 67, 10
+        ldmxcsr dword [rdi+18H]                         ; 005D _ 0F AE. 57, 18
+        fwait                                           ; 0061 _ 9B
+        fnclex                                          ; 0062 _ DB. E2
+        fldcw   word [rdi+1CH]                          ; 0064 _ D9. 6F, 1C
+        mov     rbx, qword [rdi+20H]                    ; 0067 _ 48: 8B. 5F, 20
+        mov     r12, qword [rdi+28H]                    ; 006B _ 4C: 8B. 67, 28
+        mov     r13, qword [rdi+30H]                    ; 006F _ 4C: 8B. 6F, 30
+        mov     r14, qword [rdi+38H]                    ; 0073 _ 4C: 8B. 77, 38
+        mov     r15, qword [rdi+40H]                    ; 0077 _ 4C: 8B. 7F, 40
+        mov     rdi, rbx                                ; 007B _ 48: 89. DF
+; Note: Address is not rip-relative
+        mov     dword [abs eax], 1                      ; 007E _ C7. 04 25, 00000000(d), 00000001
+        jmp     near [rdi]                              ; 0089 _ FF. 27
 ; asco_load End of function
 
 

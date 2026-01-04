@@ -75,12 +75,20 @@ asco_init_internal:
 
 /* int asco_save(asco_ctx *cur_ctx); */
 asco_save:
-	/* get pointer to cameback */
-	lea	Lasco_save_cameback(%rip), %tmp1
+	pop	%tmp1
 
+	/* saving desired %rip */
 	movq	%tmp1, (%arg1)
-	movq	%rbp, 0x8(%arg1)
+
+	/* need to save %rsp as it will be when this returns; asco_load just
+	   blindly jmps */
 	movq	%rsp, 0x10(%arg1)
+
+	push	%tmp1
+
+
+	/* saving other regs */
+	movq	%rbp, 0x8(%arg1)
 
 	/* saving fp state */
 	stmxcsr	0x18(%arg1)
@@ -151,12 +159,12 @@ asco_load:
 	movdqu	0xe8(%arg1), %xmm15
 #endif
 
-	/* saving struct pointer so we can jmp to it later */
-	movq	%arg1, %tmp1
-
 	/* move whatever is in fake %rbx to fst argument of fn */
 	movq	%rbx, %arg1
 
+	/* returning 1 */
+	movl	$1, ret32
+
 	/* jmp to stored-rip */
-	jmp	*(%tmp1)
+	jmp	*(%arg1)
 

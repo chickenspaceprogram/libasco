@@ -42,12 +42,20 @@ asco_init_internal:
 
 
 asco_save:
-	
-	lea	Lasco_save_cameback(%rip), %r11
+	pop	%r11
 
+	
 	movq	%r11, (%rcx)
-	movq	%rbp, 0x8(%rcx)
+
+	
+                   
 	movq	%rsp, 0x10(%rcx)
+
+	push	%r11
+
+
+	
+	movq	%rbp, 0x8(%rcx)
 
 	
 	stmxcsr	0x18(%rcx)
@@ -119,12 +127,12 @@ asco_load:
 
 
 	
-	movq	%rcx, %r11
-
-	
 	movq	%rbx, %rcx
 
 	
-	jmp	*(%r11)
+	movl	$1, eax
+
+	
+	jmp	*(%rcx)
 
 
