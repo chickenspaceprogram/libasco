@@ -26,12 +26,23 @@ jobs:
 
         exclude:
           - c_compiler: gcc
-            cpp_compiler: [cl, clang++]
+            cpp_compiler: cl
+          - c_compiler: gcc
+            cpp_compiler: clang++
           - c_compiler: clang
-            cpp_compiler: [cl, g++]
+            cpp_compiler: cl
+          - c_compiler: clang
+            cpp_compiler: g++
           - c_compiler: cl
-            cpp_compiler: [g++, clang++]
-            os: [ubuntu-24.04, ubuntu-24.04-arm, macos-latest]
+            cpp_compiler: g++
+          - c_compiler: cl
+            cpp_compiler: clang++
+          - c_compiler: cl
+            os: ubuntu-24.04
+          - c_compiler: cl
+            os: ubuntu-24.04-arm
+          - c_compiler: cl
+            os: macos-latest
 
     steps:
     - uses: actions/checkout@v4
