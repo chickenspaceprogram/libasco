@@ -16,7 +16,7 @@ having said that. you shouldn't be using POSIX signals anyways. if you *really*
 need them, save/restore the signal mask yourself, or just use the ucontext
 functions.
 
-i intend to port this to work on the following processors:
+i intend to port this to work on at least the following processors:
 
 - armv7
 - aarch64
@@ -25,12 +25,11 @@ i intend to port this to work on the following processors:
 - i386
 - x86-64
 
-more might be supported in future, but no guarantees
 
 currently, the following have been implemented:
 
 - aarch64
-- x86-64 (Unix only)
+- x86-64
 
 mostly this is intended to run with both the Microsoft and GNU toolchains. it
 should be reasonably portable though, you may just have to add the appropriate
