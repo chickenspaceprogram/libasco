@@ -18,7 +18,7 @@ if(ASCO_ARCH_X86_64 AND ASCO_OS_UNIX)
 		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/x86_64/sysv-att.s")
 	elseif(ASCO_ASM_NASM)
 		enable_language(ASM_NASM)
-		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/x86_64/sysv-nasm.s")
+		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/x86_64/sysv-nasm.asm")
 	elseif(ASCO_ASM_ASM)
 		enable_language(ASM) # maybe it'll work
 		set(ASCO_PLATFORM_FILES "${ASCO_SOURCE_DIR}/x86_64/sysv-att.s")

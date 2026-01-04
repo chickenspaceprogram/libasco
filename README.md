@@ -18,18 +18,19 @@ functions.
 
 i intend to port this to work on the following processors:
 
-- arm
+- armv7
 - aarch64
-- riscv
 - riscv64
-- ppc
-- ppc64(le)
+- ppc64(be/le)
 - i386
 - x86-64
+
+more might be supported in future, but no guarantees
 
 currently, the following have been implemented:
 
 - aarch64
+- x86-64 (Unix only)
 
 mostly this is intended to run with both the Microsoft and GNU toolchains. it
 should be reasonably portable though, you may just have to add the appropriate
