@@ -1,5 +1,5 @@
 ; Disassembly of file: source.win.o
-; Sun Jan  4 11:41:47 2026
+; Sun Jan  4 11:44:04 2026
 ; Type: COFF64
 ; Syntax: MASM/ML64
 ; Instruction set: SSE2, x64, 80x87
@@ -8,8 +8,6 @@ option dotname
 public asco_init_internal
 public asco_save
 public asco_load
-
-extern eax: dword
 
 
 _text   SEGMENT PARA 'CODE'                             ; section number 1
@@ -83,11 +81,16 @@ asco_load PROC
         movdqu  xmm14, xmmword ptr [rcx+0D8H]           ; 0117 _ F3 44: 0F 6F. B1, 000000D8
         movdqu  xmm15, xmmword ptr [rcx+0E8H]           ; 0120 _ F3 44: 0F 6F. B9, 000000E8
         mov     rcx, rbx                                ; 0129 _ 48: 89. D9
-; Note: Address is not rip-relative
-        mov     dword ptr [eax], 1                      ; 012C _ C7. 04 25, 00000000, 00000001
-        jmp     qword ptr [rcx]                         ; 0137 _ FF. 21
+        mov     eax, 1                                  ; 012C _ B8, 00000001
+        jmp     qword ptr [rcx]                         ; 0131 _ FF. 21
 asco_load ENDP
 
+        nop                                             ; 0133 _ 90
+        nop                                             ; 0134 _ 90
+        nop                                             ; 0135 _ 90
+        nop                                             ; 0136 _ 90
+        nop                                             ; 0137 _ 90
+        nop                                             ; 0138 _ 90
         nop                                             ; 0139 _ 90
         nop                                             ; 013A _ 90
         nop                                             ; 013B _ 90

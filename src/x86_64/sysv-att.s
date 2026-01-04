@@ -100,7 +100,7 @@ asco_load:
 	movq	%rbx, %rdi
 
 	
-	movl	$1, eax
+	movl	$1, %eax
 
 	
 	jmp	*(%rdi)

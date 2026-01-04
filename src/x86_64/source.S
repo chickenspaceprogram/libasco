@@ -163,7 +163,7 @@ asco_load:
 	movq	%rbx, %arg1
 
 	/* returning 1 */
-	movl	$1, ret32
+	movl	$1, %ret32
 
 	/* jmp to stored-rip */
 	jmp	*(%arg1)

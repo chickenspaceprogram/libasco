@@ -1,5 +1,5 @@
 ; Disassembly of file: source.sysv.o
-; Sun Jan  4 11:41:47 2026
+; Sun Jan  4 11:44:04 2026
 ; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: SSE, x64, 80x87
@@ -9,8 +9,6 @@ default rel
 global asco_init_internal
 global asco_save
 global asco_load
-
-extern eax                                              ; dword
 
 
 SECTION .text   align=1 exec                            ; section number 1, code
@@ -61,9 +59,8 @@ asco_load:; Function begin
         mov     r14, qword [rdi+38H]                    ; 0073 _ 4C: 8B. 77, 38
         mov     r15, qword [rdi+40H]                    ; 0077 _ 4C: 8B. 7F, 40
         mov     rdi, rbx                                ; 007B _ 48: 89. DF
-; Note: Address is not rip-relative
-        mov     dword [abs eax], 1                      ; 007E _ C7. 04 25, 00000000(d), 00000001
-        jmp     near [rdi]                              ; 0089 _ FF. 27
+        mov     eax, 1                                  ; 007E _ B8, 00000001
+        jmp     near [rdi]                              ; 0083 _ FF. 27
 ; asco_load End of function
 
 
