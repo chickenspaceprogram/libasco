@@ -4,7 +4,7 @@
 
 // SPDX-License-Identifier: MPL-2.0
 
-.section text
+.text
 
 .global asco_init_internal
 
