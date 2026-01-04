@@ -91,11 +91,10 @@ typedef struct {
 	uint64_t fp;
 	uint64_t sp;
 
-	// i'm using the x19 slot to serve a dual purpose
-	// it's x19 when resuming a ctx, and x0 when starting a new ctx
-	uint64_t x19_or_x0;
+	// either return value or fst arg
+	uint64_t x0;
 
-	uint64_t x20_x28[9];
+	uint64_t x19_x28[10];
 	double d8_d15[8];
 } asco_ctx;
 

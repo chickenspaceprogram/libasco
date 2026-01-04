@@ -19,7 +19,7 @@
 // void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp);
 asco_init_internal
 	stp	x1, xzr, [x0], #16
-	stp	x3, x2, [x0], #16
+	stp	x3, x2, [x0]
 
 	// after setup:
 	// ctx.lr = fn
@@ -34,16 +34,19 @@ asco_save
 	// copying sp
 	mov	x9, sp
 
+	// return value on load
+	mov	w10, #1
+
 	// storing fp, lr, sp, x19
 	stp	lr, fp, [x0], #16
-	stp	x9, x19, [x0], #16
+	stp	x9, x10, [x0], #16
 
 	// storing x19-x28
-	stp	x20, x21, [x0], #16
-	stp	x22, x23, [x0], #16
-	stp	x24, x25, [x0], #16
-	stp	x26, x27, [x0], #16
-	str	x28, [x0], #8
+	stp	x19, x20, [x0], #16
+	stp	x21, x22, [x0], #16
+	stp	x23, x24, [x0], #16
+	stp	x25, x26, [x0], #16
+	stp	x27, x28, [x0], #16
 
 	// storing d8-d15
 	stp	d8, d9, [x0], #16
@@ -57,32 +60,26 @@ asco_save
 
 // void asco_load(const asco_ctx *new_ctx);
 asco_load
-	// loading lr, sp, fp, pc
-	ldp	lr, fp, [x0], #16
-	ldp	x9, x19, [x0], #16
+	// loading lr, fp
+	ldp	lr, fp, [x0]
+
+	// loading x19-x28
+	ldp	x19, x20, [x0, #0x20]
+	ldp	x21, x22, [x0, #0x30]
+	ldp	x23, x24, [x0, #0x40]
+	ldp	x25, x26, [x0, #0x50]
+	ldp	x27, x28, [x0, #0x60]
+
+	// loading d8, d15
+	ldp	d8, d9, [x0, #0x70]
+	ldp	d10, d11, [x0, #0x80]
+	ldp	d12, d13, [x0, #0x90]
+	ldp	d14, d15, [x0, #0x100]
+
+	ldp	x9, x0, [x0, #0x10]
 	
 	// copying into sp
 	mov	sp, x9
-
-	// loading x19-x28
-	ldp	x20, x21, [x0], #16
-	ldp	x22, x23, [x0], #16
-	ldp	x24, x25, [x0], #16
-	ldp	x26, x27, [x0], #16
-	ldr	x28, [x0], #8
-
-	// loading d8, d15
-	ldp	d8, d9, [x0], #16
-	ldp	d10, d11, [x0], #16
-	ldp	d12, d13, [x0], #16
-	ldp	d14, d15, [x0]
-
-	// dirty trick
-	// when starting a new ctx from a function, i've stored its `void *`
-	// arg in the x19 slot. in that case x19 doesn't matter anyways.
-	// when resuming a ctx, x0 is not preserved, so this doesnt cause
-	// issues then either
-	mov	x0, x19
 
 	// basically br lr
 	ret
