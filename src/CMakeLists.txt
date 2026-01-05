@@ -8,6 +8,7 @@ cmake_minimum_required(VERSION 3.21)
 
 include(CheckSymbolExists)
 
+check_symbol_exists("ASCO_ARCH_ARMV7" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_ARMV7)
 check_symbol_exists("ASCO_ARCH_AARCH64" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_AARCH64)
 check_symbol_exists("ASCO_ARCH_X86_64" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_ARCH_X86_64)
 check_symbol_exists("ASCO_OS_UNIX" "${ASCO_INCLUDE_DIR}/asco/arch-detection.h" ASCO_OS_UNIX)
