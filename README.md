@@ -30,7 +30,7 @@ currently, the following have been implemented:
 
 - aarch64
 - x86-64
-- armv5
+- armv5 (partial, only softfp ABI is supported)
 
 mostly this is intended to run with both the Microsoft and GNU toolchains. it
 should be reasonably portable though, you may just have to add the appropriate
