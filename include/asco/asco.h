@@ -7,15 +7,16 @@
 
 // asco.h
 //
-// This library is a very thin wrapper around platform-specific assembly.
+// This library is a thin wrapper around platform-specific assembly.
 // It's not intended to be an actual, nice-to-use coroutine library.
-// There is no runtime or anything like that, no channels or other such useful
-// synchronization primitives. Implement those yourself.
+// There is no runtime or anything like that. You get the ability to create new
+// call stacks and switch between them, more complex logic is left to the user.
 //
 // This library also entirely avoids allocation. You must provide memory
-// yourself. This is a less-annoying alternative to custom allocators.
-// Those are great for large libraries, but this is a little tiny thing you
-// really should just statically link into your own library.
+// yourself. This allows you to avoid linking against libc if you wish.
+// There aren't convenient provisions for that in the buildsystem (the tests
+// still need libc, for example) but there's nothing in theory stopping you
+// from doing that.
 //
 // Also, this library is primarily intended to implement stackful coroutines,
 // not to serve as a better setjmp/longjmp. It can serve that purpose, but,
@@ -98,6 +99,20 @@ typedef struct {
 	double d8_d15[8];
 } asco_ctx;
 
+#elif ASCO_ARCH_ARMV5
+
+typedef struct {
+	// either retval or fst arg
+	uint32_t a1;
+
+
+	// callee-preserved regs
+	uint32_t r4_r10[7];
+
+	uint32_t fp;
+	uint32_t sp;
+	uint32_t lr;
+} asco_ctx;
 
 #else
 #	error "Unsupported CPU architecture."

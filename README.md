@@ -18,7 +18,7 @@ functions.
 
 i intend to port this to work on at least the following processors:
 
-- armv7
+- armv5
 - aarch64
 - riscv64
 - ppc64(be/le)
@@ -30,6 +30,7 @@ currently, the following have been implemented:
 
 - aarch64
 - x86-64
+- armv5
 
 mostly this is intended to run with both the Microsoft and GNU toolchains. it
 should be reasonably portable though, you may just have to add the appropriate
