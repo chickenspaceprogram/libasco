@@ -6,6 +6,10 @@
 
 #include <asco/asco.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // actually implemented in asm
 extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
 	void *sp) ASCO_ASM_NAME(asco_init_internal);
@@ -49,3 +53,7 @@ void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 {
 	asco_init_internal(new_ctx, fn, arg, set_stack_ptr(stack, stack_sz));
 }
+
+#ifdef __cplusplus
+}
+#endif

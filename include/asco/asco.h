@@ -35,6 +35,9 @@
 
 #include <asco/arch-detection.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #if ASCO_OS_WINDOWS
 #	define ASCO_ASM_NAME(NAME)
@@ -202,3 +205,6 @@ static inline void asco_swap(asco_ctx *cur_ctx, const asco_ctx *new_ctx)
 }
 
 
+#ifdef __cplusplus
+}
+#endif
