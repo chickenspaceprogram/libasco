@@ -35,7 +35,15 @@
 
 #include <asco/arch-detection.h>
 
-#define ASCO_ASM_NAME(NAME)
+
+#if ASCO_OS_WINDOWS
+#	define ASCO_ASM_NAME(NAME)
+#else
+#	define ASCO_ASM_NAME1(NAME) asm(#NAME)
+#	define ASCO_ASM_NAME(NAME) ASCO_ASM_NAME1(NAME)
+#endif
+
+#define ASCO_CALL
 
 #if (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS) // win64
 
@@ -61,10 +69,6 @@ typedef struct {
 
 #elif (ASCO_ARCH_X86_64) // sysV
 
-// if this breaks, special-case it and define it to expand to nothing
-#undef ASCO_ASM_NAME
-#define ASCO_ASM_NAME(NAME) asm(#NAME)
-
 typedef struct {
 	// preserved in any sane call conv
 	uint64_t rip;
@@ -79,14 +83,16 @@ typedef struct {
 	uint64_t r12_r15[4];
 } asco_ctx;
 
+#elif ASCO_ARCH_X86
+
+#if ASCO_OS_WINDOWS
+#	define ASCO_CALL __cdecl
+#else
+
+#endif
 
 #elif ASCO_ARCH_AARCH64
 
-#ifndef ASCO_OS_WINDOWS
-// if this breaks, special-case it and define it to expand to nothing
-#undef ASCO_ASM_NAME
-#define ASCO_ASM_NAME(NAME) asm(#NAME)
-#endif
 typedef struct {
 	uint64_t lr;
 	uint64_t fp;
@@ -122,11 +128,15 @@ typedef struct {
 
 // The function whose pointer has this type looks as follows:
 //
-// void whatever_function_name(void *arg)
+// void ASCO_CALL whatever_function_name(void *arg)
 // {
 // 	// ...
 // }
-typedef void (*asco_fn)(void *arg);
+//
+// You probably don't need to include ASCO_CALL. It's good practice to do so,
+// but it's only relevant on 32-bit MSVC when a compiler flag is passed to
+// override the default `__cdecl` calling convention.
+typedef void (ASCO_CALL *asco_fn)(void *arg);
 
 // Instantiates an `asco_ctx`.
 //
@@ -159,7 +169,7 @@ void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 // after the current scope ends.
 //
 // Returns 1 if we've come from another coroutine, 0 if not.
-extern int asco_save(asco_ctx *cur_ctx) ASCO_ASM_NAME(asco_save);
+extern int ASCO_CALL asco_save(asco_ctx *cur_ctx) ASCO_ASM_NAME(asco_save);
 
 // Sets the current ctx to `new_ctx`.
 //
@@ -167,7 +177,7 @@ extern int asco_save(asco_ctx *cur_ctx) ASCO_ASM_NAME(asco_save);
 // pointer.
 //
 // This function never returns.
-extern void asco_load(const asco_ctx *new_ctx) ASCO_ASM_NAME(asco_load);
+extern void ASCO_CALL asco_load(const asco_ctx *new_ctx) ASCO_ASM_NAME(asco_load);
 
 // Saves the current execution context, then jumps to the new context.
 //

@@ -7,7 +7,7 @@
 #include <asco/asco.h>
 
 // actually implemented in asm
-extern void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
+extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
 	void *sp) ASCO_ASM_NAME(asco_init_internal);
 
 // arch dependent
