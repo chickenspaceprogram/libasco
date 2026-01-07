@@ -8,11 +8,6 @@
    This gets compiled manually and then disassembled to spit out the various
    assembler-specific assemblies.
 
-   Doing it this way I can have a hard dependency on x86_64 and mingw
-   gcc/clang, since my dev box has those. I also only have one file to
-   maintain.
-
-
    Prodigious comments here, I am new to amd64 asm. */
 
 /* patching over the difference between sysV and win64 with cpp */

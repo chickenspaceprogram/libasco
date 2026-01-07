@@ -91,6 +91,17 @@ typedef struct {
 
 #endif
 
+typedef struct {
+	uint32_t eip;
+	uint32_t ebp; // frame ptr ("base ptr"?)
+	uint32_t esp; // stack ptr
+
+	// generic callee-svd regs
+	uint32_t ebx;
+	uint32_t edi;
+	uint32_t esi;
+} asco_ctx;
+
 #elif ASCO_ARCH_AARCH64
 
 typedef struct {
