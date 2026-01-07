@@ -36,8 +36,12 @@
 #include <asco/arch-detection.h>
 
 #ifdef __cplusplus
+#define ASCO_LINKAGE extern "C" {
 extern "C" {
+#else
+#define ASCO_LINKAGE
 #endif
+
 
 #if ASCO_OS_WINDOWS
 #	define ASCO_ASM_NAME(NAME)
@@ -142,7 +146,7 @@ typedef struct {
 
 // The function whose pointer has this type looks as follows:
 //
-// void ASCO_CALL whatever_function_name(void *arg)
+// ASCO_LINKAGE void ASCO_CALL whatever_function_name(void *arg)
 // {
 // 	// ...
 // }
@@ -150,7 +154,10 @@ typedef struct {
 // You probably don't need to include ASCO_CALL. It's good practice to do so,
 // but it's only relevant on 32-bit MSVC when a compiler flag is passed to
 // override the default `__cdecl` calling convention.
-typedef void (ASCO_CALL *asco_fn)(void *arg);
+//
+// Similar deal for ASCO_LINKAGE. It's good practice, but if you can guarantee
+// that `asco_fn`s will only be compiled by a C compiler it's unnecessary.
+ASCO_LINKAGE typedef void (ASCO_CALL *asco_fn)(void *arg);
 
 // Instantiates an `asco_ctx`.
 //
