@@ -113,9 +113,6 @@ typedef struct {
 	uint32_t sp;
 	uint32_t lr;
 // couldn't figure out how the HFP unit worked
-#	warning Building for ARM 32-bit, assuming soft floating point ABI.\
-		If you have a HFP unit, add the `-mfloat-abi=softfp` flag to\
-		gcc.
 } asco_ctx;
 
 #else
