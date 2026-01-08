@@ -33,7 +33,7 @@ asco_init_internal:
 	movl	$0, 4(%eax)
 
 	/* loading sp to regs */
-	movl	16(%ebp), %edx
+	movl	16(%esp), %edx
 
 	/* putting return addr and fst arg on the new stack */
 	sub	$8, %edx

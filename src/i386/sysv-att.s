@@ -8,7 +8,7 @@ asco_init_internal:
  movl 8(%esp), %edx
  movl %edx, (%eax)
  movl $0, 4(%eax)
- movl 16(%ebp), %edx
+ movl 16(%esp), %edx
  sub $8, %edx
  movl $0, (%edx)
  movl 12(%esp), %ecx
