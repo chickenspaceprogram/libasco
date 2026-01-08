@@ -4,11 +4,8 @@ let
 in
 crossEnv.mkShell {
 	buildInputs = with crossEnv; [
-		llvmPackages.compiler-rt
+#		llvmPackages.compiler-rt
 		gdb
 		valgrind
-		clang
-		clangStdenv
-		clang-tools
 	];
 }
