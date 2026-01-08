@@ -3,10 +3,12 @@ let
 	crossEnv = pkgs.pkgsCross.gnu32;
 in
 crossEnv.mkShell {
-	packages = with crossEnv; [
+	buildInputs = with crossEnv; [
+		llvmPackages.compiler-rt
 		gdb
 		valgrind
-		clangStdenv
 		clang
+		clangStdenv
+		clang-tools
 	];
 }
