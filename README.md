@@ -16,14 +16,19 @@ having said that. you shouldn't be using POSIX signals anyways. if you *really*
 need them, save/restore the signal mask yourself, or just use the ucontext
 functions.
 
+i also recommend running this in a debugger and making sure it's behaving
+sensibly (ensure registers are preserved/stack ptr is moved as expected).
+testing hasn't been extensive enough and i can't think of ways to automate it.
+this library is very much still in beta.
+
 i intend to port this to work on at least the following processors:
 
 - armv5
 - aarch64
 - riscv64
 - ppc64(be/le)
-- i386
 - x86-64
+- i386
 
 
 currently, the following have been implemented:
@@ -31,6 +36,7 @@ currently, the following have been implemented:
 - aarch64
 - x86-64
 - armv5 (partial, only softfp ABI is supported)
+- i386 (only tested on i686, but no i386 features used)
 
 mostly this is intended to run with both the Microsoft and GNU toolchains. it
 should be reasonably portable though, you may just have to add the appropriate
