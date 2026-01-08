@@ -1,5 +1,3 @@
-#pragma once
-
 //===----------------------------------------------------------------------===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -16,6 +14,8 @@
 
 /* ---------------------- Operating system recognition ------------------- */
 
+#ifndef ASCO_ARCH_DETECTION_H
+#define ASCO_ARCH_DETECTION_H
 
 #define ASCO_OS_LINUX 0
 #define ASCO_OS_DRAGONFLY 0
@@ -418,3 +418,5 @@
 #undef ASCO_ARCH_SPARC
 #endif
 
+
+#endif

@@ -29,7 +29,9 @@
 // ucontext, or save/restore the signal mask yourself. I'd just avoid POSIX
 // signals like the plague, personally, but I'd do that anyways.
 
-#pragma once
+#ifndef ASCO_ASCO_H
+#define ASCO_ASCO_H 1
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -214,4 +216,6 @@ static inline void asco_swap(asco_ctx *cur_ctx, const asco_ctx *new_ctx)
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
