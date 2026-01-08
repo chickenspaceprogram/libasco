@@ -16,9 +16,9 @@ asco_init_internal:
  movl %edx, 8(%eax)
  ret
 asco_save:
+ movl 4(%esp), %eax
  popl %edx
  movl %edx, (%eax)
- movl (%esp), %eax
  movl %ebp, 4(%eax)
  movl %esp, 8(%eax)
  movl %ebx, 12(%eax)

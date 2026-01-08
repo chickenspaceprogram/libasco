@@ -1,2 +1,12 @@
-let pkgs = import <nixpkgs> {}; in
-pkgs.pkgsCross.gnu32.mkShell {}
+let
+	pkgs = import <nixpkgs> {};
+	crossEnv = pkgs.pkgsCross.gnu32;
+in
+crossEnv.mkShell {
+	packages = with crossEnv; [
+		gdb
+		valgrind
+		clangStdenv
+		clang
+	];
+}

@@ -48,12 +48,13 @@ asco_init_internal:
 
 /* int asco_save(asco_ctx *cur_ctx); */
 asco_save:
+	/* getting cur_ctx */
+	movl	4(%esp), %eax
 	/* saving eip */
 	popl	%edx
+
 	movl	%edx, (%eax)
 
-	/* getting cur_ctx */
-	movl	(%esp), %eax
 
 	movl	%ebp, 4(%eax)
 	movl	%esp, 8(%eax)
@@ -72,11 +73,11 @@ asco_load:
 	movl	(%eax), %edx
 
 	movl	4(%eax), %ebp
+
 	movl	8(%eax), %esp
 	movl	12(%eax), %ebx
 	movl	16(%eax), %edi
 	movl	20(%eax), %esi
-
 
 	/* jmping to eip */
 	movl	$1, %eax

@@ -1,5 +1,5 @@
 ; Disassembly of file: source.sysv.o
-; Wed Jan  7 02:45:11 2026
+; Wed Jan  7 16:35:56 2026
 ; Type: ELF32
 ; Syntax: NASM
 ; Instruction set: 80386
@@ -27,28 +27,28 @@ asco_init_internal:; Function begin
 ; asco_init_internal End of function
 
 asco_save:; Function begin
-        pop     edx                                     ; 0028 _ 5A
-        mov     dword [eax], edx                        ; 0029 _ 89. 10
-        mov     eax, dword [esp]                        ; 002B _ 8B. 04 24
-        mov     dword [eax+4H], ebp                     ; 002E _ 89. 68, 04
-        mov     dword [eax+8H], esp                     ; 0031 _ 89. 60, 08
-        mov     dword [eax+0CH], ebx                    ; 0034 _ 89. 58, 0C
-        mov     dword [eax+10H], edi                    ; 0037 _ 89. 78, 10
-        mov     dword [eax+14H], esi                    ; 003A _ 89. 70, 14
-        mov     eax, 0                                  ; 003D _ B8, 00000000
-        jmp     edx                                     ; 0042 _ FF. E2
+        mov     eax, dword [esp+4H]                     ; 0028 _ 8B. 44 24, 04
+        pop     edx                                     ; 002C _ 5A
+        mov     dword [eax], edx                        ; 002D _ 89. 10
+        mov     dword [eax+4H], ebp                     ; 002F _ 89. 68, 04
+        mov     dword [eax+8H], esp                     ; 0032 _ 89. 60, 08
+        mov     dword [eax+0CH], ebx                    ; 0035 _ 89. 58, 0C
+        mov     dword [eax+10H], edi                    ; 0038 _ 89. 78, 10
+        mov     dword [eax+14H], esi                    ; 003B _ 89. 70, 14
+        mov     eax, 0                                  ; 003E _ B8, 00000000
+        jmp     edx                                     ; 0043 _ FF. E2
 ; asco_save End of function
 
 asco_load:; Function begin
-        mov     eax, dword [esp+4H]                     ; 0044 _ 8B. 44 24, 04
-        mov     edx, dword [eax]                        ; 0048 _ 8B. 10
-        mov     ebp, dword [eax+4H]                     ; 004A _ 8B. 68, 04
-        mov     esp, dword [eax+8H]                     ; 004D _ 8B. 60, 08
-        mov     ebx, dword [eax+0CH]                    ; 0050 _ 8B. 58, 0C
-        mov     edi, dword [eax+10H]                    ; 0053 _ 8B. 78, 10
-        mov     esi, dword [eax+14H]                    ; 0056 _ 8B. 70, 14
-        mov     eax, 1                                  ; 0059 _ B8, 00000001
-        jmp     edx                                     ; 005E _ FF. E2
+        mov     eax, dword [esp+4H]                     ; 0045 _ 8B. 44 24, 04
+        mov     edx, dword [eax]                        ; 0049 _ 8B. 10
+        mov     ebp, dword [eax+4H]                     ; 004B _ 8B. 68, 04
+        mov     esp, dword [eax+8H]                     ; 004E _ 8B. 60, 08
+        mov     ebx, dword [eax+0CH]                    ; 0051 _ 8B. 58, 0C
+        mov     edi, dword [eax+10H]                    ; 0054 _ 8B. 78, 10
+        mov     esi, dword [eax+14H]                    ; 0057 _ 8B. 70, 14
+        mov     eax, 1                                  ; 005A _ B8, 00000001
+        jmp     edx                                     ; 005F _ FF. E2
 ; asco_load End of function
 
 
