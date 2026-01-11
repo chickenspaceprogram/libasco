@@ -37,6 +37,12 @@ endif()
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if(MSVC)
+set(CMAKE_C_FLAGS "/fsanitize=address")
+else()
+set(CMAKE_C_FLAGS "-fsanitize=address")
+endif()
+
 set(ASCO_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 set(ASCO_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(ASCO_TEST_DIR "${CMAKE_SOURCE_DIR}/tests")

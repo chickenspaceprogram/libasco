@@ -71,7 +71,7 @@ static void chk_switch_stacks(void)
 	asco_ctx new_ctx;
 	void *stack = malloc(0x1000);
 	dbgassert(stack != NULL);
-	asco_init(&new_ctx, jumpback, &main_ctx, (uint8_t *)stack - 0x100, 0x1000);
+	asco_init(&new_ctx, jumpback, &main_ctx, (uint8_t *)stack, 0x1000);
 	eprintf("chk_switch_stacks(): asco_init() called\n");
 	asco_swap(&main_ctx, &new_ctx);
 	FLAGLIST[4] = CUR_FLAG++;
