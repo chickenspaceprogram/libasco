@@ -22,7 +22,6 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= 0x80; // giving a bunch of extra space, msvc is being weird
 	st &= ~(0xF);
 	return (void *)st;
 }
@@ -31,7 +30,6 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= 0x80; // giving a bunch of extra space, msvc is being weird
 	st &= ~(0x7);
 	return (void *)st;
 }
@@ -40,7 +38,7 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= 0x80; // giving a bunch of extra space, msvc is being weird
+	st -= 0x32; // giving a bunch of extra space, msvc is being weird
 	st &= ~(0xF);
 	return (void *)st;
 }
