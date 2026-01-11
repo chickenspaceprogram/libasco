@@ -22,7 +22,8 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= st % 16;
+	st -= 0x80; // giving a bunch of extra space, msvc is being weird
+	st &= ~(0xF);
 	return (void *)st;
 }
 #elif ASCO_ARCH_ARMV5
@@ -30,7 +31,8 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= st % 8;
+	st -= 0x80; // giving a bunch of extra space, msvc is being weird
+	st &= ~(0x7);
 	return (void *)st;
 }
 #elif ASCO_ARCH_X86_64
@@ -38,10 +40,8 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 {
 	uintptr_t st = (uintptr_t)stack_start;
 	st += stack_sz;
-	st -= st % 16;
-	st -= 24; // leaving space for ret addr
-		  // this is 24 bytes because MSVC can store things above the
-		  // stack ptr
+	st -= 0x80; // giving a bunch of extra space, msvc is being weird
+	st &= ~(0xF);
 	return (void *)st;
 }
 #else
