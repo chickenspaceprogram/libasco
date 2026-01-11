@@ -77,8 +77,8 @@ static void chk_switch_stacks(void)
 	FLAGLIST[4] = CUR_FLAG++;
 	eprintf("chk_switch_stacks(): asco_swap() called\n");
 	dbgassert(val == 123);
-	dbgassert(0 && "should fail here");
 	free(stack);
+	dbgassert(0 && "should fail here");
 }
 
 int main(void)
