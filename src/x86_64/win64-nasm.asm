@@ -11,7 +11,7 @@ global asco_save
 global asco_load
 
 
-SECTION .text   align=1 exec                            ; section number 1, code
+section .text
 
 asco_init_internal:; Function begin
         mov     qword [rcx], rdx                        ; 0000 _ 48: 89. 11

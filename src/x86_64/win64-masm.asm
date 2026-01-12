@@ -10,7 +10,7 @@ public asco_save
 public asco_load
 
 
-_text   SEGMENT BYTE 'CODE'                             ; section number 1
+.code
 
 asco_init_internal PROC
         mov     qword ptr [rcx], rdx                    ; 0000 _ 48: 89. 11
