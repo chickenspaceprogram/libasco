@@ -84,20 +84,3 @@ asco_load:; Function begin
         jmp     r11                                     ; 012E _ 41: FF. E3
 ; asco_load End of function
 
-
-SECTION .data   align=1 noexec                          ; section number 2, data
-
-
-SECTION .bss    align=1 noexec                          ; section number 3, bss
-
-
-SECTION .note.gnu.property align=8 noexec               ; section number 4, const
-
-        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
-        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
-        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
-
-

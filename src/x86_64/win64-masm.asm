@@ -85,23 +85,4 @@ asco_load ENDP
 
 _text   ENDS
 
-_data   SEGMENT BYTE 'DATA'                             ; section number 2
-
-_data   ENDS
-
-.bss    SEGMENT BYTE 'BSS'                              ; section number 3
-
-.bss    ENDS
-
-.note.gnu.property SEGMENT ALIGN(8) 'CONST'             ; section number 4
-
-        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
-        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
-        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
-
-.note.gnu.property ENDS
-
 END
