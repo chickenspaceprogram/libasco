@@ -4,6 +4,7 @@
 ; Syntax: MASM/ML64
 ; Instruction set: SSE2, x64, 80x87
 option dotname
+assume gs:nothing
 
 public asco_init_internal
 public asco_save
