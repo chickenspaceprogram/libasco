@@ -4,14 +4,13 @@
 ; Syntax: MASM/ML64
 ; Instruction set: SSE2, x64, 80x87
 option dotname
-assume gs:nothing
 
 public asco_init_internal
 public asco_save
 public asco_load
 
 
-_text   SEGMENT BYTE 'CODE'                             ; section number 1
+.code
 
 asco_init_internal PROC
         mov     qword ptr [rcx], rdx                    ; 0000 _ 48: 89. 11
@@ -123,26 +122,5 @@ asco_load PROC
         mov     eax, 1                                  ; 01D4 _ B8, 00000001
         jmp     r11                                     ; 01D9 _ 41: FF. E3
 asco_load ENDP
-
-_text   ENDS
-
-_data   SEGMENT BYTE 'DATA'                             ; section number 2
-
-_data   ENDS
-
-.bss    SEGMENT BYTE 'BSS'                              ; section number 3
-
-.bss    ENDS
-
-.note.gnu.property SEGMENT ALIGN(8) 'CONST'             ; section number 4
-
-        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
-        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
-        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
-
-.note.gnu.property ENDS
 
 END
