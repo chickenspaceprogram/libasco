@@ -16,6 +16,10 @@ having said that. you shouldn't be using POSIX signals anyways. if you *really*
 need them, save/restore the signal mask yourself, or just use the ucontext
 functions.
 
+well, and another catch, you must switch back to a coroutine from the same
+thread you left it. don't blame me, blame microsoft
+
+
 i also recommend running this in a debugger and making sure it's behaving
 sensibly (ensure registers are preserved/stack ptr is moved as expected).
 testing hasn't been extensive enough and i can't think of ways to automate it.
@@ -38,9 +42,10 @@ currently, the following have been implemented:
 - armv5 (partial, only softfp ABI is supported)
 - i386 (only tested on i686, but no i386 features used)
 
-mostly this is intended to run with both the Microsoft and GNU toolchains. it
-should be reasonably portable though, you may just have to add the appropriate
-preprocessor directives if the ones here don't cover things.
+mostly this is intended to run with both the Microsoft and GNU toolchains.
+support for anything on Windows should be considered experimental. Microsoft
+does not follow any relevant standards or document the behavior of their
+operating system.
 
 all my testing does occur on hosted systems, and CMake is configured for that.
 technically speaking, only the tests require a hosted system (even then it's
