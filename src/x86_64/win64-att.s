@@ -9,6 +9,13 @@ asco_init_internal:
  movl $0b1111110000000, 0x18(%rcx)
  movw $0x037F, 0x1c(%rcx)
  movq %r8, 0x20(%rcx)
+ movq 8(%rsp), %r11
+ movq $0, %r10
+ movq %r9, 0xf0(%rcx)
+ movq %r11, 0xf8(%rcx)
+ movq %r9, 0x100(%rcx)
+ subq %r11, %r9
+ movq %r9, 0x108(%rcx)
  ret
 asco_save:
  pop %r11
@@ -35,6 +42,14 @@ asco_save:
  movdqu %xmm13, 0xc8(%rcx)
  movdqu %xmm14, 0xd8(%rcx)
  movdqu %xmm15, 0xe8(%rcx)
+ movq %gs:0x08, %r11
+ movq %r11, 0xf0(%rcx)
+ movq %gs:0x10, %r11
+ movq %r11, 0xf8(%rcx)
+ movq %gs:0x1478, %r11
+ movq %r11, 0x100(%rcx)
+ movq %gs:0x1748, %r11
+ movq %r11, 0x108(%rcx)
  xorl %eax, %eax
  ret
 asco_load:
@@ -61,6 +76,14 @@ asco_load:
  movdqu 0xc8(%rcx), %xmm13
  movdqu 0xd8(%rcx), %xmm14
  movdqu 0xe8(%rcx), %xmm15
+ movq 0xf0(%rcx), %r10
+ movq %r10, %gs:0x08
+ movq 0xf8(%rcx), %r10
+ movq %r10, %gs:0x10
+ movq 0x100(%rcx), %r10
+ movq %r10, %gs:0x1478
+ movq 0x108(%rcx), %r10
+ movq %r10, %gs:0x1748
  movq %rbx, %rcx
  movl $1, %eax
  jmp *%r11

@@ -35,6 +35,12 @@
 
 #	define ret32 eax
 
+
+#	define STACK_BASE 	%gs:0x08
+#	define STACK_LIMIT 	%gs:0x10
+#	define DEALLOC_STACK 	%gs:0x1478
+#	define GUARANTEED_SB 	%gs:0x1748
+
 #else
 #error no calling convention defined
 #endif
@@ -51,6 +57,7 @@
 
 /* void 
 asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp); */
+/* might additionally pass another void *begin_stack arg on windows */
 asco_init_internal:
 	/* storing instruction ptr, stack ptr, setting frame ptr to null */
 	movq	%arg2, (%arg1)
@@ -65,6 +72,18 @@ asco_init_internal:
 	/* using first calling-convention-specific slot to store the first arg
 	   of the fn */
 	movq	%arg3, 0x20(%arg1)
+
+#ifdef WIN_CALL
+	movq	8(%rsp), %tmp1
+
+	/* setting up TIB */
+	movq	$0, %tmp2
+	movq	%arg4, 0xf0(%arg1)
+	movq	%tmp1, 0xf8(%arg1)
+	movq	%arg4, 0x100(%arg1)
+	subq	%tmp1, %arg4
+	movq	%arg4, 0x108(%arg1)
+#endif
 
 	/* no need to save caller-saved regs, we have no caller */
 	ret
@@ -112,6 +131,16 @@ asco_save:
 	movdqu	%xmm13, 0xc8(%arg1)
 	movdqu	%xmm14, 0xd8(%arg1)
 	movdqu	%xmm15, 0xe8(%arg1)
+
+	/* saving important parts of TIB */
+	movq	STACK_BASE, %tmp1
+	movq	%tmp1, 0xf0(%arg1)
+	movq	STACK_LIMIT, %tmp1
+	movq	%tmp1, 0xf8(%arg1)
+	movq	DEALLOC_STACK, %tmp1
+	movq	%tmp1, 0x100(%arg1)
+	movq	GUARANTEED_SB, %tmp1
+	movq	%tmp1, 0x108(%arg1)
 #endif
 
 	xorl	%ret32, %ret32
@@ -152,6 +181,17 @@ asco_load:
 	movdqu	0xc8(%arg1), %xmm13
 	movdqu	0xd8(%arg1), %xmm14
 	movdqu	0xe8(%arg1), %xmm15
+
+
+	/* loading TIB */
+	movq	0xf0(%arg1), %tmp2
+	movq	%tmp2, STACK_BASE
+	movq	0xf8(%arg1), %tmp2
+	movq	%tmp2, STACK_LIMIT
+	movq	0x100(%arg1), %tmp2
+	movq	%tmp2, DEALLOC_STACK
+	movq	0x108(%arg1), %tmp2
+	movq	%tmp2, GUARANTEED_SB
 #endif
 
 	/* move whatever is in fake %rbx to fst argument of fn */

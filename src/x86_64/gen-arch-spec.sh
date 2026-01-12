@@ -11,7 +11,6 @@ PREPROC=cpp
 OBJCONV=objconv
 SYSV_ASM=x86_64-unknown-linux-gnu-as
 
-
 $PREPROC -DSYSV_CALL -P "$SOURCE_FILENAME.S" > "sysv-att.s"
 $PREPROC -DWIN_CALL -P "$SOURCE_FILENAME.S" > "win64-att.s"
 

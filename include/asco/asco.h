@@ -74,10 +74,47 @@ typedef struct {
 	uint64_t rdi;
 	uint64_t rsi;
 	uint64_t xmm6_15[2 * 10];
-//	uint64_t tib_stack_base;
-//	uint64_t tib_stack_limit;
-//	uint64_t tib_dealloc_stack;
-//	uint64_t tib_guaranteed_bytes;
+
+	// https://en.wikipedia.org/wiki/Win32_Thread_Information_Block
+	//
+	// ^ A good jumping-off point for learning about ...windows...
+	//
+	// I've tried to figure out what *exactly* is meant by the various
+	// docs on this. Not completely sure the following explanations are
+	// right, but even if they're wrong they imply correct things
+	// (preserve all the following values on asco_save, set them to stack
+	// base or limit as necessary on asco_init)
+
+	// TIB.StackBase
+	//
+	// This points to the fake start of the stack, pretending that the
+	// guard pages are actually invalid memory.
+	//
+	// For fake stacks, this doesn't matter, and it's just set to the base
+	// pointer of the stack.
+	//
+	// For real stacks, this value is simply preserved.
+	uint64_t tib_stack_base;
+
+	// TIB.StackLimit
+	//
+	//
+	uint64_t tib_stack_limit;
+	
+	// TIB.DeallocationStack
+	//
+	// This points to the *true* start of the stack; the address it'd be
+	// if guard pages weren't a thing.
+	// Our fake stacks don't have guard pages, so in that case, this is
+	// just equal to the base pointer of the stack.
+	//
+	// For real Windows stacks, this value is simply preserved.
+	uint64_t tib_dealloc_stack;
+
+	// TIB.GuaranteedBytes
+	//
+	// total size of the stack
+	uint64_t tib_guaranteed_bytes;
 } asco_ctx;
 
 #elif (ASCO_ARCH_X86_64) // sysV
