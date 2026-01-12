@@ -74,6 +74,10 @@ typedef struct {
 	uint64_t rdi;
 	uint64_t rsi;
 	uint64_t xmm6_15[2 * 10];
+//	uint64_t tib_stack_base;
+//	uint64_t tib_stack_limit;
+//	uint64_t tib_dealloc_stack;
+//	uint64_t tib_guaranteed_bytes;
 } asco_ctx;
 
 #elif (ASCO_ARCH_X86_64) // sysV

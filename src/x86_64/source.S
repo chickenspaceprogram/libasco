@@ -47,6 +47,7 @@
 .global asco_save
 
 .global asco_load
+// .section .note.GNU-stack,"",@progbits
 
 /* void 
 asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp); */
@@ -113,11 +114,7 @@ asco_save:
 	movdqu	%xmm15, 0xe8(%arg1)
 #endif
 
-	xor	%ret32, %ret32
-	ret
-
-Lasco_save_cameback:
-	movl	$1, %ret32
+	xorl	%ret32, %ret32
 	ret
 
 /* void asco_load(const asco_ctx *new_ctx); */

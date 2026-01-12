@@ -1,6 +1,6 @@
 ; Disassembly of file: source.win.o
-; Sun Jan  4 11:51:50 2026
-; Type: COFF64
+; Sun Jan 11 17:24:46 2026
+; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: SSE2, x64, 80x87
 
@@ -11,14 +11,14 @@ global asco_save
 global asco_load
 
 
-SECTION .text   align=16 exec                           ; section number 1, code
+SECTION .text   align=1 exec                            ; section number 1, code
 
 asco_init_internal:; Function begin
         mov     qword [rcx], rdx                        ; 0000 _ 48: 89. 11
         mov     qword [rcx+8H], 0                       ; 0003 _ 48: C7. 41, 08, 00000000
         mov     qword [rcx+10H], r9                     ; 000B _ 4C: 89. 49, 10
         mov     dword [rcx+18H], 8064                   ; 000F _ C7. 41, 18, 00001F80
-; Note: Length-changing prefix causes delay on old Intel processors
+; Note: Length-changing prefix causes delay on Intel processors
         mov     word [rcx+1CH], 895                     ; 0016 _ 66: C7. 41, 1C, 037F
         mov     qword [rcx+20H], r8                     ; 001C _ 4C: 89. 41, 20
         ret                                             ; 0020 _ C3
@@ -54,53 +54,50 @@ asco_save:; Function begin
         ret                                             ; 00A5 _ C3
 ; asco_save End of function
 
-        mov     eax, 1                                  ; 00A6 _ B8, 00000001
-        ret                                             ; 00AB _ C3
-
 asco_load:; Function begin
-        mov     r11, qword [rcx]                        ; 00AC _ 4C: 8B. 19
-        mov     rbp, qword [rcx+8H]                     ; 00AF _ 48: 8B. 69, 08
-        mov     rsp, qword [rcx+10H]                    ; 00B3 _ 48: 8B. 61, 10
-        ldmxcsr dword [rcx+18H]                         ; 00B7 _ 0F AE. 51, 18
-        fwait                                           ; 00BB _ 9B
-        fnclex                                          ; 00BC _ DB. E2
-        fldcw   word [rcx+1CH]                          ; 00BE _ D9. 69, 1C
-        mov     rbx, qword [rcx+20H]                    ; 00C1 _ 48: 8B. 59, 20
-        mov     r12, qword [rcx+28H]                    ; 00C5 _ 4C: 8B. 61, 28
-        mov     r13, qword [rcx+30H]                    ; 00C9 _ 4C: 8B. 69, 30
-        mov     r14, qword [rcx+38H]                    ; 00CD _ 4C: 8B. 71, 38
-        mov     r15, qword [rcx+40H]                    ; 00D1 _ 4C: 8B. 79, 40
-        mov     rdi, qword [rcx+48H]                    ; 00D5 _ 48: 8B. 79, 48
-        mov     rsi, qword [rcx+50H]                    ; 00D9 _ 48: 8B. 71, 50
-        movdqu  xmm6, oword [rcx+58H]                   ; 00DD _ F3: 0F 6F. 71, 58
-        movdqu  xmm7, oword [rcx+68H]                   ; 00E2 _ F3: 0F 6F. 79, 68
-        movdqu  xmm8, oword [rcx+78H]                   ; 00E7 _ F3 44: 0F 6F. 41, 78
-        movdqu  xmm9, oword [rcx+88H]                   ; 00ED _ F3 44: 0F 6F. 89, 00000088
-        movdqu  xmm10, oword [rcx+98H]                  ; 00F6 _ F3 44: 0F 6F. 91, 00000098
-        movdqu  xmm11, oword [rcx+0A8H]                 ; 00FF _ F3 44: 0F 6F. 99, 000000A8
-        movdqu  xmm12, oword [rcx+0B8H]                 ; 0108 _ F3 44: 0F 6F. A1, 000000B8
-        movdqu  xmm13, oword [rcx+0C8H]                 ; 0111 _ F3 44: 0F 6F. A9, 000000C8
-        movdqu  xmm14, oword [rcx+0D8H]                 ; 011A _ F3 44: 0F 6F. B1, 000000D8
-        movdqu  xmm15, oword [rcx+0E8H]                 ; 0123 _ F3 44: 0F 6F. B9, 000000E8
-        mov     rcx, rbx                                ; 012C _ 48: 89. D9
-        mov     eax, 1                                  ; 012F _ B8, 00000001
-        jmp     r11                                     ; 0134 _ 41: FF. E3
+        mov     r11, qword [rcx]                        ; 00A6 _ 4C: 8B. 19
+        mov     rbp, qword [rcx+8H]                     ; 00A9 _ 48: 8B. 69, 08
+        mov     rsp, qword [rcx+10H]                    ; 00AD _ 48: 8B. 61, 10
+        ldmxcsr dword [rcx+18H]                         ; 00B1 _ 0F AE. 51, 18
+        fwait                                           ; 00B5 _ 9B
+        fnclex                                          ; 00B6 _ DB. E2
+        fldcw   word [rcx+1CH]                          ; 00B8 _ D9. 69, 1C
+        mov     rbx, qword [rcx+20H]                    ; 00BB _ 48: 8B. 59, 20
+        mov     r12, qword [rcx+28H]                    ; 00BF _ 4C: 8B. 61, 28
+        mov     r13, qword [rcx+30H]                    ; 00C3 _ 4C: 8B. 69, 30
+        mov     r14, qword [rcx+38H]                    ; 00C7 _ 4C: 8B. 71, 38
+        mov     r15, qword [rcx+40H]                    ; 00CB _ 4C: 8B. 79, 40
+        mov     rdi, qword [rcx+48H]                    ; 00CF _ 48: 8B. 79, 48
+        mov     rsi, qword [rcx+50H]                    ; 00D3 _ 48: 8B. 71, 50
+        movdqu  xmm6, oword [rcx+58H]                   ; 00D7 _ F3: 0F 6F. 71, 58
+        movdqu  xmm7, oword [rcx+68H]                   ; 00DC _ F3: 0F 6F. 79, 68
+        movdqu  xmm8, oword [rcx+78H]                   ; 00E1 _ F3 44: 0F 6F. 41, 78
+        movdqu  xmm9, oword [rcx+88H]                   ; 00E7 _ F3 44: 0F 6F. 89, 00000088
+        movdqu  xmm10, oword [rcx+98H]                  ; 00F0 _ F3 44: 0F 6F. 91, 00000098
+        movdqu  xmm11, oword [rcx+0A8H]                 ; 00F9 _ F3 44: 0F 6F. 99, 000000A8
+        movdqu  xmm12, oword [rcx+0B8H]                 ; 0102 _ F3 44: 0F 6F. A1, 000000B8
+        movdqu  xmm13, oword [rcx+0C8H]                 ; 010B _ F3 44: 0F 6F. A9, 000000C8
+        movdqu  xmm14, oword [rcx+0D8H]                 ; 0114 _ F3 44: 0F 6F. B1, 000000D8
+        movdqu  xmm15, oword [rcx+0E8H]                 ; 011D _ F3 44: 0F 6F. B9, 000000E8
+        mov     rcx, rbx                                ; 0126 _ 48: 89. D9
+        mov     eax, 1                                  ; 0129 _ B8, 00000001
+        jmp     r11                                     ; 012E _ 41: FF. E3
 ; asco_load End of function
 
-        nop                                             ; 0137 _ 90
-        nop                                             ; 0138 _ 90
-        nop                                             ; 0139 _ 90
-        nop                                             ; 013A _ 90
-        nop                                             ; 013B _ 90
-        nop                                             ; 013C _ 90
-        nop                                             ; 013D _ 90
-        nop                                             ; 013E _ 90
-        nop                                             ; 013F _ 90
+
+SECTION .data   align=1 noexec                          ; section number 2, data
 
 
-SECTION .data   align=16 noexec                         ; section number 2, data
+SECTION .bss    align=1 noexec                          ; section number 3, bss
 
 
-SECTION .bss    align=16 noexec                         ; section number 3, bss
+SECTION .note.gnu.property align=8 noexec               ; section number 4, const
+
+        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
+        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
+        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
+        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
+        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
 
 
