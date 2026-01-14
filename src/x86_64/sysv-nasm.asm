@@ -1,5 +1,5 @@
 ; Disassembly of file: source.sysv.o
-; Sun Jan 11 19:44:14 2026
+; Wed Jan 14 01:26:38 2026
 ; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: SSE, x64, 80x87
@@ -11,14 +11,14 @@ global asco_save
 global asco_load
 
 
-SECTION .text   align=1 exec                            ; section number 1, code
+SECTION .text
 
 asco_init_internal:; Function begin
         mov     qword [rdi], rsi                        ; 0000 _ 48: 89. 37
         mov     qword [rdi+8H], 0                       ; 0003 _ 48: C7. 47, 08, 00000000
         mov     qword [rdi+10H], rcx                    ; 000B _ 48: 89. 4F, 10
         mov     dword [rdi+18H], 8064                   ; 000F _ C7. 47, 18, 00001F80
-; Note: Length-changing prefix causes delay on Intel processors
+; Note: Length-changing prefix causes delay on old Intel processors
         mov     word [rdi+1CH], 895                     ; 0016 _ 66: C7. 47, 1C, 037F
         mov     qword [rdi+20H], rdx                    ; 001C _ 48: 89. 57, 20
         ret                                             ; 0020 _ C3
@@ -59,21 +59,3 @@ asco_load:; Function begin
         mov     eax, 1                                  ; 007B _ B8, 00000001
         jmp     r11                                     ; 0080 _ 41: FF. E3
 ; asco_load End of function
-
-
-SECTION .data   align=1 noexec                          ; section number 2, data
-
-
-SECTION .bss    align=1 noexec                          ; section number 3, bss
-
-
-SECTION .note.gnu.property align=8 noexec               ; section number 4, const
-
-        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
-        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
-        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
-
-

@@ -1,5 +1,5 @@
 ; Disassembly of file: source.win.o
-; Sun Jan 11 19:44:14 2026
+; Wed Jan 14 01:26:38 2026
 ; Type: ELF64
 ; Syntax: NASM
 ; Instruction set: SSE2, x64, 80x87
@@ -11,23 +11,23 @@ global asco_save
 global asco_load
 
 
-section .text
+SECTION .text
 
 asco_init_internal:; Function begin
         mov     qword [rcx], rdx                        ; 0000 _ 48: 89. 11
         mov     qword [rcx+8H], 0                       ; 0003 _ 48: C7. 41, 08, 00000000
         mov     qword [rcx+10H], r9                     ; 000B _ 4C: 89. 49, 10
         mov     dword [rcx+18H], 8064                   ; 000F _ C7. 41, 18, 00001F80
-; Note: Length-changing prefix causes delay on Intel processors
+; Note: Length-changing prefix causes delay on old Intel processors
         mov     word [rcx+1CH], 895                     ; 0016 _ 66: C7. 41, 1C, 037F
         mov     qword [rcx+20H], r8                     ; 001C _ 4C: 89. 41, 20
         mov     r11, qword [rsp+8H]                     ; 0020 _ 4C: 8B. 5C 24, 08
         mov     r10, 0                                  ; 0025 _ 49: C7. C2, 00000000
-        mov     qword [rcx+0F0H], r9                    ; 002C _ 4C: 89. 89, 000000F0
-        mov     qword [rcx+0F8H], r11                   ; 0033 _ 4C: 89. 99, 000000F8
-        mov     qword [rcx+100H], r9                    ; 003A _ 4C: 89. 89, 00000100
+        mov     qword [rcx+0F8H], r9                    ; 002C _ 4C: 89. 89, 000000F8
+        mov     qword [rcx+100H], r11                   ; 0033 _ 4C: 89. 99, 00000100
+        mov     qword [rcx+108H], r9                    ; 003A _ 4C: 89. 89, 00000108
         sub     r9, r11                                 ; 0041 _ 4D: 29. D9
-        mov     qword [rcx+108H], r9                    ; 0044 _ 4C: 89. 89, 00000108
+        mov     qword [rcx+110H], r9                    ; 0044 _ 4C: 89. 89, 00000110
         ret                                             ; 004B _ C3
 ; asco_init_internal End of function
 
@@ -60,19 +60,19 @@ asco_save:; Function begin
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     r11, qword [gs:abs 8H]                  ; 00CE _ 65 4C: 8B. 1C 25, 00000008
-        mov     qword [rcx+0F0H], r11                   ; 00D7 _ 4C: 89. 99, 000000F0
+        mov     qword [rcx+0F8H], r11                   ; 00D7 _ 4C: 89. 99, 000000F8
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     r11, qword [gs:abs 10H]                 ; 00DE _ 65 4C: 8B. 1C 25, 00000010
-        mov     qword [rcx+0F8H], r11                   ; 00E7 _ 4C: 89. 99, 000000F8
+        mov     qword [rcx+100H], r11                   ; 00E7 _ 4C: 89. 99, 00000100
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     r11, qword [gs:abs 1478H]               ; 00EE _ 65 4C: 8B. 1C 25, 00001478
-        mov     qword [rcx+100H], r11                   ; 00F7 _ 4C: 89. 99, 00000100
+        mov     qword [rcx+108H], r11                   ; 00F7 _ 4C: 89. 99, 00000108
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     r11, qword [gs:abs 1748H]               ; 00FE _ 65 4C: 8B. 1C 25, 00001748
-        mov     qword [rcx+108H], r11                   ; 0107 _ 4C: 89. 99, 00000108
+        mov     qword [rcx+110H], r11                   ; 0107 _ 4C: 89. 99, 00000110
         xor     eax, eax                                ; 010E _ 31. C0
         ret                                             ; 0110 _ C3
 ; asco_save End of function
@@ -102,19 +102,19 @@ asco_load:; Function begin
         movdqu  xmm13, oword [rcx+0C8H]                 ; 0176 _ F3 44: 0F 6F. A9, 000000C8
         movdqu  xmm14, oword [rcx+0D8H]                 ; 017F _ F3 44: 0F 6F. B1, 000000D8
         movdqu  xmm15, oword [rcx+0E8H]                 ; 0188 _ F3 44: 0F 6F. B9, 000000E8
-        mov     r10, qword [rcx+0F0H]                   ; 0191 _ 4C: 8B. 91, 000000F0
+        mov     r10, qword [rcx+0F8H]                   ; 0191 _ 4C: 8B. 91, 000000F8
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     qword [gs:abs 8H], r10                  ; 0198 _ 65 4C: 89. 14 25, 00000008
-        mov     r10, qword [rcx+0F8H]                   ; 01A1 _ 4C: 8B. 91, 000000F8
+        mov     r10, qword [rcx+100H]                   ; 01A1 _ 4C: 8B. 91, 00000100
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     qword [gs:abs 10H], r10                 ; 01A8 _ 65 4C: 89. 14 25, 00000010
-        mov     r10, qword [rcx+100H]                   ; 01B1 _ 4C: 8B. 91, 00000100
+        mov     r10, qword [rcx+108H]                   ; 01B1 _ 4C: 8B. 91, 00000108
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     qword [gs:abs 1478H], r10               ; 01B8 _ 65 4C: 89. 14 25, 00001478
-        mov     r10, qword [rcx+108H]                   ; 01C1 _ 4C: 8B. 91, 00000108
+        mov     r10, qword [rcx+110H]                   ; 01C1 _ 4C: 8B. 91, 00000110
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     qword [gs:abs 1748H], r10               ; 01C8 _ 65 4C: 89. 14 25, 00001748
@@ -122,4 +122,3 @@ asco_load:; Function begin
         mov     eax, 1                                  ; 01D4 _ B8, 00000001
         jmp     r11                                     ; 01D9 _ 41: FF. E3
 ; asco_load End of function
-
