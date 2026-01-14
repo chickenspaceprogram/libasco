@@ -4,7 +4,6 @@
 ; Syntax: MASM/ML64
 ; Instruction set: SSE2, x64, 80x87
 option dotname
-assume gs:nothing
 
 public asco_init_internal
 public asco_save
@@ -49,8 +48,8 @@ asco_save PROC
         mov     qword ptr [rcx+50H], rsi                ; 007B _ 48: 89. 71, 50
         movdqu  xmmword ptr [rcx+58H], xmm6             ; 007F _ F3: 0F 7F. 71, 58
         movdqu  xmmword ptr [rcx+68H], xmm7             ; 0084 _ F3: 0F 7F. 79, 68
-        movdqu  xmmword ptr [rcx+78H], xmm8             ; 0089 _ F3 44: 0F 7F. 41, 78
-        movdqu  xmmword ptr [rcx+88H], xmm9             ; 008F _ F3 44: 0F 7F. 89, 00000088
+	movdqu  xmmword ptr [rcx+78H], xmm8             ; 0089 _ F3 44: 0F 7F. 41, 78
+	movdqu  xmmword ptr [rcx+88H], xmm9             ; 008F _ F3 44: 0F 7F. 89, 00000088
         movdqu  xmmword ptr [rcx+98H], xmm10            ; 0098 _ F3 44: 0F 7F. 91, 00000098
         movdqu  xmmword ptr [rcx+0A8H], xmm11           ; 00A1 _ F3 44: 0F 7F. 99, 000000A8
         movdqu  xmmword ptr [rcx+0B8H], xmm12           ; 00AA _ F3 44: 0F 7F. A1, 000000B8
@@ -59,7 +58,6 @@ asco_save PROC
         movdqu  xmmword ptr [rcx+0E8H], xmm15           ; 00C5 _ F3 44: 0F 7F. B9, 000000E8
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
-ASSUME  gs:NOTHING
         mov     r11, qword ptr gs:[8H]                  ; 00CE _ 65 4C: 8B. 1C 25, 00000008
         mov     qword ptr [rcx+0F0H], r11               ; 00D7 _ 4C: 89. 99, 000000F0
 ; Note: Address is not rip-relative
