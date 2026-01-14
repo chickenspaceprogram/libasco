@@ -22,7 +22,6 @@
 .global asco_save
 
 .global asco_load
-// .section .note.GNU-stack,"",@progbits
 
 
                                                                           
@@ -46,10 +45,9 @@ asco_init_internal:
 	movq	8(%rsp), %r11
 
 	
-	movq	$0, %r10
 	movq	%r9, 0xf8(%rcx)
 	movq	%r11, 0x100(%rcx)
-	movq	%r9, 0x108(%rcx)
+	movq	%r11, 0x108(%rcx)
 	subq	%r11, %r9
 	movq	%r9, 0x110(%rcx)
 

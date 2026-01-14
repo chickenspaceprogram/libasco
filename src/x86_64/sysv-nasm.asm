@@ -1,9 +1,3 @@
-; Disassembly of file: source.sysv.o
-; Wed Jan 14 01:26:38 2026
-; Type: ELF64
-; Syntax: NASM
-; Instruction set: SSE, x64, 80x87
-
 default rel
 
 global asco_init_internal

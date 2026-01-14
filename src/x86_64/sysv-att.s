@@ -19,7 +19,6 @@
 .global asco_save
 
 .global asco_load
-// .section .note.GNU-stack,"",@progbits
 
 
                                                                           

@@ -53,7 +53,6 @@
 .global asco_save
 
 .global asco_load
-// .section .note.GNU-stack,"",@progbits
 
 /* void 
 asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp); */
@@ -77,10 +76,9 @@ asco_init_internal:
 	movq	8(%rsp), %tmp1
 
 	/* setting up TIB */
-	movq	$0, %tmp2
 	movq	%arg4, 0xf8(%arg1)
 	movq	%tmp1, 0x100(%arg1)
-	movq	%arg4, 0x108(%arg1)
+	movq	%tmp1, 0x108(%arg1)
 	subq	%tmp1, %arg4
 	movq	%arg4, 0x110(%arg1)
 #endif
