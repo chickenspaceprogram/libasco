@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 #include <WinNt.h>
-#include <Winternal.h>
+#include <Winternl.h>
 #include <asco/asco.h>
 #include <string.h>
 
