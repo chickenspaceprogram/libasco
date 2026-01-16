@@ -38,7 +38,7 @@
 #include <asco/arch-detection.h>
 
 #ifdef __cplusplus
-#define ASCO_LINKAGE extern "C" {
+#define ASCO_LINKAGE extern "C"
 extern "C" {
 #else
 #define ASCO_LINKAGE
