@@ -87,7 +87,7 @@ int asco_save(asco_ctx *cur_ctx)
 }
 void asco_load(const asco_ctx *new_ctx)
 {
-	return asco_load_internal(cur_ctx);
+	return asco_load_internal(new_ctx);
 }
 #endif
 
