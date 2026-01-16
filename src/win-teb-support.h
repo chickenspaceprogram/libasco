@@ -8,7 +8,7 @@
 
 static void set_teb(asco_ctx *ctx)
 {
-	_TEB *teb = NtCurrentTeb();
+	TEB *teb = NtCurrentTeb();
 	teb->Reserved1[1] = ctx->tib_stack_base;
 	teb->Reserved1[2] = ctx->tib_stack_limit;
 	memcpy(teb->Reserved3 + 1944, &ctx->tib_dealloc_stack, 8);
@@ -17,7 +17,7 @@ static void set_teb(asco_ctx *ctx)
 
 static void get_teb(asco_ctx *ctx)
 {
-	_TEB *teb = NtCurrentTeb();
+	TEB *teb = NtCurrentTeb();
 	ctx->tib_stack_base = teb->Reserved1[1];
 	ctx->tib_stack_limit = teb->Reserved1[2];
 	memcpy(&ctx->tib_dealloc_stack, teb->Reserved3 + 1944, 8);
