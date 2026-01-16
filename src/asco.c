@@ -69,7 +69,7 @@ int asco_save(asco_ctx *cur_ctx)
 	get_teb(cur_ctx);
 	return asco_save_internal(cur_ctx);
 }
-void asco_load(asco_ctx *new_ctx)
+void asco_load(const asco_ctx *new_ctx)
 {
 	set_teb(ctx);
 	return asco_load_internal(cur_ctx);
@@ -85,7 +85,7 @@ int asco_save(asco_ctx *cur_ctx)
 {
 	return asco_save_internal(cur_ctx);
 }
-void asco_load(asco_ctx *new_ctx)
+void asco_load(const asco_ctx *new_ctx)
 {
 	return asco_load_internal(cur_ctx);
 }

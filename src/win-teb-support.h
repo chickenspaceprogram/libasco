@@ -7,7 +7,7 @@
 #include <asco/asco.h>
 #include <string.h>
 
-static void set_teb(asco_ctx *ctx)
+static void set_teb(const asco_ctx *ctx)
 {
 	PTEB teb = NtCurrentTeb();
 	teb->Reserved1[1] = (void *)ctx->tib_stack_base;
