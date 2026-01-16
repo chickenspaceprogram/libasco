@@ -53,7 +53,7 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
 {
-	void *nsp = set_stack_ptr(stack, stack_sz)
+	void *nsp = set_stack_ptr(stack, stack_sz);
 	new_ctx->tib_stack_base = nsp;
 	new_ctx->tib_stack_limit = arg;
 	new_ctx->tib_dealloc_stack = arg;
