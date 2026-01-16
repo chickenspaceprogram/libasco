@@ -16,6 +16,8 @@ extern "C" {
 
 // arch dependent
 static inline void *set_stack_ptr(void *stack_start, size_t stack_sz);
+extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
+       void *sp) ASCO_ASM_NAME(asco_init_internal);
 
 #if ASCO_ARCH_AARCH64 || ASCO_ARCH_X86
 static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
