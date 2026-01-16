@@ -5,7 +5,7 @@
 #include <asco/asco.h>
 #include <string.h>
 
-static void asco_set_teb(asco_ctx *ctx)
+static void set_teb(asco_ctx *ctx)
 {
 	_TEB *teb = NtCurrentTeb();
 	teb->Reserved1[1] = ctx->tib_stack_base;
@@ -14,7 +14,7 @@ static void asco_set_teb(asco_ctx *ctx)
 	teb->Reserved5[24] = ctx->tib_guaranteed_bytes;
 }
 
-static void asco_get_teb(asco_ctx *ctx)
+static void get_teb(asco_ctx *ctx)
 {
 	_TEB *teb = NtCurrentTeb();
 	ctx->tib_stack_base = teb->Reserved1[1];

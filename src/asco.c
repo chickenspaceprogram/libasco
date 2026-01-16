@@ -54,11 +54,11 @@ void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
 {
 	void *nsp = set_stack_ptr(stack, stack_sz);
-	new_ctx->tib_stack_base = nsp;
-	new_ctx->tib_stack_limit = arg;
-	new_ctx->tib_dealloc_stack = arg;
+	new_ctx->tib_stack_base = (uint64_t)nsp;
+	new_ctx->tib_stack_limit = (uint64_t)arg;
+	new_ctx->tib_dealloc_stack = (uint64_t)arg;
 	new_ctx->tib_guaranteed_bytes = nsp - stack;
-	asco_set_teb(new_ctx);
+	set_teb(new_ctx);
 	asco_init_internal(new_ctx, fn, arg, nsp);
 }
 
