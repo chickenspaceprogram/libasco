@@ -1,11 +1,10 @@
 let
-	pkgs = import <nixpkgs> {};
-	crossEnv = pkgs.pkgsCross.gnu64;
+	pkgs = (import <nixpkgs> {}).pkgsCross.gnu64;
 in
-crossEnv.mkShell {
-	buildInputs = with crossEnv; [
-#		llvmPackages.compiler-rt
-		gdb
-		valgrind
+
+pkgs.callPackage({ mkShell, cmakeMinimal, gdb }: mkShell {
+	nativeBuildInputs = [ cmakeMinimal ];
+	packages = [ gdb ];
+	buildInputs = [
 	];
-}
+}) {}

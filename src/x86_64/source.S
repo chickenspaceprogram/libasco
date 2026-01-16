@@ -78,9 +78,11 @@ asco_init_internal:
 	/* setting up TIB */
 	movq	%arg4, 0xf8(%arg1)
 	movq	%tmp1, 0x100(%arg1)
+/*
 	movq	%tmp1, 0x108(%arg1)
 	subq	%tmp1, %arg4
 	movq	%arg4, 0x110(%arg1)
+*/
 #endif
 
 	/* no need to save caller-saved regs, we have no caller */
@@ -135,10 +137,12 @@ asco_save:
 	movq	%tmp1, 0xf8(%arg1)
 	movq	STACK_LIMIT, %tmp1
 	movq	%tmp1, 0x100(%arg1)
+/*
 	movq	DEALLOC_STACK, %tmp1
 	movq	%tmp1, 0x108(%arg1)
 	movq	GUARANTEED_SB, %tmp1
 	movq	%tmp1, 0x110(%arg1)
+*/
 #endif
 
 	xorl	%ret32, %ret32
@@ -186,10 +190,12 @@ asco_load:
 	movq	%tmp2, STACK_BASE
 	movq	0x100(%arg1), %tmp2
 	movq	%tmp2, STACK_LIMIT
+/*
 	movq	0x108(%arg1), %tmp2
 	movq	%tmp2, DEALLOC_STACK
 	movq	0x110(%arg1), %tmp2
 	movq	%tmp2, GUARANTEED_SB
+*/
 #endif
 
 	/* move whatever is in fake %rbx to fst argument of fn */
