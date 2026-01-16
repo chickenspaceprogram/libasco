@@ -1,6 +1,7 @@
 #ifndef ASCO_WIN_TEB_SUPPORT
 #define ASCO_WIN_TEB_SUPPORT 1
 
+#include <Windows.h>
 #include <WinNt.h>
 #include <asco/asco.h>
 #include <string.h>
