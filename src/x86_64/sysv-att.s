@@ -1,7 +1,7 @@
 .text
 .global asco_init_internal
-.global asco_save
-.global asco_load
+.global asco_save_internal
+.global asco_load_internal
 asco_init_internal:
  movq %rsi, (%rdi)
  movq $0, 0x8(%rdi)
@@ -10,7 +10,7 @@ asco_init_internal:
  movw $0x037F, 0x1c(%rdi)
  movq %rdx, 0x20(%rdi)
  ret
-asco_save:
+asco_save_internal:
  pop %r11
  movq %r11, (%rdi)
  movq %rsp, 0x10(%rdi)
@@ -25,7 +25,7 @@ asco_save:
  movq %r15, 0x40(%rdi)
  xorl %eax, %eax
  ret
-asco_load:
+asco_load_internal:
  movq (%rdi), %r11
  movq 0x8(%rdi), %rbp
  movq 0x10(%rdi), %rsp

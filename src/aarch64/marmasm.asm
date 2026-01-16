@@ -12,8 +12,8 @@
 
 	AREA	asco_internals, CODE, READONLY
 	EXPORT	asco_init_internal
-	EXPORT	asco_save
-	EXPORT	asco_load
+	EXPORT	asco_save_internal
+	EXPORT	asco_load_internal
 
 
 // void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp);
@@ -30,7 +30,7 @@ asco_init_internal
 	ret
 
 // int asco_save(asco_ctx *cur_ctx);
-asco_save
+asco_save_internal
 	// copying sp
 	mov	x9, sp
 
@@ -59,7 +59,7 @@ asco_save
 	ret
 
 // void asco_load(const asco_ctx *new_ctx);
-asco_load
+asco_load_internal
 	// loading lr, fp
 	ldp	lr, fp, [x0]
 

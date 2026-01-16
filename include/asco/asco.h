@@ -38,7 +38,7 @@
 #include <asco/arch-detection.h>
 
 #ifdef __cplusplus
-#define ASCO_LINKAGE extern "C" {
+#define ASCO_LINKAGE extern "C"
 extern "C" {
 #else
 #define ASCO_LINKAGE
@@ -94,12 +94,12 @@ typedef struct {
 	// pointer of the stack.
 	//
 	// For real stacks, this value is simply preserved.
-	uint64_t tib_stack_base;
+	void *tib_stack_base;
 
 	// TIB.StackLimit
 	//
 	//
-	uint64_t tib_stack_limit;
+	void *tib_stack_limit;
 	
 	// TIB.DeallocationStack
 	//
@@ -109,12 +109,12 @@ typedef struct {
 	// just equal to the base pointer of the stack.
 	//
 	// For real Windows stacks, this value is simply preserved.
-	uint64_t tib_dealloc_stack;
+	void *tib_dealloc_stack;
 
 	// TIB.GuaranteedBytes
 	//
 	// total size of the stack
-	uint64_t tib_guaranteed_bytes;
+	void *tib_guaranteed_bytes;
 } asco_ctx;
 
 #elif (ASCO_ARCH_X86_64) // sysV
@@ -150,6 +150,25 @@ typedef struct {
 	uint32_t ebx;
 	uint32_t edi;
 	uint32_t esi;
+} asco_ctx;
+
+#elif (ASCO_ARCH_AARCH64 && ASCO_OS_WINDOWS)
+
+typedef struct {
+	uint64_t lr;
+	uint64_t fp;
+	uint64_t sp;
+
+	// either return value or fst arg
+	uint64_t x0;
+
+	uint64_t x19_x28[10];
+	double d8_d15[8];
+
+	void *tib_stack_base;
+	void *tib_stack_limit;
+	void *tib_dealloc_stack;
+	void *tib_guaranteed_bytes;
 } asco_ctx;
 
 #elif ASCO_ARCH_AARCH64
@@ -233,7 +252,7 @@ void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 // after the current scope ends.
 //
 // Returns 1 if we've come from another coroutine, 0 if not.
-extern int ASCO_CALL asco_save(asco_ctx *cur_ctx) ASCO_ASM_NAME(asco_save);
+int asco_save(asco_ctx *cur_ctx);
 
 // Sets the current ctx to `new_ctx`.
 //
@@ -241,7 +260,8 @@ extern int ASCO_CALL asco_save(asco_ctx *cur_ctx) ASCO_ASM_NAME(asco_save);
 // pointer.
 //
 // This function never returns.
-extern void ASCO_CALL asco_load(const asco_ctx *new_ctx) ASCO_ASM_NAME(asco_load);
+void asco_load(const asco_ctx *new_ctx);
+
 
 // Saves the current execution context, then jumps to the new context.
 //

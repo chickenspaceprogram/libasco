@@ -1,8 +1,8 @@
 default rel
 
 global asco_init_internal
-global asco_save
-global asco_load
+global asco_save_internal
+global asco_load_internal
 
 
 SECTION .text
@@ -12,13 +12,13 @@ asco_init_internal:; Function begin
         mov     qword [rdi+8H], 0                       ; 0003 _ 48: C7. 47, 08, 00000000
         mov     qword [rdi+10H], rcx                    ; 000B _ 48: 89. 4F, 10
         mov     dword [rdi+18H], 8064                   ; 000F _ C7. 47, 18, 00001F80
-; Note: Length-changing prefix causes delay on old Intel processors
+; Note: Length-changing prefix causes delay on Intel processors
         mov     word [rdi+1CH], 895                     ; 0016 _ 66: C7. 47, 1C, 037F
         mov     qword [rdi+20H], rdx                    ; 001C _ 48: 89. 57, 20
         ret                                             ; 0020 _ C3
 ; asco_init_internal End of function
 
-asco_save:; Function begin
+asco_save_internal:; Function begin
         pop     r11                                     ; 0021 _ 41: 5B
         mov     qword [rdi], r11                        ; 0023 _ 4C: 89. 1F
         mov     qword [rdi+10H], rsp                    ; 0026 _ 48: 89. 67, 10
@@ -34,9 +34,9 @@ asco_save:; Function begin
         mov     qword [rdi+40H], r15                    ; 0048 _ 4C: 89. 7F, 40
         xor     eax, eax                                ; 004C _ 31. C0
         ret                                             ; 004E _ C3
-; asco_save End of function
+; asco_save_internal End of function
 
-asco_load:; Function begin
+asco_load_internal:; Function begin
         mov     r11, qword [rdi]                        ; 004F _ 4C: 8B. 1F
         mov     rbp, qword [rdi+8H]                     ; 0052 _ 48: 8B. 6F, 08
         mov     rsp, qword [rdi+10H]                    ; 0056 _ 48: 8B. 67, 10
@@ -52,4 +52,4 @@ asco_load:; Function begin
         mov     rdi, rbx                                ; 0078 _ 48: 89. DF
         mov     eax, 1                                  ; 007B _ B8, 00000001
         jmp     r11                                     ; 0080 _ 41: FF. E3
-; asco_load End of function
+; asco_load_internal End of function

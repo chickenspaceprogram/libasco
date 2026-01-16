@@ -45,9 +45,14 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 #	error "Unsupported CPU architecture."
 #endif
 
+extern int ASCO_CALL asco_save_internal(asco_ctx *cur_ctx)
+	ASCO_ASM_NAME(asco_save);
+extern void ASCO_CALL asco_load_internal(const asco_ctx *new_ctx) 
+	ASCO_ASM_NAME(asco_load);
 
 #if (ASCO_OS_WINDOWS)
 #include "win-teb-support.h"
+
 void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
 {
@@ -59,12 +64,30 @@ void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	set_teb(new_ctx);
 	asco_init_internal(new_ctx, fn, arg, nsp);
 }
+int asco_save(asco_ctx *cur_ctx)
+{
+	get_teb(cur_ctx);
+	return asco_save_internal(cur_ctx);
+}
+void asco_load(asco_ctx *new_ctx)
+{
+	set_teb(ctx);
+	return asco_load_internal(cur_ctx);
+}
 
 #else
 void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
 {
 	asco_init_internal(new_ctx, fn, arg, set_stack_ptr(stack, stack_sz));
+}
+int asco_save(asco_ctx *cur_ctx)
+{
+	return asco_save_internal(cur_ctx);
+}
+void asco_load(asco_ctx *new_ctx)
+{
+	return asco_load_internal(cur_ctx);
 }
 #endif
 

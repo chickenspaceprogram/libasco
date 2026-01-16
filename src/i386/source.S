@@ -15,9 +15,9 @@
 
 .global asco_init_internal
 
-.global asco_save
+.global asco_save_internal
 
-.global asco_load
+.global asco_load_internal
 
 /* void 
 asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *sp); */
@@ -47,7 +47,7 @@ asco_init_internal:
 	ret
 
 /* int asco_save(asco_ctx *cur_ctx); */
-asco_save:
+asco_save_internal:
 	/* getting cur_ctx */
 	movl	4(%esp), %eax
 	/* saving eip */
@@ -67,7 +67,7 @@ asco_save:
 	jmp	*%edx /* returning, we've already popped eip */
 
 /* void asco_load(const asco_ctx *new_ctx); */
-asco_load:
+asco_load_internal:
 	movl	4(%esp), %eax
 
 	movl	(%eax), %edx

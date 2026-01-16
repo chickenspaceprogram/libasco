@@ -6,9 +6,9 @@
 
 .global asco_init_internal
 
-.global asco_save
+.global asco_save_internal
 
-.global asco_load
+.global asco_load_internal
 
 /* void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *new_sp); */
 asco_init_internal:
@@ -19,14 +19,14 @@ asco_init_internal:
 	bx	lr
 
 /* int asco_save(asco_ctx *cur_ctx); */
-asco_save:
+asco_save_internal:
 	mov	a2, #1
 	stmia	a1!, { a2, r4, r5, r6, r7, r8, r9, r10, fp, sp, lr }
 	mov	a1, #0
 	bx	lr
 
 /* void asco_load(const asco_ctx *new_ctx); */
-asco_load:
+asco_load_internal:
 	ldmia	a1!, { a2, r4, r5, r6, r7, r8, r9, r10, fp, sp, lr }
 	mov	a1, a2
 	bx	lr

@@ -1,7 +1,7 @@
 .section .note.GNU-stack,"",@progbits
 .text
 .global asco_init_internal
-.global asco_save
+.global asco_save_internal
 .global asco_load
 asco_init_internal:
  movl 4(%esp), %eax
@@ -15,7 +15,7 @@ asco_init_internal:
  movl %ecx, 4(%edx)
  movl %edx, 8(%eax)
  ret
-asco_save:
+asco_save_internal:
  movl 4(%esp), %eax
  popl %edx
  movl %edx, (%eax)
@@ -26,7 +26,7 @@ asco_save:
  movl %esi, 20(%eax)
  movl $0, %eax
  jmp *%edx
-asco_load:
+asco_load_internal:
  movl 4(%esp), %eax
  movl (%eax), %edx
  movl 4(%eax), %ebp

@@ -9,11 +9,11 @@ option dotname
 .model flat
 
 public asco_init_internal
-public asco_save
-public asco_load
+public asco_save_internal
+public asco_load_internal
 
 
-_text   SEGMENT BYTE PUBLIC 'CODE'                      ; section number 1
+.code
 
 asco_init_internal PROC NEAR
         mov     eax, dword ptr [esp+4H]                 ; 0000 _ 8B. 44 24, 04
@@ -29,7 +29,7 @@ asco_init_internal PROC NEAR
         ret                                             ; 0028 _ C3
 asco_init_internal ENDP
 
-asco_save PROC NEAR
+asco_save_internal PROC NEAR
         mov     eax, dword ptr [esp+4H]                 ; 0029 _ 8B. 44 24, 04
         pop     edx                                     ; 002D _ 5A
         mov     dword ptr [eax], edx                    ; 002E _ 89. 10
@@ -40,9 +40,9 @@ asco_save PROC NEAR
         mov     dword ptr [eax+14H], esi                ; 003C _ 89. 70, 14
         mov     eax, 0                                  ; 003F _ B8, 00000000
         jmp     edx                                     ; 0044 _ FF. E2
-asco_save ENDP
+asco_save_internal ENDP
 
-asco_load PROC NEAR
+asco_load_internal PROC NEAR
         mov     eax, dword ptr [esp+4H]                 ; 0046 _ 8B. 44 24, 04
         mov     edx, dword ptr [eax]                    ; 004A _ 8B. 10
         mov     ebp, dword ptr [eax+4H]                 ; 004C _ 8B. 68, 04
@@ -52,26 +52,7 @@ asco_load PROC NEAR
         mov     esi, dword ptr [eax+14H]                ; 0058 _ 8B. 70, 14
         mov     eax, 1                                  ; 005B _ B8, 00000001
         jmp     edx                                     ; 0060 _ FF. E2
-asco_load ENDP
+asco_load_internal ENDP
 
-_text   ENDS
-
-_data   SEGMENT BYTE PUBLIC 'DATA'                      ; section number 2
-
-_data   ENDS
-
-.bss    SEGMENT BYTE PUBLIC 'BSS'                       ; section number 3
-
-.bss    ENDS
-
-.note.gnu.property SEGMENT DWORD PUBLIC 'CONST'         ; section number 4
-
-        db 04H, 00H, 00H, 00H, 18H, 00H, 00H, 00H       ; 0000 _ ........
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 00H, 00H, 00H, 00H, 01H, 00H, 01H, 0C0H      ; 0018 _ ........
-        db 04H, 00H, 00H, 00H, 01H, 00H, 00H, 00H       ; 0020 _ ........
-
-.note.gnu.property ENDS
 
 END

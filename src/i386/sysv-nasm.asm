@@ -6,11 +6,11 @@
 
 
 global asco_init_internal
-global asco_save
-global asco_load
+global asco_save_internal
+global asco_load_internal
 
 
-SECTION .text   align=1 exec                            ; section number 1, code
+SECTION .text
 
 asco_init_internal:; Function begin
         mov     eax, dword [esp+4H]                     ; 0000 _ 8B. 44 24, 04
@@ -26,7 +26,7 @@ asco_init_internal:; Function begin
         ret                                             ; 0028 _ C3
 ; asco_init_internal End of function
 
-asco_save:; Function begin
+asco_save_internal:; Function begin
         mov     eax, dword [esp+4H]                     ; 0029 _ 8B. 44 24, 04
         pop     edx                                     ; 002D _ 5A
         mov     dword [eax], edx                        ; 002E _ 89. 10
@@ -39,7 +39,7 @@ asco_save:; Function begin
         jmp     edx                                     ; 0044 _ FF. E2
 ; asco_save End of function
 
-asco_load:; Function begin
+asco_load_internal:; Function begin
         mov     eax, dword [esp+4H]                     ; 0046 _ 8B. 44 24, 04
         mov     edx, dword [eax]                        ; 004A _ 8B. 10
         mov     ebp, dword [eax+4H]                     ; 004C _ 8B. 68, 04
@@ -50,20 +50,4 @@ asco_load:; Function begin
         mov     eax, 1                                  ; 005B _ B8, 00000001
         jmp     edx                                     ; 0060 _ FF. E2
 ; asco_load End of function
-
-
-SECTION .data   align=1 noexec                          ; section number 2, data
-
-
-SECTION .bss    align=1 noexec                          ; section number 3, bss
-
-
-SECTION .note.gnu.property align=4 noexec               ; section number 4, const
-
-        db 04H, 00H, 00H, 00H, 18H, 00H, 00H, 00H       ; 0000 _ ........
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 00H, 00H, 00H, 00H, 01H, 00H, 01H, 0C0H      ; 0018 _ ........
-        db 04H, 00H, 00H, 00H, 01H, 00H, 00H, 00H       ; 0020 _ ........
-
 

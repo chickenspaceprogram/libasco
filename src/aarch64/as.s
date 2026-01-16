@@ -10,9 +10,9 @@
 
 .global asco_init_internal
 
-.global asco_save
+.global asco_save_internal
 
-.global asco_load
+.global asco_load_internal
 
 
 // void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *new_sp);
@@ -30,7 +30,7 @@ asco_init_internal:
 
 
 // int asco_save(asco_ctx *cur_ctx);
-asco_save:
+asco_save_internal:
 	// copying sp
 	mov	x9, sp
 
@@ -59,7 +59,7 @@ asco_save:
 	ret
 
 // void asco_load(const asco_ctx *new_ctx);
-asco_load:
+asco_load_internal:
 	// loading lr, fp
 	ldp	lr, fp, [x0]
 
