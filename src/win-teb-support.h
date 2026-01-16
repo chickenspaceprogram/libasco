@@ -1,0 +1,27 @@
+#ifndef ASCO_WIN_TEB_SUPPORT
+#define ASCO_WIN_TEB_SUPPORT 1
+
+#include <WinNt.h>
+#include <asco/asco.h>
+#include <string.h>
+
+static void asco_set_teb(asco_ctx *ctx)
+{
+	_TEB *teb = NtCurrentTeb();
+	teb->Reserved1[1] = ctx->tib_stack_base;
+	teb->Reserved1[2] = ctx->tib_stack_limit;
+	memcpy(teb->Reserved3 + 1944, &ctx->tib_dealloc_stack, 8);
+	teb->Reserved5[24] = ctx->tib_guaranteed_bytes;
+}
+
+static void asco_get_teb(asco_ctx *ctx)
+{
+	_TEB *teb = NtCurrentTeb();
+	ctx->tib_stack_base = teb->Reserved1[1];
+	ctx->tib_stack_limit = teb->Reserved1[2];
+	memcpy(&ctx->tib_dealloc_stack, teb->Reserved3 + 1944, 8);
+	ctx->tib_guaranteed_bytes = teb->Reserved5[24];
+}
+
+
+#endif

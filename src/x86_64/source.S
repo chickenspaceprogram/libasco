@@ -72,7 +72,7 @@ asco_init_internal:
 	   of the fn */
 	movq	%arg3, 0x20(%arg1)
 
-#ifdef WIN_CALL
+#ifdef WIN_CALL_ASFASDFAFDSAFDSA
 	movq	8(%rsp), %tmp1
 
 	/* setting up TIB */

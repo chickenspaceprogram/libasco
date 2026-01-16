@@ -4,20 +4,14 @@
 
 // SPDX-License-Identifier: MPL-2.0
 
+#if (ASCO_OS_WINDOWS)
+#include "win-teb-support.h"
+#endif
+
 #include <asco/asco.h>
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#if (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS)
-
-extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
-	void *sp, void *begin_stack) ASCO_ASM_NAME(asco_init_internal);
-#else
-// actually implemented in asm
-extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
-	void *sp) ASCO_ASM_NAME(asco_init_internal);
 #endif
 
 // arch dependent
@@ -53,12 +47,19 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 #endif
 
 
-#if (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS)
+#if (ASCO_OS_WINDOWS)
 void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
 {
-	asco_init_internal(new_ctx, fn, arg, set_stack_ptr(stack, stack_sz), stack);
+	void *nsp = set_stack_ptr(stack, stack_sz)
+	new_ctx->tib_stack_base = nsp;
+	new_ctx->tib_stack_limit = arg;
+	new_ctx->tib_dealloc_stack = arg;
+	new_ctx->tib_guaranteed_bytes = nsp - stack;
+	asco_set_teb(new_ctx);
+	asco_init_internal(new_ctx, fn, arg, nsp);
 }
+
 #else
 void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
