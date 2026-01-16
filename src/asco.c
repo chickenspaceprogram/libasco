@@ -4,9 +4,6 @@
 
 // SPDX-License-Identifier: MPL-2.0
 
-#if (ASCO_OS_WINDOWS)
-#include "win-teb-support.h"
-#endif
 
 #include <asco/asco.h>
 
@@ -50,6 +47,7 @@ static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
 
 
 #if (ASCO_OS_WINDOWS)
+#include "win-teb-support.h"
 void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
 	size_t stack_sz)
 {
