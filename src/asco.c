@@ -13,7 +13,8 @@ extern "C" {
 
 // Sets up to call the coroutine function, calls it, then jumps to the return
 // ctx once it finishes.
-ASCO_LINKAGE extern void ASCO_CALL asco_init_routine(void);
+ASCO_LINKAGE extern void ASCO_CALL asco_init_routine(void)
+	ASCO_ASM_NAME(asco_init_routine);
 
 #if (ASCO_ARCH_AARCH64)
 
