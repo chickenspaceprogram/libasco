@@ -66,8 +66,41 @@ asco_swap:
 	push	%r14
 	push	%r15
 
+#ifdef WIN_CALL
+	push	%rdi
+	push	%rsi
+	subq	$10*0x10, %rsp
+	movdqu	%xmm6, (%rsp)
+	movdqu	%xmm7, 1*0x10(%rsp)
+	movdqu	%xmm8, 2*0x10(%rsp)
+	movdqu	%xmm9, 3*0x10(%rsp)
+	movdqu	%xmm10, 4*0x10(%rsp)
+	movdqu	%xmm11, 5*0x10(%rsp)
+	movdqu	%xmm12, 6*0x10(%rsp)
+	movdqu	%xmm13, 7*0x10(%rsp)
+	movdqu	%xmm14, 8*0x10(%rsp)
+	movdqu	%xmm15, 9*0x10(%rsp)
+
+#endif
+
 	movq	%rsp, (%arg1)
 	movq	%arg2, %rsp
+
+#ifdef WIN_CALL
+	movdqu	(%rsp), %xmm6
+	movdqu	1*0x10(%rsp), %xmm7
+	movdqu	2*0x10(%rsp), %xmm8
+	movdqu	3*0x10(%rsp), %xmm9
+	movdqu	4*0x10(%rsp), %xmm10
+	movdqu	5*0x10(%rsp), %xmm11
+	movdqu	6*0x10(%rsp), %xmm12
+	movdqu	7*0x10(%rsp), %xmm13
+	movdqu	8*0x10(%rsp), %xmm14
+	movdqu	9*0x10(%rsp), %xmm15
+	addq	$10*0x10, %rsp
+	pop	%rsi
+	pop	%rdi
+#endif
 
 	pop	%r15
 	pop	%r14

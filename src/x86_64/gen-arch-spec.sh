@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -e
 # if you want to regenerate the .s, .asm files in this directory, run:
 #
 # rm sysv* win*

@@ -111,8 +111,18 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 // -- low --
 //
 // otherwise: normal
+//
+//
+// extra stack members on win64 (after all the other members):
+// uint64_t rdi
+// uint64_t rsi
+// uint64_t xmm6_15[10 * 2]
 
-#define SP_DEC_AMT (1 + 1 + 1 + 1 + 4)
+#if ASCO_OS_WINDOWS
+#	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4 + 1 + 1 + 10 * 2)
+#else
+#	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4)
+#endif
 
 ASCO_LINKAGE void ASCO_CALL asco_init(
 	asco_ctx *new_ctx, const asco_ctx *ret_ctx,

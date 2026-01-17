@@ -1,15 +1,10 @@
-; Disassembly of file: source.win.o
-; Sat Jan 17 13:10:32 2026
-; Type: ELF64
-; Syntax: MASM/ML64
-; Instruction set: SSE, x64, 80x87
 option dotname
 
 public asco_init_routine
 public asco_swap
 
 
-_text   SEGMENT BYTE 'CODE'                             ; section number 1
+.code
 
 asco_init_routine PROC
         mov     rcx, rbx                                ; 0000 _ 48: 89. D9
@@ -38,39 +33,44 @@ asco_swap PROC
         push    r13                                     ; 002C _ 41: 55
         push    r14                                     ; 002E _ 41: 56
         push    r15                                     ; 0030 _ 41: 57
-        mov     qword ptr [rcx], rsp                    ; 0032 _ 48: 89. 21
-        mov     rsp, rdx                                ; 0035 _ 48: 89. D4
-        pop     r15                                     ; 0038 _ 41: 5F
-        pop     r14                                     ; 003A _ 41: 5E
-        pop     r13                                     ; 003C _ 41: 5D
-        pop     r12                                     ; 003E _ 41: 5C
-        pop     rbx                                     ; 0040 _ 5B
-        fldcw   word ptr [rsp+4H]                       ; 0041 _ D9. 6C 24, 04
-        ldmxcsr dword ptr [rsp]                         ; 0045 _ 0F AE. 14 24
-        pop     rbp                                     ; 0049 _ 5D
-        pop     rbp                                     ; 004A _ 5D
-        ret                                             ; 004B _ C3
+        push    rdi                                     ; 0032 _ 57
+        push    rsi                                     ; 0033 _ 56
+        sub     rsp, 160                                ; 0034 _ 48: 81. EC, 000000A0
+        movdqu  xmmword ptr [rsp], xmm6                 ; 003B _ F3: 0F 7F. 34 24
+        movdqu  xmmword ptr [rsp+10H], xmm7             ; 0040 _ F3: 0F 7F. 7C 24, 10
+        movdqu  xmmword ptr [rsp+20H], xmm8             ; 0046 _ F3 44: 0F 7F. 44 24, 20
+        movdqu  xmmword ptr [rsp+30H], xmm9             ; 004D _ F3 44: 0F 7F. 4C 24, 30
+        movdqu  xmmword ptr [rsp+40H], xmm10            ; 0054 _ F3 44: 0F 7F. 54 24, 40
+        movdqu  xmmword ptr [rsp+50H], xmm11            ; 005B _ F3 44: 0F 7F. 5C 24, 50
+        movdqu  xmmword ptr [rsp+60H], xmm12            ; 0062 _ F3 44: 0F 7F. 64 24, 60
+        movdqu  xmmword ptr [rsp+70H], xmm13            ; 0069 _ F3 44: 0F 7F. 6C 24, 70
+        movdqu  xmmword ptr [rsp+80H], xmm14            ; 0070 _ F3 44: 0F 7F. B4 24, 00000080
+        movdqu  xmmword ptr [rsp+90H], xmm15            ; 007A _ F3 44: 0F 7F. BC 24, 00000090
+        mov     qword ptr [rcx], rsp                    ; 0084 _ 48: 89. 21
+        mov     rsp, rdx                                ; 0087 _ 48: 89. D4
+        movdqu  xmm6, xmmword ptr [rsp]                 ; 008A _ F3: 0F 6F. 34 24
+        movdqu  xmm7, xmmword ptr [rsp+10H]             ; 008F _ F3: 0F 6F. 7C 24, 10
+        movdqu  xmm8, xmmword ptr [rsp+20H]             ; 0095 _ F3 44: 0F 6F. 44 24, 20
+        movdqu  xmm9, xmmword ptr [rsp+30H]             ; 009C _ F3 44: 0F 6F. 4C 24, 30
+        movdqu  xmm10, xmmword ptr [rsp+40H]            ; 00A3 _ F3 44: 0F 6F. 54 24, 40
+        movdqu  xmm11, xmmword ptr [rsp+50H]            ; 00AA _ F3 44: 0F 6F. 5C 24, 50
+        movdqu  xmm12, xmmword ptr [rsp+60H]            ; 00B1 _ F3 44: 0F 6F. 64 24, 60
+        movdqu  xmm13, xmmword ptr [rsp+70H]            ; 00B8 _ F3 44: 0F 6F. 6C 24, 70
+        movdqu  xmm14, xmmword ptr [rsp+80H]            ; 00BF _ F3 44: 0F 6F. B4 24, 00000080
+        movdqu  xmm15, xmmword ptr [rsp+90H]            ; 00C9 _ F3 44: 0F 6F. BC 24, 00000090
+        add     rsp, 160                                ; 00D3 _ 48: 81. C4, 000000A0
+        pop     rsi                                     ; 00DA _ 5E
+        pop     rdi                                     ; 00DB _ 5F
+        pop     r15                                     ; 00DC _ 41: 5F
+        pop     r14                                     ; 00DE _ 41: 5E
+        pop     r13                                     ; 00E0 _ 41: 5D
+        pop     r12                                     ; 00E2 _ 41: 5C
+        pop     rbx                                     ; 00E4 _ 5B
+        fldcw   word ptr [rsp+4H]                       ; 00E5 _ D9. 6C 24, 04
+        ldmxcsr dword ptr [rsp]                         ; 00E9 _ 0F AE. 14 24
+        pop     rbp                                     ; 00ED _ 5D
+        pop     rbp                                     ; 00EE _ 5D
+        ret                                             ; 00EF _ C3
 asco_swap ENDP
-
-_text   ENDS
-
-_data   SEGMENT BYTE 'DATA'                             ; section number 2
-
-_data   ENDS
-
-.bss    SEGMENT BYTE 'BSS'                              ; section number 3
-
-.bss    ENDS
-
-.note.gnu.property SEGMENT ALIGN(8) 'CONST'             ; section number 4
-
-        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
-        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
-        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
-        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
-        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
-        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
-
-.note.gnu.property ENDS
 
 END
