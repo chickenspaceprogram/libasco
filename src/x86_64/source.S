@@ -40,6 +40,22 @@ asco_init_routine:
 
 	mov	(%r13), %rsp
 
+#ifdef WIN_CALL
+	movdqu	(%rsp), %xmm6
+	movdqu	1*0x10(%rsp), %xmm7
+	movdqu	2*0x10(%rsp), %xmm8
+	movdqu	3*0x10(%rsp), %xmm9
+	movdqu	4*0x10(%rsp), %xmm10
+	movdqu	5*0x10(%rsp), %xmm11
+	movdqu	6*0x10(%rsp), %xmm12
+	movdqu	7*0x10(%rsp), %xmm13
+	movdqu	8*0x10(%rsp), %xmm14
+	movdqu	9*0x10(%rsp), %xmm15
+	addq	$10*0x10, %rsp
+	pop	%rsi
+	pop	%rdi
+#endif
+
 	pop	%r15
 	pop	%r14
 	pop	%r13

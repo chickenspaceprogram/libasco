@@ -73,6 +73,7 @@ static void chk_switch_stacks(void)
 	eprintf("chk_switch_stacks: jumpback finished\n");
 
 	free(stack);
+	eprintf("freed memory\n");
 }
 
 int main(void)
