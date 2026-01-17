@@ -47,21 +47,18 @@ support for anything on Windows should be considered experimental. Microsoft
 does not follow any relevant standards or document the behavior of their
 operating system.
 
-all my testing does occur on hosted systems, and CMake is configured for that.
-technically speaking, only the tests require a hosted system (even then it's
-for abort() and fprintf()), so you'd probably be fine removing the asserts and
-setting up a makefile to compile your desired architecture manually.
-
 i don't know much about freestanding environments so i don't currently have
 plans to officially support them; that might come in future if i do get
 experience though.
 
 porting to new platforms should be pretty straightforward if you already know
-that platform's assembly; you need to implement 3 assembly routines and a C
-function that aligns and sets up the stack pointer properly. unfortunately,
-prior to this project I'd only touched z80 assembly so porting's gonna be slow.
+that platform's assembly; you need to implement an assembly routine to swap
+stacks, and a C function that prepares a stack to be swapped to.
+
 this project was mostly an excuse to mess around a bit with a bunch of assembly
-languages to be honest.
+languages. don't use it in prod, just... be sensible. maybe once i more
+extensively test it by integrating it into a proper async runtime that'll be
+reasonable.
 
 i also need to setup benchmarks at some point to compare these routines with
 standard function calls; that'll come after I implement the most common

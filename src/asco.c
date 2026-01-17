@@ -5,66 +5,66 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <asco/asco.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#if (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS)
+// Sets up to call the coroutine function, calls it, then jumps to the return
+// ctx once it finishes.
+ASCO_LINKAGE extern void ASCO_CALL asco_init_routine(void);
 
-extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
-	void *sp, void *begin_stack) ASCO_ASM_NAME(asco_init_internal);
-#else
-// actually implemented in asm
-extern void ASCO_CALL asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg,
-	void *sp) ASCO_ASM_NAME(asco_init_internal);
-#endif
+#if (ASCO_ARCH_AARCH64)
 
-// arch dependent
-static inline void *set_stack_ptr(void *stack_start, size_t stack_sz);
+// aarch64 stack setup:
+//
+//
+// before first fn call:
+//
+// lr: asco_init_routine
+// fp: 0
+// x20: void *init_arg;
+// x19: void *init_fn
+// x22: < unspecified > 
+// x21: asco_ctx *return_ctx;
+// other: unspecified
+// 
+// when coroutine is swapped away from:
+//
+// -- high --
+// ... function calls ...
+//
+// void *link_reg;
+// void *frame_ptr;
+// uint64_t x19_x28[10];
+// double d8_d15[8];
+// -- low --
+//
+// otherwise: normal
 
-#if ASCO_ARCH_AARCH64 || ASCO_ARCH_X86
-static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
-{
-	uintptr_t st = (uintptr_t)stack_start;
-	st += stack_sz;
-	st &= ~(0xF);
-	return (void *)st;
-}
-#elif ASCO_ARCH_ARMV5
-static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
-{
-	uintptr_t st = (uintptr_t)stack_start;
-	st += stack_sz;
-	st &= ~(0x7);
-	return (void *)st;
-}
-#elif ASCO_ARCH_X86_64
-static inline void *set_stack_ptr(void *stack_start, size_t stack_sz)
-{
-	uintptr_t st = (uintptr_t)stack_start;
-	st += stack_sz;
-	st -= 0x32; // giving a bunch of extra space, msvc is being weird
-	st &= ~(0xF);
-	return (void *)st;
-}
-#else
-#	error "Unsupported CPU architecture."
-#endif
+#define SP_DEC_AMT (1 + 1 + 10 + 8)
 
+ASCO_LINKAGE void ASCO_CALL asco_init(
+	asco_ctx *new_ctx, const asco_ctx *ret_ctx,
+	asco_fn fn, void *arg,
+	void *stack_top, size_t stack_size)
+{
+	uintptr_t sp = (uintptr_t)stack_top + stack_size;
+	sp &= ~(0xF);
+	void **sp_as_ptr = (void **)sp;
+	sp_as_ptr[-1] = asco_init_routine;
+	sp_as_ptr[-2] = 0;
+	sp_as_ptr[-3] = arg;
+	sp_as_ptr[-4] = fn;
+	sp_as_ptr[-6] = (void *)ret_ctx; // scary const cast
+	sp_as_ptr -= SP_DEC_AMT;
+	new_ctx->sp = (void *)sp_as_ptr;
+}
 
-#if (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS)
-void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
-	size_t stack_sz)
-{
-	asco_init_internal(new_ctx, fn, arg, set_stack_ptr(stack, stack_sz), stack);
-}
-#else
-void asco_init(asco_ctx *new_ctx, asco_fn fn, void *arg, void *stack,
-	size_t stack_sz)
-{
-	asco_init_internal(new_ctx, fn, arg, set_stack_ptr(stack, stack_sz));
-}
+#elif
+#	error libasco: unsupported architecture
+
 #endif
 
 #ifdef __cplusplus

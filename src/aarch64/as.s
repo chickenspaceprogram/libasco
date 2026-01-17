@@ -4,83 +4,59 @@
 
 // SPDX-License-Identifier: MPL-2.0
 
+.global asco_swap
+.global asco_init_routine
 
-// i haven't written much aarch64, so expect inane comments
+asco_init_routine:
+	// call coroutine fn
+	mov	x0, x20
+	blr	x19
 
-
-.global asco_init_internal
-
-.global asco_save
-
-.global asco_load
-
-
-// void asco_init_internal(asco_ctx *new_ctx, asco_fn fn, void *arg, void *new_sp);
-asco_init_internal:
-	stp	x1, xzr, [x0], #16
-	stp	x3, x2, [x0]
-
-	// after setup:
-	// ctx.lr = fn
-	// ctx.fp = 0
-	// ctx.sp = new_sp
-	// ctx.x19_or_x0 = arg
-	
-	ret
-
-
-// int asco_save(asco_ctx *cur_ctx);
-asco_save:
-	// copying sp
-	mov	x9, sp
-
-	// return value on load
-	mov	w10, #1
-
-	// storing fp, lr, sp, x19
-	stp	lr, fp, [x0], #16
-	stp	x9, x10, [x0], #16
-
-	// storing x19-x28
-	stp	x19, x20, [x0], #16
-	stp	x21, x22, [x0], #16
-	stp	x23, x24, [x0], #16
-	stp	x25, x26, [x0], #16
-	stp	x27, x28, [x0], #16
-
-	// storing d8-d15
-	stp	d8, d9, [x0], #16
-	stp	d10, d11, [x0], #16
-	stp	d12, d13, [x0], #16
-	stp	d14, d15, [x0]
-
-	// returning 0
-	mov	w0, #0
-	ret
-
-// void asco_load(const asco_ctx *new_ctx);
-asco_load:
-	// loading lr, fp
-	ldp	lr, fp, [x0]
-
-	// loading x19-x28
-	ldp	x19, x20, [x0, #0x20]
-	ldp	x21, x22, [x0, #0x30]
-	ldp	x23, x24, [x0, #0x40]
-	ldp	x25, x26, [x0, #0x50]
-	ldp	x27, x28, [x0, #0x60]
-
-	// loading d8, d15
-	ldp	d8, d9, [x0, #0x70]
-	ldp	d10, d11, [x0, #0x80]
-	ldp	d12, d13, [x0, #0x90]
-	ldp	d14, d15, [x0, #0x100]
-
-	ldp	x9, x0, [x0, #0x10]
-	
-	// copying into sp
+	// load return ctx
+	ldr	x9, [x21]
 	mov	sp, x9
 
-	// basically br lr
+	ldp	d14, d15, [sp], #0x10
+	ldp	d12, d13, [sp], #0x10
+	ldp	d10, d11, [sp], #0x10
+	ldp	d8, d9, [sp], #0x10
+	ldp	x27, x28, [sp], #0x10
+	ldp	x25, x26, [sp], #0x10
+	ldp	x23, x24, [sp], #0x10
+	ldp	x21, x22, [sp], #0x10
+	ldp	x19, x20, [sp], #0x10
+	ldp	fp, lr, [sp], #0x10
+
 	ret
 
+// void asco_swap(asco_ctx *cur_ctx, asco_ctx new_ctx);
+asco_swap:
+	// saving regs
+	stp	fp, lr, [sp, #-0x10]!
+	stp	x19, x20, [sp, #-0x10]!
+	stp	x21, x22, [sp, #-0x10]!
+	stp	x23, x24, [sp, #-0x10]!
+	stp	x25, x26, [sp, #-0x10]!
+	stp	x27, x28, [sp, #-0x10]!
+	stp	d8, d9, [sp, #-0x10]!
+	stp	d10, d11, [sp, #-0x10]!
+	stp	d12, d13, [sp, #-0x10]!
+	stp	d14, d15, [sp, #-0x10]!
+
+	// swap stacks
+	mov	x9, sp
+	str	x9, [x0]
+	mov	sp, x1
+
+	ldp	d14, d15, [sp], #0x10
+	ldp	d12, d13, [sp], #0x10
+	ldp	d10, d11, [sp], #0x10
+	ldp	d8, d9, [sp], #0x10
+	ldp	x27, x28, [sp], #0x10
+	ldp	x25, x26, [sp], #0x10
+	ldp	x23, x24, [sp], #0x10
+	ldp	x21, x22, [sp], #0x10
+	ldp	x19, x20, [sp], #0x10
+	ldp	fp, lr, [sp], #0x10
+
+	ret

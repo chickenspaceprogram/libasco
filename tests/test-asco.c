@@ -33,57 +33,50 @@
 static int FLAGLIST[NFLAGS] = {};
 static int CUR_FLAG = 0;
 
+typedef struct {
+	asco_ctx main_ctx;
+	asco_ctx jb_ctx;
+} contexts;
 
-static void chk_revert(void)
-{
-	asco_ctx ctx;
-	volatile int niter = 6969;
-	FLAGLIST[0] = CUR_FLAG++;
-	bool rv = asco_save(&ctx);
-	if (rv) {
-		FLAGLIST[2] = CUR_FLAG++;
-	}
-	else {
-		FLAGLIST[1] = CUR_FLAG++;
-		eprintf("chk_revert(): asco_save() called\n");
-		asco_load(&ctx);
-		dbgassert(0 && "chk_revert(): asco_load() called, SHOULD NOT BE HERE!!!\n");
-		niter = 1;
-	}
-	dbgassert(niter == 6969);
-}
 
 static void jumpback(void *arg)
 {
 	eprintf("in jumpback()\n");
 	volatile int foo = 3;
 	dbgassert(foo == 3);
-	asco_ctx *main_ctx = arg;
+	contexts *ctxs = arg;
+	FLAGLIST[1] = CUR_FLAG++;
+	asco_swap(&ctxs->jb_ctx, ctxs->main_ctx);
 	FLAGLIST[3] = CUR_FLAG++;
-	asco_load(main_ctx);
-	dbgassert(0 && "jumpback(): asco_load() called, SHOULD NOT BE HERE");
+	dbgassert(foo == 3);
+	eprintf("came back to jumpback again\n");
 }
 
 static void chk_switch_stacks(void)
 {
 	int val = 123;
-	asco_ctx main_ctx;
-	asco_ctx new_ctx;
+	contexts ctxs;
 	void *stack = malloc(0x1000);
 	dbgassert(stack != NULL);
-	asco_init(&new_ctx, jumpback, &main_ctx, (uint8_t *)stack, 0x1000);
+	asco_init(&ctxs.jb_ctx, &ctxs.main_ctx,
+		jumpback, &ctxs,
+		stack, 0x1000);
 	eprintf("chk_switch_stacks(): asco_init() called\n");
-	asco_swap(&main_ctx, &new_ctx);
-	FLAGLIST[4] = CUR_FLAG++;
-	eprintf("chk_switch_stacks(): asco_swap() called\n");
+	FLAGLIST[0] = CUR_FLAG++;
+	asco_swap(&ctxs.main_ctx, ctxs.jb_ctx);
+	FLAGLIST[2] = CUR_FLAG++;
+	eprintf("chk_switch_stacks: back from jumpback\n");
 	dbgassert(val == 123);
+	asco_swap(&ctxs.main_ctx, ctxs.jb_ctx);
+	FLAGLIST[4] = CUR_FLAG++;
+	dbgassert(val == 123);
+	eprintf("chk_switch_stacks: jumpback finished\n");
+
 	free(stack);
 }
 
 int main(void)
 {
-	eprintf("Calling chk_revert()\n");
-	chk_revert();
 	eprintf("Calling chk_switch_stacks()\n");
 	chk_switch_stacks();
 	for (int i = 0; i < NFLAGS; ++i) {
