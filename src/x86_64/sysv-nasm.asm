@@ -1,55 +1,72 @@
+; Disassembly of file: source.sysv.o
+; Sat Jan 17 13:10:32 2026
+; Type: ELF64
+; Syntax: NASM
+; Instruction set: SSE, x64, 80x87
+
 default rel
 
-global asco_init_internal
-global asco_save
-global asco_load
+global asco_init_routine
+global asco_swap
 
 
-SECTION .text
+SECTION .text   align=1 exec                            ; section number 1, code
 
-asco_init_internal:; Function begin
-        mov     qword [rdi], rsi                        ; 0000 _ 48: 89. 37
-        mov     qword [rdi+8H], 0                       ; 0003 _ 48: C7. 47, 08, 00000000
-        mov     qword [rdi+10H], rcx                    ; 000B _ 48: 89. 4F, 10
-        mov     dword [rdi+18H], 8064                   ; 000F _ C7. 47, 18, 00001F80
-; Note: Length-changing prefix causes delay on old Intel processors
-        mov     word [rdi+1CH], 895                     ; 0016 _ 66: C7. 47, 1C, 037F
-        mov     qword [rdi+20H], rdx                    ; 001C _ 48: 89. 57, 20
-        ret                                             ; 0020 _ C3
-; asco_init_internal End of function
+asco_init_routine:; Function begin
+        mov     rdi, rbx                                ; 0000 _ 48: 89. DF
+        call    r12                                     ; 0003 _ 41: FF. D4
+        mov     rsp, qword [r13]                        ; 0006 _ 49: 8B. 65, 00
+        pop     r15                                     ; 000A _ 41: 5F
+        pop     r14                                     ; 000C _ 41: 5E
+        pop     r13                                     ; 000E _ 41: 5D
+        pop     r12                                     ; 0010 _ 41: 5C
+        pop     rbx                                     ; 0012 _ 5B
+        fldcw   word [rsp+4H]                           ; 0013 _ D9. 6C 24, 04
+        ldmxcsr dword [rsp]                             ; 0017 _ 0F AE. 14 24
+        pop     rbp                                     ; 001B _ 5D
+        pop     rbp                                     ; 001C _ 5D
+        ret                                             ; 001D _ C3
+; asco_init_routine End of function
 
-asco_save:; Function begin
-        pop     r11                                     ; 0021 _ 41: 5B
-        mov     qword [rdi], r11                        ; 0023 _ 4C: 89. 1F
-        mov     qword [rdi+10H], rsp                    ; 0026 _ 48: 89. 67, 10
-        push    r11                                     ; 002A _ 41: 53
-        mov     qword [rdi+8H], rbp                     ; 002C _ 48: 89. 6F, 08
-        stmxcsr dword [rdi+18H]                         ; 0030 _ 0F AE. 5F, 18
-        fwait                                           ; 0034 _ 9B
-        fnstcw  word [rdi+1CH]                          ; 0035 _ D9. 7F, 1C
-        mov     qword [rdi+20H], rbx                    ; 0038 _ 48: 89. 5F, 20
-        mov     qword [rdi+28H], r12                    ; 003C _ 4C: 89. 67, 28
-        mov     qword [rdi+30H], r13                    ; 0040 _ 4C: 89. 6F, 30
-        mov     qword [rdi+38H], r14                    ; 0044 _ 4C: 89. 77, 38
-        mov     qword [rdi+40H], r15                    ; 0048 _ 4C: 89. 7F, 40
-        xor     eax, eax                                ; 004C _ 31. C0
-        ret                                             ; 004E _ C3
-; asco_save End of function
+asco_swap:; Function begin
+        push    rbp                                     ; 001E _ 55
+        push    rbp                                     ; 001F _ 55
+        stmxcsr dword [rsp]                             ; 0020 _ 0F AE. 1C 24
+        fwait                                           ; 0024 _ 9B
+        fnstcw  word [rsp+4H]                           ; 0025 _ D9. 7C 24, 04
+        push    rbx                                     ; 0029 _ 53
+        push    r12                                     ; 002A _ 41: 54
+        push    r13                                     ; 002C _ 41: 55
+        push    r14                                     ; 002E _ 41: 56
+        push    r15                                     ; 0030 _ 41: 57
+        mov     qword [rdi], rsp                        ; 0032 _ 48: 89. 27
+        mov     rsp, rsi                                ; 0035 _ 48: 89. F4
+        pop     r15                                     ; 0038 _ 41: 5F
+        pop     r14                                     ; 003A _ 41: 5E
+        pop     r13                                     ; 003C _ 41: 5D
+        pop     r12                                     ; 003E _ 41: 5C
+        pop     rbx                                     ; 0040 _ 5B
+        fldcw   word [rsp+4H]                           ; 0041 _ D9. 6C 24, 04
+        ldmxcsr dword [rsp]                             ; 0045 _ 0F AE. 14 24
+        pop     rbp                                     ; 0049 _ 5D
+        pop     rbp                                     ; 004A _ 5D
+        ret                                             ; 004B _ C3
+; asco_swap End of function
 
-asco_load:; Function begin
-        mov     r11, qword [rdi]                        ; 004F _ 4C: 8B. 1F
-        mov     rbp, qword [rdi+8H]                     ; 0052 _ 48: 8B. 6F, 08
-        mov     rsp, qword [rdi+10H]                    ; 0056 _ 48: 8B. 67, 10
-        ldmxcsr dword [rdi+18H]                         ; 005A _ 0F AE. 57, 18
-        fwait                                           ; 005E _ 9B
-        fnclex                                          ; 005F _ DB. E2
-        fldcw   word [rdi+1CH]                          ; 0061 _ D9. 6F, 1C
-        mov     rbx, qword [rdi+20H]                    ; 0064 _ 48: 8B. 5F, 20
-        mov     r12, qword [rdi+28H]                    ; 0068 _ 4C: 8B. 67, 28
-        mov     r13, qword [rdi+30H]                    ; 006C _ 4C: 8B. 6F, 30
-        mov     r14, qword [rdi+38H]                    ; 0070 _ 4C: 8B. 77, 38
-        mov     r15, qword [rdi+40H]                    ; 0074 _ 4C: 8B. 7F, 40
-        mov     rdi, rbx                                ; 0078 _ 48: 89. DF
-        mov     eax, 1                                  ; 007B _ B8, 00000001
-        jmp     r11                                     ; 0080 _ 41: FF. E3
-; asco_load End of function
+
+SECTION .data   align=1 noexec                          ; section number 2, data
+
+
+SECTION .bss    align=1 noexec                          ; section number 3, bss
+
+
+SECTION .note.gnu.property align=8 noexec               ; section number 4, const
+
+        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
+        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
+        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
+        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
+        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
+
+

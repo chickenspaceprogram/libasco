@@ -4,8 +4,14 @@ let
 in
 crossEnv.mkShell {
 	buildInputs = with crossEnv; [
-#		llvmPackages.compiler-rt
-		gdb
 		valgrind
+		binutils
+		gcc
+	];
+	nativeBuildInputs = with crossEnv; [
+		gdb
+		cmake
+		gnumake
+		zsh
 	];
 }

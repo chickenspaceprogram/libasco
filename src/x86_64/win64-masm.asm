@@ -1,119 +1,76 @@
+; Disassembly of file: source.win.o
+; Sat Jan 17 13:10:32 2026
+; Type: ELF64
+; Syntax: MASM/ML64
+; Instruction set: SSE, x64, 80x87
 option dotname
 
-public asco_init_internal
-public asco_save
-public asco_load
+public asco_init_routine
+public asco_swap
 
 
-.code
+_text   SEGMENT BYTE 'CODE'                             ; section number 1
 
-asco_init_internal PROC
-        mov     qword ptr [rcx], rdx                    ; 0000 _ 48: 89. 11
-        mov     qword ptr [rcx+8H], 0                   ; 0003 _ 48: C7. 41, 08, 00000000
-        mov     qword ptr [rcx+10H], r9                 ; 000B _ 4C: 89. 49, 10
-        mov     dword ptr [rcx+18H], 8064               ; 000F _ C7. 41, 18, 00001F80
-; Note: Length-changing prefix causes delay on old Intel processors
-        mov     word ptr [rcx+1CH], 895                 ; 0016 _ 66: C7. 41, 1C, 037F
-        mov     qword ptr [rcx+20H], r8                 ; 001C _ 4C: 89. 41, 20
-        mov     r11, qword ptr [rsp+8H]                 ; 0020 _ 4C: 8B. 5C 24, 08
-        mov     qword ptr [rcx+0F8H], r9                ; 0025 _ 4C: 89. 89, 000000F8
-        mov     qword ptr [rcx+100H], r11               ; 002C _ 4C: 89. 99, 00000100
-        mov     qword ptr [rcx+108H], r11               ; 0033 _ 4C: 89. 99, 00000108
-        sub     r9, r11                                 ; 003A _ 4D: 29. D9
-        mov     qword ptr [rcx+110H], r9                ; 003D _ 4C: 89. 89, 00000110
-        ret                                             ; 0044 _ C3
-asco_init_internal ENDP
+asco_init_routine PROC
+        mov     rcx, rbx                                ; 0000 _ 48: 89. D9
+        call    r12                                     ; 0003 _ 41: FF. D4
+        mov     rsp, qword ptr [r13]                    ; 0006 _ 49: 8B. 65, 00
+        pop     r15                                     ; 000A _ 41: 5F
+        pop     r14                                     ; 000C _ 41: 5E
+        pop     r13                                     ; 000E _ 41: 5D
+        pop     r12                                     ; 0010 _ 41: 5C
+        pop     rbx                                     ; 0012 _ 5B
+        fldcw   word ptr [rsp+4H]                       ; 0013 _ D9. 6C 24, 04
+        ldmxcsr dword ptr [rsp]                         ; 0017 _ 0F AE. 14 24
+        pop     rbp                                     ; 001B _ 5D
+        pop     rbp                                     ; 001C _ 5D
+        ret                                             ; 001D _ C3
+asco_init_routine ENDP
 
-asco_save PROC
-        pop     r11                                     ; 0045 _ 41: 5B
-        mov     qword ptr [rcx], r11                    ; 0047 _ 4C: 89. 19
-        mov     qword ptr [rcx+10H], rsp                ; 004A _ 48: 89. 61, 10
-        push    r11                                     ; 004E _ 41: 53
-        mov     qword ptr [rcx+8H], rbp                 ; 0050 _ 48: 89. 69, 08
-        stmxcsr dword ptr [rcx+18H]                     ; 0054 _ 0F AE. 59, 18
-        fwait                                           ; 0058 _ 9B
-        fnstcw  word ptr [rcx+1CH]                      ; 0059 _ D9. 79, 1C
-        mov     qword ptr [rcx+20H], rbx                ; 005C _ 48: 89. 59, 20
-        mov     qword ptr [rcx+28H], r12                ; 0060 _ 4C: 89. 61, 28
-        mov     qword ptr [rcx+30H], r13                ; 0064 _ 4C: 89. 69, 30
-        mov     qword ptr [rcx+38H], r14                ; 0068 _ 4C: 89. 71, 38
-        mov     qword ptr [rcx+40H], r15                ; 006C _ 4C: 89. 79, 40
-        mov     qword ptr [rcx+48H], rdi                ; 0070 _ 48: 89. 79, 48
-        mov     qword ptr [rcx+50H], rsi                ; 0074 _ 48: 89. 71, 50
-        movdqu  xmmword ptr [rcx+58H], xmm6             ; 0078 _ F3: 0F 7F. 71, 58
-        movdqu  xmmword ptr [rcx+68H], xmm7             ; 007D _ F3: 0F 7F. 79, 68
-        movdqu  xmmword ptr [rcx+78H], xmm8             ; 0082 _ F3 44: 0F 7F. 41, 78
-        movdqu  xmmword ptr [rcx+88H], xmm9             ; 0088 _ F3 44: 0F 7F. 89, 00000088
-        movdqu  xmmword ptr [rcx+98H], xmm10            ; 0091 _ F3 44: 0F 7F. 91, 00000098
-        movdqu  xmmword ptr [rcx+0A8H], xmm11           ; 009A _ F3 44: 0F 7F. 99, 000000A8
-        movdqu  xmmword ptr [rcx+0B8H], xmm12           ; 00A3 _ F3 44: 0F 7F. A1, 000000B8
-        movdqu  xmmword ptr [rcx+0C8H], xmm13           ; 00AC _ F3 44: 0F 7F. A9, 000000C8
-        movdqu  xmmword ptr [rcx+0D8H], xmm14           ; 00B5 _ F3 44: 0F 7F. B1, 000000D8
-        movdqu  xmmword ptr [rcx+0E8H], xmm15           ; 00BE _ F3 44: 0F 7F. B9, 000000E8
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     r11, qword ptr gs:[8H]                  ; 00C7 _ 65 4C: 8B. 1C 25, 00000008
-        mov     qword ptr [rcx+0F8H], r11               ; 00D0 _ 4C: 89. 99, 000000F8
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     r11, qword ptr gs:[10H]                 ; 00D7 _ 65 4C: 8B. 1C 25, 00000010
-        mov     qword ptr [rcx+100H], r11               ; 00E0 _ 4C: 89. 99, 00000100
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     r11, qword ptr gs:[1478H]               ; 00E7 _ 65 4C: 8B. 1C 25, 00001478
-        mov     qword ptr [rcx+108H], r11               ; 00F0 _ 4C: 89. 99, 00000108
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     r11, qword ptr gs:[1748H]               ; 00F7 _ 65 4C: 8B. 1C 25, 00001748
-        mov     qword ptr [rcx+110H], r11               ; 0100 _ 4C: 89. 99, 00000110
-        xor     eax, eax                                ; 0107 _ 31. C0
-        ret                                             ; 0109 _ C3
-asco_save ENDP
+asco_swap PROC
+        push    rbp                                     ; 001E _ 55
+        push    rbp                                     ; 001F _ 55
+        stmxcsr dword ptr [rsp]                         ; 0020 _ 0F AE. 1C 24
+        fwait                                           ; 0024 _ 9B
+        fnstcw  word ptr [rsp+4H]                       ; 0025 _ D9. 7C 24, 04
+        push    rbx                                     ; 0029 _ 53
+        push    r12                                     ; 002A _ 41: 54
+        push    r13                                     ; 002C _ 41: 55
+        push    r14                                     ; 002E _ 41: 56
+        push    r15                                     ; 0030 _ 41: 57
+        mov     qword ptr [rcx], rsp                    ; 0032 _ 48: 89. 21
+        mov     rsp, rdx                                ; 0035 _ 48: 89. D4
+        pop     r15                                     ; 0038 _ 41: 5F
+        pop     r14                                     ; 003A _ 41: 5E
+        pop     r13                                     ; 003C _ 41: 5D
+        pop     r12                                     ; 003E _ 41: 5C
+        pop     rbx                                     ; 0040 _ 5B
+        fldcw   word ptr [rsp+4H]                       ; 0041 _ D9. 6C 24, 04
+        ldmxcsr dword ptr [rsp]                         ; 0045 _ 0F AE. 14 24
+        pop     rbp                                     ; 0049 _ 5D
+        pop     rbp                                     ; 004A _ 5D
+        ret                                             ; 004B _ C3
+asco_swap ENDP
 
-asco_load PROC
-        mov     r11, qword ptr [rcx]                    ; 010A _ 4C: 8B. 19
-        mov     rbp, qword ptr [rcx+8H]                 ; 010D _ 48: 8B. 69, 08
-        mov     rsp, qword ptr [rcx+10H]                ; 0111 _ 48: 8B. 61, 10
-        ldmxcsr dword ptr [rcx+18H]                     ; 0115 _ 0F AE. 51, 18
-        fwait                                           ; 0119 _ 9B
-        fnclex                                          ; 011A _ DB. E2
-        fldcw   word ptr [rcx+1CH]                      ; 011C _ D9. 69, 1C
-        mov     rbx, qword ptr [rcx+20H]                ; 011F _ 48: 8B. 59, 20
-        mov     r12, qword ptr [rcx+28H]                ; 0123 _ 4C: 8B. 61, 28
-        mov     r13, qword ptr [rcx+30H]                ; 0127 _ 4C: 8B. 69, 30
-        mov     r14, qword ptr [rcx+38H]                ; 012B _ 4C: 8B. 71, 38
-        mov     r15, qword ptr [rcx+40H]                ; 012F _ 4C: 8B. 79, 40
-        mov     rdi, qword ptr [rcx+48H]                ; 0133 _ 48: 8B. 79, 48
-        mov     rsi, qword ptr [rcx+50H]                ; 0137 _ 48: 8B. 71, 50
-        movdqu  xmm6, xmmword ptr [rcx+58H]             ; 013B _ F3: 0F 6F. 71, 58
-        movdqu  xmm7, xmmword ptr [rcx+68H]             ; 0140 _ F3: 0F 6F. 79, 68
-        movdqu  xmm8, xmmword ptr [rcx+78H]             ; 0145 _ F3 44: 0F 6F. 41, 78
-        movdqu  xmm9, xmmword ptr [rcx+88H]             ; 014B _ F3 44: 0F 6F. 89, 00000088
-        movdqu  xmm10, xmmword ptr [rcx+98H]            ; 0154 _ F3 44: 0F 6F. 91, 00000098
-        movdqu  xmm11, xmmword ptr [rcx+0A8H]           ; 015D _ F3 44: 0F 6F. 99, 000000A8
-        movdqu  xmm12, xmmword ptr [rcx+0B8H]           ; 0166 _ F3 44: 0F 6F. A1, 000000B8
-        movdqu  xmm13, xmmword ptr [rcx+0C8H]           ; 016F _ F3 44: 0F 6F. A9, 000000C8
-        movdqu  xmm14, xmmword ptr [rcx+0D8H]           ; 0178 _ F3 44: 0F 6F. B1, 000000D8
-        movdqu  xmm15, xmmword ptr [rcx+0E8H]           ; 0181 _ F3 44: 0F 6F. B9, 000000E8
-        mov     r10, qword ptr [rcx+0F8H]               ; 018A _ 4C: 8B. 91, 000000F8
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     qword ptr gs:[8H], r10                  ; 0191 _ 65 4C: 89. 14 25, 00000008
-        mov     r10, qword ptr [rcx+100H]               ; 019A _ 4C: 8B. 91, 00000100
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     qword ptr gs:[10H], r10                 ; 01A1 _ 65 4C: 89. 14 25, 00000010
-        mov     r10, qword ptr [rcx+108H]               ; 01AA _ 4C: 8B. 91, 00000108
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     qword ptr gs:[1478H], r10               ; 01B1 _ 65 4C: 89. 14 25, 00001478
-        mov     r10, qword ptr [rcx+110H]               ; 01BA _ 4C: 8B. 91, 00000110
-; Note: Address is not rip-relative
-; Note: Absolute memory address without relocation
-        mov     qword ptr gs:[1748H], r10               ; 01C1 _ 65 4C: 89. 14 25, 00001748
-        mov     rcx, rbx                                ; 01CA _ 48: 89. D9
-        mov     eax, 1                                  ; 01CD _ B8, 00000001
-        jmp     r11                                     ; 01D2 _ 41: FF. E3
-asco_load ENDP
+_text   ENDS
+
+_data   SEGMENT BYTE 'DATA'                             ; section number 2
+
+_data   ENDS
+
+.bss    SEGMENT BYTE 'BSS'                              ; section number 3
+
+.bss    ENDS
+
+.note.gnu.property SEGMENT ALIGN(8) 'CONST'             ; section number 4
+
+        db 04H, 00H, 00H, 00H, 20H, 00H, 00H, 00H       ; 0000 _ .... ...
+        db 05H, 00H, 00H, 00H, 47H, 4EH, 55H, 00H       ; 0008 _ ....GNU.
+        db 02H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0010 _ ........
+        db 01H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0018 _ ........
+        db 01H, 00H, 01H, 0C0H, 04H, 00H, 00H, 00H      ; 0020 _ ........
+        db 09H, 00H, 00H, 00H, 00H, 00H, 00H, 00H       ; 0028 _ ........
+
+.note.gnu.property ENDS
 
 END

@@ -98,7 +98,7 @@ message(SEND_ERROR "Unsupported architecture.")
 endif()
 
 
-add_library(asco
+add_library(asco STATIC
 	"${ASCO_PLATFORM_FILES}"
 	"${ASCO_SOURCE_DIR}/asco.c"
 	"${ASCO_INCLUDE_FILES}"
