@@ -49,9 +49,10 @@ jobs:
           - c_compiler: cl
             os: macos-latest
 
-            # clang doesn't want to compile ARM assembly on Win11 ARM for some reason
-            # gcc works fine so just use that
+          # gcc/clang are x64 on win11 arm
           - c_compiler: clang
+            os: windows-11-arm
+          - c_compiler: gcc
             os: windows-11-arm
 
     steps:
