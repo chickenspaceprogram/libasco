@@ -63,7 +63,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	new_ctx->sp = (void *)sp_as_ptr;
 }
 
-#elif
+#else
 #	error libasco: unsupported architecture
 
 #endif
