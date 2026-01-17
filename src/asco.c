@@ -62,11 +62,6 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	new_ctx->sp = (void *)sp_as_ptr;
 }
 
-#elif (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS)
-
-// windoze
-#error windows not supported yet
-
 #elif (ASCO_ARCH_X86_64)
 
 // mxcsr default value: 0b1111110000000 = 0x00001f80
