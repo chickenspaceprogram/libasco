@@ -5,7 +5,6 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <asco/asco.h>
-#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
