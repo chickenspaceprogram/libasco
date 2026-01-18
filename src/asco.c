@@ -65,12 +65,13 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 {
 	uintptr_t stack_base = (uintptr_t)stack_top + stack_size;
 	stack_base -= sizeof(win_ctx);
+	stack_base &= ~(0x7);
+	pwin_ctx new_win_ctx = (pwin_ctx)stack_base;
 	stack_base &= ~(0xF);
 	// just be generous with stack sizes and this is not an issue
 	assert((void *)stack_base < stack_top && "Stack size was too small");
 	uintptr_t *sp = (uintptr_t *)stack_base;
 	*(--sp) = (uintptr_t)asco_exit_routine;
-	pwin_ctx new_win_ctx = (pwin_ctx)new_ctx;
 
 	// Cygwin does this, and then just swaps out the stack and instruction
 	// ptrs. So I think I'm good to do that? Maybe extensive testing could
