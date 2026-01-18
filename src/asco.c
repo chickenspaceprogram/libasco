@@ -10,12 +10,106 @@
 extern "C" {
 #endif
 
+#if (ASCO_OS_WINDOWS)
+ASCO_LINKAGE extern void ASCO_CALL asco_exit_routine(void)
+	ASCO_ASM_NAME(asco_exit_routine);
+#else
 // Sets up to call the coroutine function, calls it, then jumps to the return
 // ctx once it finishes.
 ASCO_LINKAGE extern void ASCO_CALL asco_init_routine(void)
 	ASCO_ASM_NAME(asco_init_routine);
+#endif
+
+#if (ASCO_OS_WINDOWS)
+
+#include <Windows.h>
+#include <Winnt.h>
+#include <assert.h> // might as well use them now that we need libc
+
 
 #if (ASCO_ARCH_AARCH64)
+typedef ARM64_NT_CONTEXT win_ctx;
+typedef PARM64_NT_CONTEXT pwin_ctx;
+#else
+typedef CONTEXT win_ctx;
+typedef PCONTEXT pwin_ctx;
+#endif
+
+
+#if (ASCO_ARCH_AARCH64)
+#	define PC_ELEM Pc
+#else
+#	define PC_ELEM Rip
+#endif
+static inline void unwind_frame(pwin_ctx ctx)
+{
+	DWORD64 img_base = 0;
+	UNWIND_HISTORY_TABLE unwind_hist = {0};
+
+	PRUNTIME_FUNCTION fn = RtlLookupFunctionEntry(ctx->PC_ELEM, &img_base, &unwind_hist);
+	assert(fn != NULL && "Couldn't find function in symbol table!");
+	PVOID handler_data;
+	DWORD estab_frame;
+	RtlVirtualUnwind(0, img_base, ctx->PC_ELEM, fn, ctx, &handler_data,
+		&estab_frame, NULL);
+}
+
+#if (ASCO_ARCH_AARCH64)
+#error not implemented yet
+#elif (ASCO_ARCH_X86_64)
+
+ASCO_LINKAGE void ASCO_CALL asco_init(
+	asco_ctx *new_ctx, const asco_ctx *ret_ctx,
+	asco_fn fn, void *arg,
+	void *stack_top, size_t stack_size)
+{
+	uintptr_t stack_base = (uintptr_t)stack_top + stack_size;
+	stack_base -= sizeof(win_ctx);
+	stack_base &= ~(0xF);
+	// just be generous with stack sizes and this is not an issue
+	assert((void *)stack_base < stack_top && "Stack size was too small");
+	uintptr_t *sp = (uintptr_t *)stack_base;
+	*(--sp) = (uintptr_t)asco_exit_routine;
+	pwin_ctx new_win_ctx = (pwin_ctx)new_ctx;
+
+	// Cygwin does this, and then just swaps out the stack and instruction
+	// ptrs. So I think I'm good to do that? Maybe extensive testing could
+	// determine whether this is necessary.
+	//
+	// "waaa it's inefficient" the two people running a windows server
+	// can cry about it
+	RtlCaptureContext(new_win_ctx);
+
+	new_win_ctx->Rsp = sp;
+	new_win_ctx->Rcx = (uint64_t)arg;
+	new_win_ctx->Rip = (uint64_t)fn;
+	new_win_ctx->R12 = (uint64_t)ret_ctx;
+
+}
+#else
+#	error architecture not supported
+#endif
+
+// separated out to ensure that even after we unwind `cur_ctx` it is still
+// valid
+static void asco_swap_internal(
+	pwin_ctx cur_ctx, pwin_ctx new_ctx) ASCO_ASM_NAME(asco_swap)
+{
+	RtlCaptureContext(cur_ctx);
+	unwind_frame(cur_ctx);
+	RtlRestoreContext(new_ctx, NULL);
+	assert(0 && "Shouldn't be here!");
+}
+
+ASCO_LINKAGE void ASCO_CALL asco_swap(
+	asco_ctx *cur_ctx, asco_ctx new_ctx) ASCO_ASM_NAME(asco_swap)
+{
+	win_ctx ctx;
+	cur_ctx->sp = (void *)&ctx;
+	asco_swap_internal((pwin_ctx)cur_ctx->sp, (pwin_ctx)new_ctx.sp);
+}
+
+#elif (ASCO_ARCH_AARCH64)
 
 // aarch64 stack setup:
 //
@@ -61,11 +155,6 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr -= SP_DEC_AMT;
 	new_ctx->sp = (void *)sp_as_ptr;
 }
-
-#elif (ASCO_ARCH_X86_64 && ASCO_OS_WINDOWS)
-
-// windoze
-#error windows not supported yet
 
 #elif (ASCO_ARCH_X86_64)
 

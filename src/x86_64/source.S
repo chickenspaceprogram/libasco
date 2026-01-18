@@ -16,16 +16,11 @@
 #	define arg1 rcx
 #	define arg2 rdx
 
-
-#	define STACK_BASE 	%gs:0x08
-#	define STACK_LIMIT 	%gs:0x10
-#	define DEALLOC_STACK 	%gs:0x1478
-#	define GUARANTEED_SB 	%gs:0x1748
-
 #else
 #error no calling convention defined
 #endif
 
+#ifdef SYSV_CALL
 
 .text
 
@@ -81,3 +76,19 @@ asco_swap:
 
 	ret
 
+#elif defined(WIN_CALL)
+
+.text
+
+.global asco_exit_routine
+
+asco_exit_routine:
+	movq	%r12, %rcx
+	movl	$0, %edx
+	call	RtlRestoreContext
+
+
+
+#else
+#	error didn't define either SYSV_CALL or WIN_CALL
+#endif
