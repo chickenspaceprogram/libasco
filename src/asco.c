@@ -80,10 +80,10 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	// can cry about it
 	RtlCaptureContext(new_win_ctx);
 
-	new_win_ctx->Rsp = sp;
-	new_win_ctx->Rcx = (uint64_t)arg;
-	new_win_ctx->Rip = (uint64_t)fn;
-	new_win_ctx->R12 = (uint64_t)ret_ctx;
+	new_win_ctx->Rsp = (DWORD64)sp;
+	new_win_ctx->Rcx = (DWORD64)arg;
+	new_win_ctx->Rip = (DWORD64)fn;
+	new_win_ctx->R12 = (DWORD64)ret_ctx;
 
 }
 #else
