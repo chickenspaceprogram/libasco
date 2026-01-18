@@ -49,7 +49,7 @@ static inline void unwind_frame(pwin_ctx ctx)
 	PRUNTIME_FUNCTION fn = RtlLookupFunctionEntry(ctx->PC_ELEM, &img_base, &unwind_hist);
 	assert(fn != NULL && "Couldn't find function in symbol table!");
 	PVOID handler_data;
-	DWORD estab_frame;
+	DWORD64 estab_frame;
 	RtlVirtualUnwind(0, img_base, ctx->PC_ELEM, fn, ctx, &handler_data,
 		&estab_frame, NULL);
 }
