@@ -111,10 +111,16 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 // extra stack members on win64 (after all the other members):
 // uint64_t rdi
 // uint64_t rsi
+// uint64_t tib_stack_base
+// uint64_t tib_stack_limit
+// uint64_t tib_dealloc_stack
 // uint64_t xmm6_15[10 * 2]
 
 #if ASCO_OS_WINDOWS
-#	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4 + 1 + 1 + 10 * 2)
+#	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4 + 5 + 10 * 2)
+#	define TIB_STACK_BASE -11
+#	define TIB_STACK_LIMIT -12
+#	define TIB_DEALLOC_STACK -13
 #else
 #	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4)
 #endif
@@ -133,6 +139,9 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr[-4] = arg;
 	sp_as_ptr[-5] = fn;
 	sp_as_ptr[-6] = (void *)ret_ctx; // scary const cast
+	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
+	sp_as_ptr[TIB_STACK_LIMIT] = stack_top;
+	sp_as_ptr[TIB_DEALLOC_STACK] = stack_top;
 	sp_as_ptr -= SP_DEC_AMT;
 	new_ctx->sp = (void *)sp_as_ptr;
 }

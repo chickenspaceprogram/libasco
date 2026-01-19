@@ -4,7 +4,7 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main", "rework" ]
+    branches: [ "main", "rework", "old-rework" ]
   pull_request:
     branches: [ "main", "rework" ]
 
