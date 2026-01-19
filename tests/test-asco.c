@@ -56,7 +56,7 @@ static void chk_switch_stacks(void)
 {
 	int val = 123;
 	contexts ctxs;
-	void *stack = malloc(0x1000);
+	void *stack = malloc(0x20000);
 	dbgassert(stack != NULL);
 	asco_init(&ctxs.jb_ctx, &ctxs.main_ctx,
 		jumpback, &ctxs,
