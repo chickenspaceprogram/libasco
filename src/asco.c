@@ -86,7 +86,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	RtlCaptureContext(new_win_ctx);
 
 	// just be generous with stack sizes and this is not an issue
-	assert((void *)stack_base < stack_top && "Stack size was too small");
+	assert((void *)stack_top < stack_base && "Stack size was too small");
 
 
 	new_win_ctx->Rsp = stack_base;
