@@ -58,6 +58,7 @@ static inline void unwind_frame(pwin_ctx ctx)
 //
 // rsp: set large enough to fit the CONTEXT struct
 // rbp: set to lowest valid stack addr
+// rip: set to asco_init_routine
 // mxcsr, x87cw, padding: <left as they are>
 // rbx: init_arg
 // r12: init_fn
@@ -81,8 +82,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	// ptrs. So I think I'm good to do that? Maybe extensive testing could
 	// determine whether this is necessary.
 	//
-	// "waaa it's inefficient" the two people running a windows server
-	// can cry about it
+	// "but it's inefficient" simply don't run a windows server
 	RtlCaptureContext(new_win_ctx);
 
 	// just be generous with stack sizes and this is not an issue
@@ -91,6 +91,12 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 
 	new_win_ctx->Rsp = stack_base;
 	new_win_ctx->Rbp = base_ptr;
+
+	// passing needed context through callee-preserved regs
+	new_win_ctx->Rbx = (DWORD64)arg;
+	new_win_ctx->R12 = (DWORD64)fn;
+	new_win_ctx->R13 = (DWORD64)ret_ctx;
+	new_win_ctx->Rip = (DWORD64)asco_init_routine;
 
 }
 #else

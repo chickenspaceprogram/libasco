@@ -75,19 +75,19 @@ asco_swap:
 	pop	%rbp
 
 	ret
-
 #elif defined(WIN_CALL)
 
 .text
 
-.global asco_exit_routine
+.global asco_init_routine
 
-asco_exit_routine:
-	movq	%r12, %rcx
+asco_init_routine:
+	movq	%rbp, %rsp
+	movq	%rbx, %rcx
+	call	*%r12
+	movq	(%r13), %rcx
 	movl	$0, %edx
 	call	RtlRestoreContext
-
-
 
 #else
 #	error didn't define either SYSV_CALL or WIN_CALL
