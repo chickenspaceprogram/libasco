@@ -10,15 +10,10 @@
 extern "C" {
 #endif
 
-#if (ASCO_OS_WINDOWS)
-ASCO_LINKAGE extern void ASCO_CALL asco_exit_routine(void)
-	ASCO_ASM_NAME(asco_exit_routine);
-#else
 // Sets up to call the coroutine function, calls it, then jumps to the return
 // ctx once it finishes.
 ASCO_LINKAGE extern void ASCO_CALL asco_init_routine(void)
 	ASCO_ASM_NAME(asco_init_routine);
-#endif
 
 #if (ASCO_OS_WINDOWS)
 
@@ -58,21 +53,30 @@ static inline void unwind_frame(pwin_ctx ctx)
 #error not implemented yet
 #elif (ASCO_ARCH_X86_64)
 
+
+// before first fn call:
+//
+// rsp: set large enough to fit the CONTEXT struct
+// rbp: set to lowest valid stack addr
+// mxcsr, x87cw, padding: <left as they are>
+// rbx: init_arg
+// r12: init_fn
+// r13: return_ctx
+// other: unspecified
 ASCO_LINKAGE void ASCO_CALL asco_init(
 	asco_ctx *new_ctx, const asco_ctx *ret_ctx,
 	asco_fn fn, void *arg,
 	void *stack_top, size_t stack_size)
 {
 	uintptr_t stack_base = (uintptr_t)stack_top + stack_size;
-	stack_base -= sizeof(win_ctx);
-	stack_base &= ~(0x7);
-	pwin_ctx new_win_ctx = (pwin_ctx)stack_base;
 	stack_base &= ~(0xF);
-	// just be generous with stack sizes and this is not an issue
-	assert((void *)stack_base < stack_top && "Stack size was too small");
-	uintptr_t *sp = (uintptr_t *)stack_base;
-	*(--sp) = (uintptr_t)asco_exit_routine;
 
+	DWORD64 base_ptr = stack_base;
+
+	stack_base -= sizeof(win_ctx);
+	stack_base &= ~(0xF);
+
+	pwin_ctx new_win_ctx = (pwin_ctx)stack_base;
 	// Cygwin does this, and then just swaps out the stack and instruction
 	// ptrs. So I think I'm good to do that? Maybe extensive testing could
 	// determine whether this is necessary.
@@ -81,10 +85,12 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	// can cry about it
 	RtlCaptureContext(new_win_ctx);
 
-	new_win_ctx->Rsp = (DWORD64)sp;
-	new_win_ctx->Rcx = (DWORD64)arg;
-	new_win_ctx->Rip = (DWORD64)fn;
-	new_win_ctx->R12 = (DWORD64)ret_ctx;
+	// just be generous with stack sizes and this is not an issue
+	assert((void *)stack_base < stack_top && "Stack size was too small");
+
+
+	new_win_ctx->Rsp = stack_base;
+	new_win_ctx->Rbp = base_ptr;
 
 }
 #else
