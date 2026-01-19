@@ -139,9 +139,11 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr[-4] = arg;
 	sp_as_ptr[-5] = fn;
 	sp_as_ptr[-6] = (void *)ret_ctx; // scary const cast
+#if ASCO_OS_WINDOWS
 	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
 	sp_as_ptr[TIB_STACK_LIMIT] = stack_top;
 	sp_as_ptr[TIB_DEALLOC_STACK] = stack_top;
+#endif
 	sp_as_ptr -= SP_DEC_AMT;
 	new_ctx->sp = (void *)sp_as_ptr;
 }
