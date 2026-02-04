@@ -117,6 +117,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 // uint64_t xmm6_15[10 * 2]
 
 #if ASCO_OS_WINDOWS
+#	include <Windows.h>
 #	include <Winnt.h>
 #	define TIB_STACK_BASE 8
 #	define TIB_STACK_LIMIT 9
