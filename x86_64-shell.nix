@@ -4,14 +4,12 @@ let
 in
 crossEnv.mkShell {
 	buildInputs = with crossEnv; [
-		valgrind
 		binutils
 		gcc
 	];
 	nativeBuildInputs = with crossEnv; [
-		gdb
 		cmake
 		gnumake
-		zsh
+		objconv
 	];
 }

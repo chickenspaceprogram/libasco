@@ -8,7 +8,7 @@ set -e
 
 
 SOURCE_FILENAME=source
-PREPROC=cpp
+PREPROC=x86_64-unknown-linux-gnu-cpp
 OBJCONV=objconv
 SYSV_ASM=x86_64-unknown-linux-gnu-as
 #SYSV_ASM=x86_64-elf-as

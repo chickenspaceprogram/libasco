@@ -59,49 +59,52 @@ asco_swap PROC
         mov     r10, qword ptr gs:[30H]                 ; 009E _ 65 4C: 8B. 14 25, 00000030
         push    qword ptr [r10+8H]                      ; 00A7 _ 41: FF. 72, 08
         push    qword ptr [r10+10H]                     ; 00AB _ 41: FF. 72, 10
-        push    qword ptr [r10+1478H]                   ; 00AF _ 41: FF. B2, 00001478
-        sub     rsp, 160                                ; 00B6 _ 48: 81. EC, 000000A0
-        movdqu  xmmword ptr [rsp], xmm6                 ; 00BD _ F3: 0F 7F. 34 24
-        movdqu  xmmword ptr [rsp+10H], xmm7             ; 00C2 _ F3: 0F 7F. 7C 24, 10
-        movdqu  xmmword ptr [rsp+20H], xmm8             ; 00C8 _ F3 44: 0F 7F. 44 24, 20
-        movdqu  xmmword ptr [rsp+30H], xmm9             ; 00CF _ F3 44: 0F 7F. 4C 24, 30
-        movdqu  xmmword ptr [rsp+40H], xmm10            ; 00D6 _ F3 44: 0F 7F. 54 24, 40
-        movdqu  xmmword ptr [rsp+50H], xmm11            ; 00DD _ F3 44: 0F 7F. 5C 24, 50
-        movdqu  xmmword ptr [rsp+60H], xmm12            ; 00E4 _ F3 44: 0F 7F. 64 24, 60
-        movdqu  xmmword ptr [rsp+70H], xmm13            ; 00EB _ F3 44: 0F 7F. 6C 24, 70
-        movdqu  xmmword ptr [rsp+80H], xmm14            ; 00F2 _ F3 44: 0F 7F. B4 24, 00000080
-        movdqu  xmmword ptr [rsp+90H], xmm15            ; 00FC _ F3 44: 0F 7F. BC 24, 00000090
-        mov     qword ptr [rcx], rsp                    ; 0106 _ 48: 89. 21
-        mov     rsp, rdx                                ; 0109 _ 48: 89. D4
-        movdqu  xmm6, xmmword ptr [rsp]                 ; 010C _ F3: 0F 6F. 34 24
-        movdqu  xmm7, xmmword ptr [rsp+10H]             ; 0111 _ F3: 0F 6F. 7C 24, 10
-        movdqu  xmm8, xmmword ptr [rsp+20H]             ; 0117 _ F3 44: 0F 6F. 44 24, 20
-        movdqu  xmm9, xmmword ptr [rsp+30H]             ; 011E _ F3 44: 0F 6F. 4C 24, 30
-        movdqu  xmm10, xmmword ptr [rsp+40H]            ; 0125 _ F3 44: 0F 6F. 54 24, 40
-        movdqu  xmm11, xmmword ptr [rsp+50H]            ; 012C _ F3 44: 0F 6F. 5C 24, 50
-        movdqu  xmm12, xmmword ptr [rsp+60H]            ; 0133 _ F3 44: 0F 6F. 64 24, 60
-        movdqu  xmm13, xmmword ptr [rsp+70H]            ; 013A _ F3 44: 0F 6F. 6C 24, 70
-        movdqu  xmm14, xmmword ptr [rsp+80H]            ; 0141 _ F3 44: 0F 6F. B4 24, 00000080
-        movdqu  xmm15, xmmword ptr [rsp+90H]            ; 014B _ F3 44: 0F 6F. BC 24, 00000090
-        add     rsp, 160                                ; 0155 _ 48: 81. C4, 000000A0
+        push    qword ptr [r10+20H]                     ; 00AF _ 41: FF. 72, 20
+        push    qword ptr [r10+1478H]                   ; 00B3 _ 41: FF. B2, 00001478
+        sub     rsp, 160                                ; 00BA _ 48: 81. EC, 000000A0
+        movdqu  xmmword ptr [rsp], xmm6                 ; 00C1 _ F3: 0F 7F. 34 24
+        movdqu  xmmword ptr [rsp+10H], xmm7             ; 00C6 _ F3: 0F 7F. 7C 24, 10
+        movdqu  xmmword ptr [rsp+20H], xmm8             ; 00CC _ F3 44: 0F 7F. 44 24, 20
+        movdqu  xmmword ptr [rsp+30H], xmm9             ; 00D3 _ F3 44: 0F 7F. 4C 24, 30
+        movdqu  xmmword ptr [rsp+40H], xmm10            ; 00DA _ F3 44: 0F 7F. 54 24, 40
+        movdqu  xmmword ptr [rsp+50H], xmm11            ; 00E1 _ F3 44: 0F 7F. 5C 24, 50
+        movdqu  xmmword ptr [rsp+60H], xmm12            ; 00E8 _ F3 44: 0F 7F. 64 24, 60
+        movdqu  xmmword ptr [rsp+70H], xmm13            ; 00EF _ F3 44: 0F 7F. 6C 24, 70
+        movdqu  xmmword ptr [rsp+80H], xmm14            ; 00F6 _ F3 44: 0F 7F. B4 24, 00000080
+        movdqu  xmmword ptr [rsp+90H], xmm15            ; 0100 _ F3 44: 0F 7F. BC 24, 00000090
+        mov     qword ptr [rcx], rsp                    ; 010A _ 48: 89. 21
+        mov     rsp, rdx                                ; 010D _ 48: 89. D4
+        pop     rcx                                     ; 0110 _ 59
+        movdqu  xmm6, xmmword ptr [rsp]                 ; 0111 _ F3: 0F 6F. 34 24
+        movdqu  xmm7, xmmword ptr [rsp+10H]             ; 0116 _ F3: 0F 6F. 7C 24, 10
+        movdqu  xmm8, xmmword ptr [rsp+20H]             ; 011C _ F3 44: 0F 6F. 44 24, 20
+        movdqu  xmm9, xmmword ptr [rsp+30H]             ; 0123 _ F3 44: 0F 6F. 4C 24, 30
+        movdqu  xmm10, xmmword ptr [rsp+40H]            ; 012A _ F3 44: 0F 6F. 54 24, 40
+        movdqu  xmm11, xmmword ptr [rsp+50H]            ; 0131 _ F3 44: 0F 6F. 5C 24, 50
+        movdqu  xmm12, xmmword ptr [rsp+60H]            ; 0138 _ F3 44: 0F 6F. 64 24, 60
+        movdqu  xmm13, xmmword ptr [rsp+70H]            ; 013F _ F3 44: 0F 6F. 6C 24, 70
+        movdqu  xmm14, xmmword ptr [rsp+80H]            ; 0146 _ F3 44: 0F 6F. B4 24, 00000080
+        movdqu  xmm15, xmmword ptr [rsp+90H]            ; 0150 _ F3 44: 0F 6F. BC 24, 00000090
+        add     rsp, 160                                ; 015A _ 48: 81. C4, 000000A0
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
-        mov     r10, qword ptr gs:[30H]                 ; 015C _ 65 4C: 8B. 14 25, 00000030
-        pop     dword ptr [r10+1478H]                   ; 0165 _ 41: 8F. 82, 00001478
-        pop     dword ptr [r10+10H]                     ; 016C _ 41: 8F. 42, 10
-        pop     dword ptr [r10+8H]                      ; 0170 _ 41: 8F. 42, 08
-        pop     rsi                                     ; 0174 _ 5E
-        pop     rdi                                     ; 0175 _ 5F
-        pop     r15                                     ; 0176 _ 41: 5F
-        pop     r14                                     ; 0178 _ 41: 5E
-        pop     r13                                     ; 017A _ 41: 5D
-        pop     r12                                     ; 017C _ 41: 5C
-        pop     rbx                                     ; 017E _ 5B
-        fldcw   word ptr [rsp+4H]                       ; 017F _ D9. 6C 24, 04
-        ldmxcsr dword ptr [rsp]                         ; 0183 _ 0F AE. 14 24
-        pop     rbp                                     ; 0187 _ 5D
-        pop     rbp                                     ; 0188 _ 5D
-        ret                                             ; 0189 _ C3
+        mov     r10, qword ptr gs:[30H]                 ; 0161 _ 65 4C: 8B. 14 25, 00000030
+        pop     dword ptr [r10+1478H]                   ; 016A _ 41: 8F. 82, 00001478
+        pop     dword ptr [r10+20H]                     ; 0171 _ 41: 8F. 42, 20
+        pop     dword ptr [r10+10H]                     ; 0175 _ 41: 8F. 42, 10
+        pop     dword ptr [r10+8H]                      ; 0179 _ 41: 8F. 42, 08
+        pop     rsi                                     ; 017D _ 5E
+        pop     rdi                                     ; 017E _ 5F
+        pop     r15                                     ; 017F _ 41: 5F
+        pop     r14                                     ; 0181 _ 41: 5E
+        pop     r13                                     ; 0183 _ 41: 5D
+        pop     r12                                     ; 0185 _ 41: 5C
+        pop     rbx                                     ; 0187 _ 5B
+        fldcw   word ptr [rsp+4H]                       ; 0188 _ D9. 6C 24, 04
+        ldmxcsr dword ptr [rsp]                         ; 018C _ 0F AE. 14 24
+        pop     rbp                                     ; 0190 _ 5D
+        pop     rbp                                     ; 0191 _ 5D
+        ret                                             ; 0192 _ C3
 asco_swap ENDP
 
 END

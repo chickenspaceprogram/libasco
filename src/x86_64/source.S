@@ -93,9 +93,10 @@ asco_swap:
 	push	%rdi
 	push	%rsi
 	movq	%gs:0x30, %r10
-	push	0x08(%r10)
-	push	0x10(%r10)
-	push	0x1478(%r10)
+	push	0x08(%r10) /* stack base */
+	push	0x10(%r10) /* stack limit */
+	push	0x20(%r10) /* fiber local storage */
+	push	0x1478(%r10) /* dealloc stack */
 
 	subq	$10*0x10, %rsp
 	movdqu	%xmm6, (%rsp)
@@ -115,6 +116,8 @@ asco_swap:
 	movq	%arg2, %rsp
 
 #ifdef WIN_CALL
+	pop	%rcx /* aligning stack */
+
 	movdqu	(%rsp), %xmm6
 	movdqu	1*0x10(%rsp), %xmm7
 	movdqu	2*0x10(%rsp), %xmm8
@@ -130,6 +133,7 @@ asco_swap:
 	movq	%gs:0x30, %r10
 
 	pop	0x1478(%r10)
+	pop	0x20(%r10)
 	pop	0x10(%r10)
 	pop	0x08(%r10)
 

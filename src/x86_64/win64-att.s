@@ -47,6 +47,7 @@ asco_swap:
  movq %gs:0x30, %r10
  push 0x08(%r10)
  push 0x10(%r10)
+ push 0x20(%r10)
  push 0x1478(%r10)
  subq $10*0x10, %rsp
  movdqu %xmm6, (%rsp)
@@ -61,6 +62,7 @@ asco_swap:
  movdqu %xmm15, 9*0x10(%rsp)
  movq %rsp, (%rcx)
  movq %rdx, %rsp
+ pop %rcx
  movdqu (%rsp), %xmm6
  movdqu 1*0x10(%rsp), %xmm7
  movdqu 2*0x10(%rsp), %xmm8
@@ -74,6 +76,7 @@ asco_swap:
  addq $10*0x10, %rsp
  movq %gs:0x30, %r10
  pop 0x1478(%r10)
+ pop 0x20(%r10)
  pop 0x10(%r10)
  pop 0x08(%r10)
  pop %rsi
