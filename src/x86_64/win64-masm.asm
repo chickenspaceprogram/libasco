@@ -30,6 +30,7 @@ asco_init_routine PROC
 ; Note: Absolute memory address without relocation
         mov     r10, qword ptr gs:[30H]                 ; 005A _ 65 4C: 8B. 14 25, 00000030
         pop     [r10+1478H]                   ; 0063 _ 41: 8F. 82, 00001478
+        pop     [r10+20H]                     ; 006A _ 41: 8F. 42, 10
         pop     [r10+10H]                     ; 006A _ 41: 8F. 42, 10
         pop     [r10+8H]                      ; 006E _ 41: 8F. 42, 08
         pop     rsi                                     ; 0072 _ 5E
