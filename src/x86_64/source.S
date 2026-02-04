@@ -10,18 +10,19 @@
 
 #	define arg1 rdi
 #	define arg2 rsi
-#	define SP_DEC_AMT	8*
+#	define SP_DEC_AMT	0x38
 
 #elif defined(WIN_CALL)
 
 #	define arg1 rcx
 #	define arg2 rdx
+#	define SP_DEC_AMT	0x108
 
 
-#	define STACK_BASE 	%gs:0x08
-#	define STACK_LIMIT 	%gs:0x10
-#	define DEALLOC_STACK 	%gs:0x1478
-#	define GUARANTEED_SB 	%gs:0x1748
+#	define STACK_BASE 	0x08
+#	define STACK_LIMIT 	0x10
+#	define FIBER_DATA	0x20
+#	define DEALLOC_STACK 	0x1478
 
 #else
 #error no calling convention defined
@@ -41,116 +42,155 @@ asco_init_routine:
 
 	mov	(%r13), %rsp
 
-#ifdef WIN_CALL
-	movdqu	(%rsp), %xmm6
-	movdqu	1*0x10(%rsp), %xmm7
-	movdqu	2*0x10(%rsp), %xmm8
-	movdqu	3*0x10(%rsp), %xmm9
-	movdqu	4*0x10(%rsp), %xmm10
-	movdqu	5*0x10(%rsp), %xmm11
-	movdqu	6*0x10(%rsp), %xmm12
-	movdqu	7*0x10(%rsp), %xmm13
-	movdqu	8*0x10(%rsp), %xmm14
-	movdqu	9*0x10(%rsp), %xmm15
-	addq	$10*0x10, %rsp
+	ldmxcsr	(%rsp)
+	fldcw	4(%rsp)
+	movq	8(%rsp), %rbp
+	movq	0x10(%rsp), %rbx
+	movq	0x18(%rsp), %r12
+	movq	0x20(%rsp), %r13
+	movq	0x28(%rsp), %r14
+	movq	0x30(%rsp), %r15
 
+#ifdef WIN_CALL
+	/* load %rdi. %rsi comes later */
+	movq	0x38(%rsp), %rdi
+
+	/* get TEB */
 	movq	%gs:(0x30), %r10
 
-	pop	0x1478(%r10)
-	pop	0x20(%r10)
-	pop	0x10(%r10)
-	pop	0x08(%r10)
+	/* load stuff from TEB */
+	movq	0x40(%rsp), %r11
+	movq	%r11, STACK_BASE(%r10)
+	movq	0x48(%rsp), %r11
+	movq	%r11, STACK_LIMIT(%r10)
+	movq	0x50(%rsp), %r11
+	movq	%r11, FIBER_DATA(%r10)
+	movq	0x58(%rsp), %r11
+	movq	%r11, DEALLOC_STACK(%r10)
+	
+	/* load float regs */
+	movdqu	0x60(%rsp), %xmm6
+	movdqu	0x70(%rsp), %xmm7
+	movdqu	0x80(%rsp), %xmm8
+	movdqu	0x90(%rsp), %xmm9
+	movdqu	0xa0(%rsp), %xmm10
+	movdqu	0xb0(%rsp), %xmm11
+	movdqu	0xc0(%rsp), %xmm12
+	movdqu	0xd0(%rsp), %xmm13
+	movdqu	0xe0(%rsp), %xmm14
+	movdqu	0xf0(%rsp), %xmm15
 
-	pop	%rsi
-	pop	%rdi
+	/* load %rsi */
+	movq	0x100(%rsp), %rsi
 #endif
 
-	pop	%r15
-	pop	%r14
-	pop	%r13
-	pop	%r12
-	pop	%rbx
-	fldcw	4(%rsp)
-	ldmxcsr	(%rsp)
-	pop	%rbp
-	pop	%rbp
-
+	leaq	SP_DEC_AMT(%rsp), %rsp
 	ret
+
+
 
 /* void asco_swap(asco_ctx *cur_ctx, asco_ctx new_ctx) */
 
 asco_swap:
 	/* ret addr already pushed, thanks x86_64 */
-	push	%rbp
-	push	%rbp /* extra space for mxcsr/x87cw */
+
+	/* decrement %rsp */
+	leaq	-SP_DEC_AMT(%rsp), %rsp
+
+	/* save fp state */
 	stmxcsr	(%rsp)
 	fstcw	4(%rsp)
-	push	%rbx
-	push	%r12
-	push	%r13
-	push	%r14
-	push	%r15
+
+	/* save sysv regs */
+	movq	%rbp, 0x08(%rsp)
+	movq	%rbx, 0x10(%rsp)
+	movq	%r12, 0x18(%rsp)
+	movq	%r13, 0x20(%rsp)
+	movq	%r14, 0x28(%rsp)
+	movq	%r15, 0x30(%rsp)
 
 #ifdef WIN_CALL
-	push	%rdi
-	push	%rsi
-	movq	%gs:(0x30), %r10
-	push	0x08(%r10) /* stack base */
-	push	0x10(%r10) /* stack limit */
-	push	0x20(%r10) /* fiber local storage */
-	push	0x1478(%r10) /* dealloc stack */
+	/* save %rdi. %rsi comes later */
+	movq	%rdi, 0x38(%rsp)
 
-	subq	$10*0x10, %rsp
-	movdqu	%xmm6, (%rsp)
-	movdqu	%xmm7, 1*0x10(%rsp)
-	movdqu	%xmm8, 2*0x10(%rsp)
-	movdqu	%xmm9, 3*0x10(%rsp)
-	movdqu	%xmm10, 4*0x10(%rsp)
-	movdqu	%xmm11, 5*0x10(%rsp)
-	movdqu	%xmm12, 6*0x10(%rsp)
-	movdqu	%xmm13, 7*0x10(%rsp)
-	movdqu	%xmm14, 8*0x10(%rsp)
-	movdqu	%xmm15, 9*0x10(%rsp)
+	/* get TEB */
+	movq	%gs:(0x30), %r10
+
+	/* save stuff from TEB */
+	movq	STACK_BASE(%r10), %r11
+	movq	%r11, 0x40(%rsp)
+	movq	STACK_LIMIT(%r10), %r11
+	movq	%r11, 0x48(%rsp)
+	movq	FIBER_DATA(%r10), %r11
+	movq	%r11, 0x50(%rsp)
+	movq	DEALLOC_STACK(%r10), %r11
+	movq	%r11, 0x58(%rsp)
+	
+	/* save float regs */
+	movdqu	%xmm6, 0x60(%rsp)
+	movdqu	%xmm7, 0x70(%rsp)
+	movdqu	%xmm8, 0x80(%rsp)
+	movdqu	%xmm9, 0x90(%rsp)
+	movdqu	%xmm10, 0xa0(%rsp)
+	movdqu	%xmm11, 0xb0(%rsp)
+	movdqu	%xmm12, 0xc0(%rsp)
+	movdqu	%xmm13, 0xd0(%rsp)
+	movdqu	%xmm14, 0xe0(%rsp)
+	movdqu	%xmm15, 0xf0(%rsp)
+
+	/* save %rsi. might as well align FPU memory accesses
+	...dont know if that is helpful but it cant hurt */
+	movq	%rsi, 0x100(%rsp)
 
 #endif
 
 	movq	%rsp, (%arg1)
 	movq	%arg2, %rsp
 
+	ldmxcsr	(%rsp)
+	fldcw	4(%rsp)
+	movq	8(%rsp), %rbp
+	movq	0x10(%rsp), %rbx
+	movq	0x18(%rsp), %r12
+	movq	0x20(%rsp), %r13
+	movq	0x28(%rsp), %r14
+	movq	0x30(%rsp), %r15
+
 #ifdef WIN_CALL
+	/* load %rdi. %rsi comes later */
+	movq	0x38(%rsp), %rdi
 
-	movdqu	(%rsp), %xmm6
-	movdqu	1*0x10(%rsp), %xmm7
-	movdqu	2*0x10(%rsp), %xmm8
-	movdqu	3*0x10(%rsp), %xmm9
-	movdqu	4*0x10(%rsp), %xmm10
-	movdqu	5*0x10(%rsp), %xmm11
-	movdqu	6*0x10(%rsp), %xmm12
-	movdqu	7*0x10(%rsp), %xmm13
-	movdqu	8*0x10(%rsp), %xmm14
-	movdqu	9*0x10(%rsp), %xmm15
-	addq	$10*0x10, %rsp
-
+	/* get TEB */
 	movq	%gs:(0x30), %r10
 
-	pop	0x1478(%r10)
-	pop	0x20(%r10)
-	pop	0x10(%r10)
-	pop	0x08(%r10)
+	/* load stuff from TEB */
+	movq	0x40(%rsp), %r11
+	movq	%r11, STACK_BASE(%r10)
+	movq	0x48(%rsp), %r11
+	movq	%r11, STACK_LIMIT(%r10)
+	movq	0x50(%rsp), %r11
+	movq	%r11, FIBER_DATA(%r10)
+	movq	0x58(%rsp), %r11
+	movq	%r11, DEALLOC_STACK(%r10)
+	
+	/* load float regs */
+	movdqu	0x60(%rsp), %xmm6
+	movdqu	0x70(%rsp), %xmm7
+	movdqu	0x80(%rsp), %xmm8
+	movdqu	0x90(%rsp), %xmm9
+	movdqu	0xa0(%rsp), %xmm10
+	movdqu	0xb0(%rsp), %xmm11
+	movdqu	0xc0(%rsp), %xmm12
+	movdqu	0xd0(%rsp), %xmm13
+	movdqu	0xe0(%rsp), %xmm14
+	movdqu	0xf0(%rsp), %xmm15
 
-	pop	%rsi
-	pop	%rdi
+	/* load %rsi */
+	movq	0x100(%rsp), %rsi
 #endif
 
-	pop	%r15
-	pop	%r14
-	pop	%r13
-	pop	%r12
-	pop	%rbx
-	fldcw	4(%rsp)
-	ldmxcsr	(%rsp)
-	pop	%rbp
-	pop	%rbp
+	leaq	SP_DEC_AMT(%rsp), %rsp
 
 	ret
+
 

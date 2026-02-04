@@ -117,12 +117,14 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 // uint64_t xmm6_15[10 * 2]
 
 #if ASCO_OS_WINDOWS
-#	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4 + 5 + 10 * 2)
-#	define TIB_STACK_BASE -11
-#	define TIB_STACK_LIMIT -12
-#	define TIB_DEALLOC_STACK -13
+#	include <Winnt.h>
+#	define TIB_STACK_BASE 8
+#	define TIB_STACK_LIMIT 9
+#	define TIB_FIBER_DATA 10
+#	define TIB_DEALLOC_STACK 11
+#	define SP_DEC_AMT	0x108
 #else
-#	define SP_DEC_AMT (1 + 1 + 1 + 1 + 4)
+#	define SP_DEC_AMT	0x38
 #endif
 
 ASCO_LINKAGE void ASCO_CALL asco_init(
@@ -132,19 +134,27 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 {
 	uintptr_t sp = (uintptr_t)stack_top + stack_size - 0x40;
 	sp &= ~(0xF);
+	sp -= 8;
+	*((void **)sp) = asco_init_routine;
+	sp -= SP_DEC_AMT;
 	void **sp_as_ptr = (void **)sp;
-	sp_as_ptr[-1] = asco_init_routine;
-	sp_as_ptr[-2] = 0;
-	sp_as_ptr[-3] = (void *)STATE_REG_MAGIC;
-	sp_as_ptr[-4] = arg;
-	sp_as_ptr[-5] = fn;
-	sp_as_ptr[-6] = (void *)ret_ctx; // scary const cast
+
+
+	__TEB *teb = NtCurrentTeb();
+	void *fiber_data = teb->Reserved1[4];
+
+	sp_as_ptr[0] = (void *)STATE_REG_MAGIC;
+	sp_as_ptr[1] = 0;
+	sp_as_ptr[2] = arg;
+	sp_as_ptr[3] = asco_init_routine;
+	sp_as_ptr[4] = (void *)ret_ctx; // spooky const cast
+	
 #if ASCO_OS_WINDOWS
 	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
 	sp_as_ptr[TIB_STACK_LIMIT] = stack_top;
+	sp_as_ptr[TIB_FIBER_DATA] = fiber_data;
 	sp_as_ptr[TIB_DEALLOC_STACK] = stack_top;
 #endif
-	sp_as_ptr -= SP_DEC_AMT;
 	new_ctx->sp = (void *)sp_as_ptr;
 }
 
