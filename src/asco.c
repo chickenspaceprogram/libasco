@@ -124,8 +124,8 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr[4] = (void *)ret_ctx; // spooky const cast
 	
 #if ASCO_OS_WINDOWS
-	struct _TEB *teb = NtCurrentTeb();
-	void *fiber_data = teb->Reserved1[4];
+	void **teb = (void **)NtCurrentTeb();
+	void *fiber_data = teb[4];
 
 	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
 	sp_as_ptr[TIB_STACK_LIMIT] = stack_top;
