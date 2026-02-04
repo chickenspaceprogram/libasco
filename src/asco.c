@@ -91,30 +91,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 // r13: return_ctx
 // other: unspecified
 // 
-// when coroutine is swapped away from:
-//
-// -- high --
-// ... function calls ...
-//
-// void *ret_addr;
-// void *frame_ptr;
-// uint32_t mxcsr;
-// uint16_t x87cw;
-// uint16_t padding;
-// uint64_t rbx;
-// uint64_t r12_r15[4];
-// -- low --
-//
-// otherwise: normal
-//
-//
-// extra stack members on win64 (after all the other members):
-// uint64_t rdi
-// uint64_t rsi
-// uint64_t tib_stack_base
-// uint64_t tib_stack_limit
-// uint64_t tib_dealloc_stack
-// uint64_t xmm6_15[10 * 2]
+// todo: document this better
 
 #if ASCO_OS_WINDOWS
 #	include <Windows.h>
@@ -143,7 +120,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr[0] = (void *)STATE_REG_MAGIC;
 	sp_as_ptr[1] = 0;
 	sp_as_ptr[2] = arg;
-	sp_as_ptr[3] = asco_init_routine;
+	sp_as_ptr[3] = fn;
 	sp_as_ptr[4] = (void *)ret_ctx; // spooky const cast
 	
 #if ASCO_OS_WINDOWS
