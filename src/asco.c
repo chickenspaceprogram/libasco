@@ -147,7 +147,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr[4] = (void *)ret_ctx; // spooky const cast
 	
 #if ASCO_OS_WINDOWS
-	NT_TIB *teb = NtCurrentTeb();
+	TEB *teb = NtCurrentTeb();
 	void *fiber_data = teb->Reserved1[4];
 
 	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
