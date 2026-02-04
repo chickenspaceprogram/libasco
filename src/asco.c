@@ -139,10 +139,6 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp -= SP_DEC_AMT;
 	void **sp_as_ptr = (void **)sp;
 
-
-	__TEB *teb = NtCurrentTeb();
-	void *fiber_data = teb->Reserved1[4];
-
 	sp_as_ptr[0] = (void *)STATE_REG_MAGIC;
 	sp_as_ptr[1] = 0;
 	sp_as_ptr[2] = arg;
@@ -150,6 +146,9 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 	sp_as_ptr[4] = (void *)ret_ctx; // spooky const cast
 	
 #if ASCO_OS_WINDOWS
+	__TEB *teb = NtCurrentTeb();
+	void *fiber_data = teb->Reserved1[4];
+
 	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
 	sp_as_ptr[TIB_STACK_LIMIT] = stack_top;
 	sp_as_ptr[TIB_FIBER_DATA] = fiber_data;
