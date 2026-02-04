@@ -24,9 +24,9 @@ asco_init_routine PROC
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     r10, qword ptr gs:[30H]                 ; 005A _ 65 4C: 8B. 14 25, 00000030
-        pop     dword ptr [r10+1478H]                   ; 0063 _ 41: 8F. 82, 00001478
-        pop     dword ptr [r10+10H]                     ; 006A _ 41: 8F. 42, 10
-        pop     dword ptr [r10+8H]                      ; 006E _ 41: 8F. 42, 08
+        pop     [r10+1478H]                   ; 0063 _ 41: 8F. 82, 00001478
+        pop     [r10+10H]                     ; 006A _ 41: 8F. 42, 10
+        pop     [r10+8H]                      ; 006E _ 41: 8F. 42, 08
         pop     rsi                                     ; 0072 _ 5E
         pop     rdi                                     ; 0073 _ 5F
         pop     r15                                     ; 0074 _ 41: 5F
@@ -89,10 +89,10 @@ asco_swap PROC
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
         mov     r10, qword ptr gs:[30H]                 ; 0161 _ 65 4C: 8B. 14 25, 00000030
-        pop     dword ptr [r10+1478H]                   ; 016A _ 41: 8F. 82, 00001478
-        pop     dword ptr [r10+20H]                     ; 0171 _ 41: 8F. 42, 20
-        pop     dword ptr [r10+10H]                     ; 0175 _ 41: 8F. 42, 10
-        pop     dword ptr [r10+8H]                      ; 0179 _ 41: 8F. 42, 08
+        pop     [r10+1478H]                   ; 016A _ 41: 8F. 82, 00001478
+        pop     [r10+20H]                     ; 0171 _ 41: 8F. 42, 20
+        pop     [r10+10H]                     ; 0175 _ 41: 8F. 42, 10
+        pop     [r10+8H]                      ; 0179 _ 41: 8F. 42, 08
         pop     rsi                                     ; 017D _ 5E
         pop     rdi                                     ; 017E _ 5F
         pop     r15                                     ; 017F _ 41: 5F
