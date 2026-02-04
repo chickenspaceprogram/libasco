@@ -62,7 +62,6 @@ asco_swap:
  movdqu %xmm15, 9*0x10(%rsp)
  movq %rsp, (%rcx)
  movq %rdx, %rsp
- pop %rcx
  movdqu (%rsp), %xmm6
  movdqu 1*0x10(%rsp), %xmm7
  movdqu 2*0x10(%rsp), %xmm8

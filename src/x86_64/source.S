@@ -10,6 +10,7 @@
 
 #	define arg1 rdi
 #	define arg2 rsi
+#	define SP_DEC_AMT	8*
 
 #elif defined(WIN_CALL)
 
@@ -116,7 +117,6 @@ asco_swap:
 	movq	%arg2, %rsp
 
 #ifdef WIN_CALL
-	pop	%rcx /* aligning stack */
 
 	movdqu	(%rsp), %xmm6
 	movdqu	1*0x10(%rsp), %xmm7

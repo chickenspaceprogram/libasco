@@ -1,3 +1,8 @@
+; Disassembly of file: source.win.o
+; Tue Feb  3 20:45:02 2026
+; Type: ELF64
+; Syntax: MASM/ML64
+; Instruction set: SSE2, x64, 80x87
 option dotname
 
 public asco_init_routine
@@ -74,37 +79,36 @@ asco_swap PROC
         movdqu  xmmword ptr [rsp+90H], xmm15            ; 0100 _ F3 44: 0F 7F. BC 24, 00000090
         mov     qword ptr [rcx], rsp                    ; 010A _ 48: 89. 21
         mov     rsp, rdx                                ; 010D _ 48: 89. D4
-        pop     rcx                                     ; 0110 _ 59
-        movdqu  xmm6, xmmword ptr [rsp]                 ; 0111 _ F3: 0F 6F. 34 24
-        movdqu  xmm7, xmmword ptr [rsp+10H]             ; 0116 _ F3: 0F 6F. 7C 24, 10
-        movdqu  xmm8, xmmword ptr [rsp+20H]             ; 011C _ F3 44: 0F 6F. 44 24, 20
-        movdqu  xmm9, xmmword ptr [rsp+30H]             ; 0123 _ F3 44: 0F 6F. 4C 24, 30
-        movdqu  xmm10, xmmword ptr [rsp+40H]            ; 012A _ F3 44: 0F 6F. 54 24, 40
-        movdqu  xmm11, xmmword ptr [rsp+50H]            ; 0131 _ F3 44: 0F 6F. 5C 24, 50
-        movdqu  xmm12, xmmword ptr [rsp+60H]            ; 0138 _ F3 44: 0F 6F. 64 24, 60
-        movdqu  xmm13, xmmword ptr [rsp+70H]            ; 013F _ F3 44: 0F 6F. 6C 24, 70
-        movdqu  xmm14, xmmword ptr [rsp+80H]            ; 0146 _ F3 44: 0F 6F. B4 24, 00000080
-        movdqu  xmm15, xmmword ptr [rsp+90H]            ; 0150 _ F3 44: 0F 6F. BC 24, 00000090
-        add     rsp, 160                                ; 015A _ 48: 81. C4, 000000A0
+        movdqu  xmm6, xmmword ptr [rsp]                 ; 0110 _ F3: 0F 6F. 34 24
+        movdqu  xmm7, xmmword ptr [rsp+10H]             ; 0115 _ F3: 0F 6F. 7C 24, 10
+        movdqu  xmm8, xmmword ptr [rsp+20H]             ; 011B _ F3 44: 0F 6F. 44 24, 20
+        movdqu  xmm9, xmmword ptr [rsp+30H]             ; 0122 _ F3 44: 0F 6F. 4C 24, 30
+        movdqu  xmm10, xmmword ptr [rsp+40H]            ; 0129 _ F3 44: 0F 6F. 54 24, 40
+        movdqu  xmm11, xmmword ptr [rsp+50H]            ; 0130 _ F3 44: 0F 6F. 5C 24, 50
+        movdqu  xmm12, xmmword ptr [rsp+60H]            ; 0137 _ F3 44: 0F 6F. 64 24, 60
+        movdqu  xmm13, xmmword ptr [rsp+70H]            ; 013E _ F3 44: 0F 6F. 6C 24, 70
+        movdqu  xmm14, xmmword ptr [rsp+80H]            ; 0145 _ F3 44: 0F 6F. B4 24, 00000080
+        movdqu  xmm15, xmmword ptr [rsp+90H]            ; 014F _ F3 44: 0F 6F. BC 24, 00000090
+        add     rsp, 160                                ; 0159 _ 48: 81. C4, 000000A0
 ; Note: Address is not rip-relative
 ; Note: Absolute memory address without relocation
-        mov     r10, qword ptr gs:[30H]                 ; 0161 _ 65 4C: 8B. 14 25, 00000030
-        pop     [r10+1478H]                   ; 016A _ 41: 8F. 82, 00001478
-        pop     [r10+20H]                     ; 0171 _ 41: 8F. 42, 20
-        pop     [r10+10H]                     ; 0175 _ 41: 8F. 42, 10
-        pop     [r10+8H]                      ; 0179 _ 41: 8F. 42, 08
-        pop     rsi                                     ; 017D _ 5E
-        pop     rdi                                     ; 017E _ 5F
-        pop     r15                                     ; 017F _ 41: 5F
-        pop     r14                                     ; 0181 _ 41: 5E
-        pop     r13                                     ; 0183 _ 41: 5D
-        pop     r12                                     ; 0185 _ 41: 5C
-        pop     rbx                                     ; 0187 _ 5B
-        fldcw   word ptr [rsp+4H]                       ; 0188 _ D9. 6C 24, 04
-        ldmxcsr dword ptr [rsp]                         ; 018C _ 0F AE. 14 24
+        mov     r10, qword ptr gs:[30H]                 ; 0160 _ 65 4C: 8B. 14 25, 00000030
+        pop     [r10+1478H]                   ; 0169 _ 41: 8F. 82, 00001478
+        pop     [r10+20H]                     ; 0170 _ 41: 8F. 42, 20
+        pop     [r10+10H]                     ; 0174 _ 41: 8F. 42, 10
+        pop     [r10+8H]                      ; 0178 _ 41: 8F. 42, 08
+        pop     rsi                                     ; 017C _ 5E
+        pop     rdi                                     ; 017D _ 5F
+        pop     r15                                     ; 017E _ 41: 5F
+        pop     r14                                     ; 0180 _ 41: 5E
+        pop     r13                                     ; 0182 _ 41: 5D
+        pop     r12                                     ; 0184 _ 41: 5C
+        pop     rbx                                     ; 0186 _ 5B
+        fldcw   word ptr [rsp+4H]                       ; 0187 _ D9. 6C 24, 04
+        ldmxcsr dword ptr [rsp]                         ; 018B _ 0F AE. 14 24
+        pop     rbp                                     ; 018F _ 5D
         pop     rbp                                     ; 0190 _ 5D
-        pop     rbp                                     ; 0191 _ 5D
-        ret                                             ; 0192 _ C3
+        ret                                             ; 0191 _ C3
 asco_swap ENDP
 
 END
