@@ -129,7 +129,7 @@ ASCO_LINKAGE void ASCO_CALL asco_init(
 
 	sp_as_ptr[TIB_STACK_BASE] = (void *)sp_as_ptr;
 	sp_as_ptr[TIB_STACK_LIMIT] = stack_top;
-	sp_as_ptr[TIB_FIBER_DATA] = fiber_data;
+	sp_as_ptr[TIB_FIBER_DATA] = NULL;
 	sp_as_ptr[TIB_DEALLOC_STACK] = stack_top;
 #endif
 	new_ctx->sp = (void *)sp_as_ptr;
